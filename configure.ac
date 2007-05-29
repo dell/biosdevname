@@ -1,0 +1,69 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT([bios_dev_name],[0.1],[Matt_Domsch@dell.com])
+AC_LANG([C])
+AC_CONFIG_SRCDIR([src/read_proc.c])
+AC_CONFIG_HEADER([config.h])
+AC_PREFIX_DEFAULT()
+AM_INIT_AUTOMAKE
+
+# Checks for programs.
+AC_PROG_AWK
+AC_PROG_CC
+AC_PROG_LN_S
+AC_CHECK_PROGS([READELF], [readelf])
+
+# Disable libtool shared libraries when libpci.a
+# isn't linked to be included in a shared library.
+[[ `uname -m | grep -c i.86` -gt 0 ]] && LIBPCI_PATH=/usr/lib
+[[ `uname -m | grep -c 64`   -gt 0 ]] && LIBPCI_PATH=/usr/lib64
+if [[ -n "$READELF"  -a -e $LIBPCI_PATH/libpci.a ]]; then
+    $READELF -a $f | grep R_X86_64_32 > /dev/null 2>&1
+    [[ $? -eq 0 ]] && enable_shared=no
+fi
+AC_PROG_LIBTOOL
+
+# Checks for libraries.
+AC_CHECK_LIB([c], [snprintf])
+AC_CHECK_LIB([pci], [pci_alloc], [],
+	    [AC_MSG_ERROR([You must install pciutils or equivalent])])
+AC_CHECK_LIB([sysfs], [sysfs_get_mnt_path], [],
+	    [AC_MSG_ERROR([You must install sysfsutils, libsysfs\[12\] or equivalent])])
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([fcntl.h limits.h locale.h stddef.h stdint.h stdlib.h string.h sys/ioctl.h sys/time.h syslog.h unistd.h])
+AC_CHECK_HEADER([pci/pci.h], ,
+	    [AC_MSG_ERROR([You must install pciutils-devel or equivalent])])
+AC_CHECK_HEADER([sysfs/libsysfs.h], ,
+	    [AC_MSG_ERROR([You must install sysfsutils-devel, libsysfs-dev or equivalent])])
+
+# Check for pci_dev.domain
+AC_CHECK_MEMBERS([struct pci_dev.domain], , , [#include<pci/pci.h>])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+# Checks for library functions.
+AC_FUNC_ALLOCA
+AC_FUNC_FORK
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 gettimeofday memset munmap select socket strcasecmp strchr strdup strerror strncasecmp strpbrk strrchr strstr strtol strtoul])
+
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

@@ -1,0 +1,14 @@
+Matt Domsch <Matt_Domsch@dell.com>
+ All files not otherwise noted
+
+list.h:
+ Cribbed from the Linux kernel 2.6.18.
+
+read_proc.c:
+ Cribbed from net-tools-1.60
+
+ethtool-copy.h:
+ Cribbed from ethtool
+
+pcmcia.c, cistpl.h, parse_cis.c, read-cis.c:
+ Cribbed from pcmciautils-014

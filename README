@@ -1,0 +1,16 @@
+bios_dev_name
+Copyright (c) 2006 Dell, Inc.  <Matt_Domsch@dell.com>
+
+bios_dev_name in its simplest form takes an kernel name name as an
+argument, and returns the BIOS-given name it "should" be.  This is necessary
+on systems where the BIOS name for a given device (e.g. the label on
+the chassis is "Gb1") doesn't map directly and obviously to the kernel
+name (e.g. eth0).
+
+The distro-patches/sles10/ directory contains a patch needed to
+integrate bios_dev_name into the SLES10 udev ethernet naming rules.
+
+This also works as a straight udev rule.  On RHEL4, that looks like:
+
+KERNEL=="eth*", ACTION=="add", PROGRAM="/usr/sbin/bios_dev_name -i %k", NAME="%c"
+
