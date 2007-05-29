@@ -1,0 +1,7 @@
+* Wed Nov 28 2006
+- fix usage() being printed on success
+- don't assign BIOS device names to Linux virtual devices (tun0)
+	(thanks to Bill Nottingham for finding both of these)
+
+* Wed Nov 28 2006
+- Release 0.1

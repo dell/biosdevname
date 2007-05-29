@@ -281,6 +281,8 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 			continue;
 		if (!drvinfo_valid(n))
 			continue;
+		if (!is_ethernet(n)) /* for virtual interfaces */
+			continue;
 		b = malloc(sizeof(*b));
 		if (!b)
 			continue;

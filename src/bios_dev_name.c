@@ -95,7 +95,7 @@ parse_opts(int argc, char **argv)
 
 int main(int argc, char *argv[])
 {
-	int i, rc=1;
+	int i, rc=0;
 	char *name;
 	void *cookie = NULL;
 
@@ -113,22 +113,23 @@ int main(int argc, char *argv[])
 		goto out_cleanup;
 	}
 
-	for (i=0; i<opts.argc; i++) {
-		if (opts.interface) {
-			name = kern_to_bios(cookie, opts.argv[i]);
-			if (name) {
-				printf("%s\n", name);
-				rc = 0;
-			}
-			else
-				rc = 2;
-		}
-		else {
-			fprintf(stderr, "Unknown device type %s, try passing an option like -i\n", opts.argv[i]);
-			rc = 1;
-			goto out_usage;
-		}
+
+	if (!opts.interface) {
+		fprintf(stderr, "Unknown device type, try passing an option like -i\n");
+		rc = 1;
+		goto out_usage;
 	}
+
+	for (i=0; i<opts.argc; i++) {
+		name = kern_to_bios(cookie, opts.argv[i]);
+		if (name) {
+			printf("%s\n", name);
+		}
+		else
+			rc |= 2; /* one or more given devices weren't found */
+	}
+	goto out_cleanup;
+
  out_usage:
 	usage();
  out_cleanup:
