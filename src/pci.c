@@ -152,6 +152,27 @@ static int unparse_location(char *buf, const int size, const int location)
 	return (s-buf);
 }
 
+static int unparse_smbios_type41_type(char *buf, const int size, const int type)
+{
+	char *s = buf;
+	const char *msg[] = {"Other",
+			     "Unknown",
+			     "Video",
+			     "SCSI Controller",
+			     "Ethernet",
+			     "Token Ring",
+			     "Sound",
+			     "PATA Controller",
+			     "SATA Controller",
+			     "SAS Controller",
+	};
+	if (type > 0 && type <= sizeof(msg))
+		s += snprintf(s, size-(s-buf), "%s\n", msg[type-1]);
+	else
+		s += snprintf(s, size-(s-buf), "<OUT OF SPEC>\n");
+	return (s-buf);
+}
+
 
 int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 {
@@ -162,6 +183,12 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	s += snprintf(s, size-(s-buf), "PCI Slot      : ");
 	s += unparse_location(s, size-(s-buf), p->physical_slot);
 	s += snprintf(s, size-(s-buf), "\n");
+	if (p->smbios_type) {
+		s += snprintf(s, size-(s-buf), "SMBIOS Device Type: ");
+		s += unparse_smbios_type41_type(s, size-(s-buf), p->smbios_type);
+		s += snprintf(s, size-(s-buf), "SMBIOS Instance: %u\n", p->smbios_instance);
+		s += snprintf(s, size-(s-buf), "SMBIOS Enabled: %s\n", p->smbios_instance?"True":"False");
+	}
 	return (s-buf);
 }
 
