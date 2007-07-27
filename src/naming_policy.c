@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Dell, Inc.
+ *  Copyright (c) 2006, 2007 Dell, Inc.
  *  by Matt Domsch <Matt_Domsch@dell.com>
  *  Licensed under the GNU General Public license, version 2.
  */
@@ -12,6 +12,16 @@
 #include "libbiosdevname.h"
 #include "state.h"
 
+static void use_all_ethN(const struct libbiosdevname_state *state)
+{
+	struct bios_device *dev;
+	unsigned int i=0;
+
+	list_for_each_entry(dev, &state->bios_devices, node) {
+		if (dev->netdev)
+			snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", i++);
+	}
+}
 
 static void use_kernel_names(const struct libbiosdevname_state *state)
 {
@@ -19,19 +29,10 @@ static void use_kernel_names(const struct libbiosdevname_state *state)
 
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (dev->netdev)
-			strncpy(dev->bios_name, dev->netdev->kernel_name, sizeof(dev->bios_name));
+			strncpy(dev->bios_name, dev->netdev->kernel_name, sizeof(dev->bios_name)-1);
 	}
 }
 
-static void use_all_ethN(const struct libbiosdevname_state *state)
-{
-	struct bios_device *dev;
-	unsigned int i=0;
-
-	list_for_each_entry(dev, &state->bios_devices, node) {
-		snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", i++);
-	}
-}
 
 static void pcmcia_names(struct bios_device *dev)
 {
