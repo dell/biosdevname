@@ -1,0 +1,10 @@
+2007-07-19  Matt Domsch <Matt_Domsch@dell.com>
+
+	* remove most of the code, leaving only what's needed by
+          bios_dev_name.
+
+2007-06-30  Jean Delvare  <khali@linux-fr.org>
+
+	* config.h: Add support for Solaris (x86 only, of course). Based
+	  on a patch by Sun's Dan Mick, brought to my knowledge by
+	  Attila Nagy.
