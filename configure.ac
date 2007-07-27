@@ -27,10 +27,14 @@ AC_PROG_LIBTOOL
 
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
+# libz has to come before libpci because libpci needs it now.
+AC_CHECK_LIB([z], [gzopen], [],
+	    [AC_MSG_ERROR([You must install zlib-devel or equivalent])])
 AC_CHECK_LIB([pci], [pci_alloc], [],
-	    [AC_MSG_ERROR([You must install pciutils or equivalent])])
+	    [AC_MSG_ERROR([You must install pciutils or equivalent])],
+	    -lz)
 AC_CHECK_LIB([sysfs], [sysfs_get_mnt_path], [],
-	    [AC_MSG_ERROR([You must install sysfsutils, libsysfs\[12\] or equivalent])])
+	    [AC_MSG_ERROR([You must install sysfsutils, libsysfs, libsysfs-devel, or equivalent])])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -40,6 +44,8 @@ AC_CHECK_HEADER([pci/pci.h], ,
 	    [AC_MSG_ERROR([You must install pciutils-devel or equivalent])])
 AC_CHECK_HEADER([sysfs/libsysfs.h], ,
 	    [AC_MSG_ERROR([You must install sysfsutils-devel, libsysfs-dev or equivalent])])
+AC_CHECK_HEADER([zlib.h], ,
+	    [AC_MSG_ERROR([You must install zlib-devel or equivalent])])
 
 # Check for pci_dev.domain
 AC_CHECK_MEMBERS([struct pci_dev.domain], , , [#include<pci/pci.h>])
