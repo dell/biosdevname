@@ -11,6 +11,7 @@
 #include "bios_device.h"
 #include "state.h"
 #include "libbiosdevname.h"
+#include "dmidecode/dmidecode.h"
 
 void free_bios_devices(void *cookie)
 {
@@ -130,6 +131,31 @@ static int sort_pci(const struct bios_device *bdev_a, const struct bios_device *
 	return 0;
 }
 
+static int sort_smbios(const struct bios_device *x, const struct bios_device *y)
+{
+	struct pci_device *a, *b;
+
+	if      (x->pcidev && !y->pcidev) return -1;
+	else if (!x->pcidev && y->pcidev) return 1;
+
+	a = x->pcidev;
+	b = y->pcidev;
+
+	if      (a->physical_slot == 0 && b->physical_slot == 0) {
+		if ( a->smbios_type == b->smbios_type) {
+			if ( a->smbios_instance < b->smbios_instance) return -1;
+			else if (a->smbios_instance > b->smbios_instance) return 1;
+		}
+	}
+	else {
+		if      (a->physical_slot < b->physical_slot) return -1;
+		else if (a->physical_slot > b->physical_slot) return 1;
+	}
+
+	return sort_pci(x, y);
+}
+
+
 static int sort_pcmcia(const struct bios_device *bdev_a, const struct bios_device *bdev_b)
 {
 	const struct pcmcia_device *a = bdev_a->pcmciadev;
@@ -165,7 +191,7 @@ static int sort_by_type(const struct bios_device *a, const struct bios_device *b
 		return -1;
 	else if (bios_device_type_num(a) == bios_device_type_num(b)) {
 		if (is_pci(a))
-			return sort_pci(a, b);
+			return sort_smbios(a, b);
 		else if (is_pcmcia(a))
 			return sort_pcmcia(a, b);
 		else return 0;
@@ -338,6 +364,9 @@ void * setup_bios_devices(int sortroutine, int namingpolicy)
 		goto out;
 
 	rc = get_pcmcia_devices(state);
+	if (rc)
+		goto out;
+	rc = dmidecode_main(state);
 	if (rc)
 		goto out;
 	get_eths(state);
