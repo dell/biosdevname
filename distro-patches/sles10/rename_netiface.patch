@@ -1,0 +1,37 @@
+--- /etc/sysconfig/network/config.orig	2006-09-20 15:02:06.000000000 -0500
++++ /etc/sysconfig/network/config	2006-09-29 10:05:36.000000000 -0500
+@@ -197,7 +197,16 @@
+ #
+ FORCE_PERSISTENT_NAMES=yes
+ 
++## Type:        string
++## Default:     ""
++#
++# Force all interfaces eth* to use the given naming policy by
++# querying the hardware for topology information.
++# See bios_dev_name --help  for the list of supported policies.
++#
++BIOS_DEV_NAME_POLICY=""
++
+ ## Type:        yesno
+ ## Default:     no
+ #
+--- /lib/udev/rename_netiface.orig	2006-09-20 16:10:51.000000000 -0500
++++ /lib/udev/rename_netiface	2006-09-29 10:14:15.000000000 -0500
+@@ -139,7 +139,15 @@
+ 	# The latter serves as temporary registration file to avoid race
+ 	# conditions. It will be removed when the script exits.
+ 
+-	NEWNAME=$OLDNAME
++        # Try using the BIOS name
++        if [ -x /sbin/bios_dev_name ] ; then
++	        unset POLICY
++                [ -n "$BIOS_DEV_NAME_POLICY" ] &&
++		POLICY="--policy=$BIOS_DEV_NAME_POLICY"
++                NEWNAME="$(/sbin/bios_dev_name $POLICY -i $OLDNAME)"
++        fi    
++
++        [ -z "$NEWNAME" ] && NEWNAME=$OLDNAME
+ 	get_device_id "$OLDNAME" "$2"
+ 	if [ -z "$DEV_ID" ] ; then
+ 		error_exit 4 "no device id for $OLDNAME"
