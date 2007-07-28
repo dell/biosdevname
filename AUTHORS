@@ -12,3 +12,6 @@ ethtool-copy.h:
 
 pcmcia.c, cistpl.h, parse_cis.c, read-cis.c:
  Cribbed from pcmciautils-014
+
+dmidecode/*
+ Cribbed from dmidecode 2.9
