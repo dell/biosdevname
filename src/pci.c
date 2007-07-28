@@ -146,7 +146,7 @@ static int unparse_location(char *buf, const int size, const int location)
 	else if (location == INT_MAX)
 		s += snprintf(s, size-(s-buf), "unknown");
 	else if (location > 0)
-		s += snprintf(s, size-(s-buf), "PCI Slot %d", location);
+		s += snprintf(s, size-(s-buf), "%u", location);
 	else
 		s += snprintf(s, size-(s-buf), "unknown");
 	return (s-buf);
