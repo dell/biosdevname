@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([bios_dev_name],[0.1],[Matt_Domsch@dell.com])
+AC_INIT([bios_dev_name],[0.2],[Matt_Domsch@dell.com])
 AC_LANG([C])
 AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
