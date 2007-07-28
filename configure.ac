@@ -20,7 +20,7 @@ AC_CHECK_PROGS([READELF], [readelf])
 [[ `uname -m | grep -c i.86` -gt 0 ]] && LIBPCI_PATH=/usr/lib
 [[ `uname -m | grep -c 64`   -gt 0 ]] && LIBPCI_PATH=/usr/lib64
 if [[ -n "$READELF"  -a -e $LIBPCI_PATH/libpci.a ]]; then
-    $READELF -a $f | grep R_X86_64_32 > /dev/null 2>&1
+    $READELF -a $LIBPCI_PATH/libpci.a | grep R_X86_64_32 > /dev/null 2>&1
     [[ $? -eq 0 ]] && enable_shared=no
 fi
 AC_PROG_LIBTOOL
