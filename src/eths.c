@@ -189,3 +189,26 @@ struct network_device * find_net_device_by_bus_info(struct libbiosdevname_state 
 	}
 	return NULL;
 }
+
+int is_ethernet(struct network_device *dev)
+{
+	int i;
+	int rc = 0;
+
+	/* No bus means not visible to BIOS */
+	if (strncmp("N/A", dev->drvinfo.bus_info, sizeof(dev->drvinfo.bus_info)) == 0)
+		goto out;
+
+	const char *nonethernet_drivers[] = {
+		"bridge",
+		"tun",
+	};
+	for (i=0; i<sizeof(nonethernet_drivers); i++) {
+		if (strncmp(dev->drvinfo.driver, nonethernet_drivers[i], sizeof(dev->drvinfo.driver)) == 0)
+			goto out;
+	}
+
+	rc = dev->arphrd_type == ARPHRD_ETHER;
+out:
+	return rc;
+}

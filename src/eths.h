@@ -33,11 +33,7 @@ extern void free_eths(struct libbiosdevname_state *state);
 extern int unparse_network_device(char *buf, const int size, struct network_device *dev);
 extern struct network_device * find_net_device_by_bus_info(struct libbiosdevname_state *state,
 							   const char *bus_info);
-
-static inline int is_ethernet(struct network_device *dev)
-{
-	return dev->arphrd_type == ARPHRD_ETHER;
-}
+extern int is_ethernet(struct network_device *dev);
 
 extern int zero_mac(const void *addr);
 
