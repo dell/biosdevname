@@ -195,6 +195,10 @@ int is_ethernet(struct network_device *dev)
 	int i;
 	int rc = 0;
 
+	/* FIXME: /sys/class/net/$kernel_name/device will be a symlink if there's underlying hardware,
+	 * or not exist if it's virtual.  Try using that if this isn't good enough already.
+	 */
+
 	/* No bus means not visible to BIOS */
 	if (strncmp("N/A", dev->drvinfo.bus_info, sizeof(dev->drvinfo.bus_info)) == 0)
 		goto out;
