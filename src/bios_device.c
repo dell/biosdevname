@@ -249,10 +249,16 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 {
 	struct pci_device *p;
 	struct bios_device *b;
+	struct network_device *n;
 	char pci_name[40];
 
 	list_for_each_entry(p, &state->pci_devices, node) {
 		if (!is_pci_network(p))
+			continue;
+
+		unparse_pci_name(pci_name, sizeof(pci_name), &p->pci_dev);
+		n = find_net_device_by_bus_info(state, pci_name);
+		if (!n)
 			continue;
 
 		b = malloc(sizeof(*b));
@@ -261,11 +267,7 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 		memset(b, 0, sizeof(*b));
 		INIT_LIST_HEAD(&b->node);
 		b->pcidev = p;
-
-		unparse_pci_name(pci_name, sizeof(pci_name), &p->pci_dev);
-		b->netdev = find_net_device_by_bus_info(state, pci_name);
-
-		memset(b->bios_name, 0, sizeof(b->bios_name));
+		b->netdev = n;
 		claim_netdev(b->netdev);
 		list_add(&b->node, &state->bios_devices);
 	}
