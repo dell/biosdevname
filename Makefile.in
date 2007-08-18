@@ -125,6 +125,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
 READELF = @READELF@
+RULEDEST = @RULEDEST@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -182,7 +183,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src
-dist_noinst_DATA = 60-bios_dev_name.rules.in bios_dev_name.spec
+dist_noinst_DATA = bios_dev_name.rules.in bios_dev_name.spec
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -627,12 +628,12 @@ uninstall-am:
 	ps ps-am tags tags-recursive uninstall uninstall-am
 
 
-60-bios_dev_name.rules: 60-bios_dev_name.rules.in
-	sed -e 's#/usr/sbin/#$(sbindir)/#' 60-bios_dev_name.rules.in > 60-bios_dev_name.rules
+bios_dev_name.rules: bios_dev_name.rules.in
+	sed -e 's#/usr/sbin/#$(sbindir)/#' bios_dev_name.rules.in > bios_dev_name.rules
 
-install-data-local: 60-bios_dev_name.rules
+install-data-local: bios_dev_name.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
-	$(INSTALL_DATA) $(srcdir)/60-bios_dev_name.rules $(DESTDIR)@sysconfdir@/udev/rules.d/60-bios_dev_name.rules
+	$(INSTALL_DATA) $(srcdir)/bios_dev_name.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

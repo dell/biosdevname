@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([bios_dev_name],[0.2],[Matt_Domsch@dell.com])
+AC_INIT([bios_dev_name],[0.2.1],[Matt_Domsch@dell.com])
 AC_LANG([C])
 AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
@@ -70,6 +70,21 @@ AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([dup2 gettimeofday memset munmap select socket strcasecmp strchr strdup strerror strncasecmp strpbrk strrchr strstr strtol strtoul])
+
+# this is ugly, but accounts for SLES 10, Red Hat/Fedora, and Ubuntu
+# handles default udev rules as of udev 114 or thereabouts
+RULEDEST=74-bios_dev_name.rules
+if [[ -e /etc/udev/rules.d/60-net.rules ]]; then
+     # Red Hat / Fedora
+     RULEDEST=60-bios_dev_name.rules
+elif [[ -e /etc/udev/rules.d/31-network.rules ]]; then
+     # SLES 10
+     RULEDEST=31-bios_dev_name.rules
+elif [[ -e /etc/udev/rules.d/25-iftab.rules ]]; then
+     # Ubuntu
+     RULEDEST=25-bios_dev_name.rules
+fi
+AC_SUBST(RULEDEST, $RULEDEST)
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
