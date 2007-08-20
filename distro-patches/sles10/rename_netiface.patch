@@ -9,9 +9,9 @@
 +#
 +# Force all interfaces eth* to use the given naming policy by
 +# querying the hardware for topology information.
-+# See bios_dev_name --help  for the list of supported policies.
++# See biosdevname --help  for the list of supported policies.
 +#
-+BIOS_DEV_NAME_POLICY=""
++BIOSDEVNAME_POLICY=""
 +
  ## Type:        yesno
  ## Default:     no
@@ -24,11 +24,11 @@
  
 -	NEWNAME=$OLDNAME
 +        # Try using the BIOS name
-+        if [ -x /sbin/bios_dev_name ] ; then
++        if [ -x /sbin/biosdevname ] ; then
 +	        unset POLICY
-+                [ -n "$BIOS_DEV_NAME_POLICY" ] &&
-+		POLICY="--policy=$BIOS_DEV_NAME_POLICY"
-+                NEWNAME="$(/sbin/bios_dev_name $POLICY -i $OLDNAME)"
++                [ -n "$BIOSDEVNAME_POLICY" ] &&
++		POLICY="--policy=$BIOSDEVNAME_POLICY"
++                NEWNAME="$(/sbin/biosdevname $POLICY -i $OLDNAME)"
 +        fi    
 +
 +        [ -z "$NEWNAME" ] && NEWNAME=$OLDNAME

@@ -1,1 +1,0 @@
-KERNEL=="eth*", ACTION=="add", PROGRAM="/usr/sbin/bios_dev_name --policy=embedded_ethN_slots_names -i %k", NAME="%c"

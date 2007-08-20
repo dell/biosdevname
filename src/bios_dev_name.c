@@ -15,13 +15,13 @@ static struct bios_dev_name_opts opts;
 
 static void usage(void)
 {
-	fprintf(stderr, "Usage:  bios_dev_name [options] [args]...\n");
+	fprintf(stderr, "Usage:  biosdevname [options] [args]...\n");
 	fprintf(stderr, " Options:\n");
 	fprintf(stderr, "   -i        or --interface           treat [args] as ethernet devs\n");
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   -n        or --nosort              don't sort the PCI device list breadth-first\n");
 	fprintf(stderr, "   --policy [kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
-	fprintf(stderr, " Example:  bios_dev_name -i eth0\n");
+	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: eth0\n");
 	fprintf(stderr, "  when the BIOS name and kernel name are both eth0.\n");
 	fprintf(stderr, " --nosort implies --policy kernelnames.\n");

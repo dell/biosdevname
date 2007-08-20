@@ -33,7 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-sbin_PROGRAMS = bios_dev_name$(EXEEXT) bios_dev_nameS$(EXEEXT)
+sbin_PROGRAMS = biosdevname$(EXEEXT) biosdevnameS$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,15 +59,15 @@ am_libbiosdevname_la_OBJECTS = bios_device.lo pirq.lo pci.lo eths.lo \
 libbiosdevname_la_OBJECTS = $(am_libbiosdevname_la_OBJECTS)
 sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(sbin_PROGRAMS)
-am_bios_dev_name_OBJECTS = bios_dev_name.$(OBJEXT)
-bios_dev_name_OBJECTS = $(am_bios_dev_name_OBJECTS)
-bios_dev_name_DEPENDENCIES = libbiosdevname.la
-am_bios_dev_nameS_OBJECTS = bios_dev_name.$(OBJEXT)
-bios_dev_nameS_OBJECTS = $(am_bios_dev_nameS_OBJECTS)
-bios_dev_nameS_DEPENDENCIES = libbiosdevname.la
-bios_dev_nameS_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+am_biosdevname_OBJECTS = bios_dev_name.$(OBJEXT)
+biosdevname_OBJECTS = $(am_biosdevname_OBJECTS)
+biosdevname_DEPENDENCIES = libbiosdevname.la
+am_biosdevnameS_OBJECTS = bios_dev_name.$(OBJEXT)
+biosdevnameS_OBJECTS = $(am_biosdevnameS_OBJECTS)
+biosdevnameS_DEPENDENCIES = libbiosdevname.la
+biosdevnameS_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(bios_dev_nameS_LDFLAGS) $(LDFLAGS) -o $@
+	$(biosdevnameS_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -80,10 +80,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libbiosdevname_la_SOURCES) $(bios_dev_name_SOURCES) \
-	$(bios_dev_nameS_SOURCES)
-DIST_SOURCES = $(libbiosdevname_la_SOURCES) $(bios_dev_name_SOURCES) \
-	$(bios_dev_nameS_SOURCES)
+SOURCES = $(libbiosdevname_la_SOURCES) $(biosdevname_SOURCES) \
+	$(biosdevnameS_SOURCES)
+DIST_SOURCES = $(libbiosdevname_la_SOURCES) $(biosdevname_SOURCES) \
+	$(biosdevnameS_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -212,11 +212,11 @@ libbiosdevname_la_SOURCES = bios_device.c bios_device.h pirq.c pirq.h pci.c pci.
 	dmidecode/util.c \
 	dmidecode/util.h
 
-bios_dev_name_SOURCES = bios_dev_name.c bios_dev_name.h
-bios_dev_name_LDADD = libbiosdevname.la
-bios_dev_nameS_SOURCES = bios_dev_name.c bios_dev_name.h
-bios_dev_nameS_LDADD = libbiosdevname.la
-bios_dev_nameS_LDFLAGS = -all-static
+biosdevname_SOURCES = bios_dev_name.c bios_dev_name.h
+biosdevname_LDADD = libbiosdevname.la
+biosdevnameS_SOURCES = bios_dev_name.c bios_dev_name.h
+biosdevnameS_LDADD = libbiosdevname.la
+biosdevnameS_LDFLAGS = -all-static
 all: all-am
 
 .SUFFIXES:
@@ -307,12 +307,12 @@ clean-sbinPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-bios_dev_name$(EXEEXT): $(bios_dev_name_OBJECTS) $(bios_dev_name_DEPENDENCIES) 
-	@rm -f bios_dev_name$(EXEEXT)
-	$(LINK) $(bios_dev_name_OBJECTS) $(bios_dev_name_LDADD) $(LIBS)
-bios_dev_nameS$(EXEEXT): $(bios_dev_nameS_OBJECTS) $(bios_dev_nameS_DEPENDENCIES) 
-	@rm -f bios_dev_nameS$(EXEEXT)
-	$(bios_dev_nameS_LINK) $(bios_dev_nameS_OBJECTS) $(bios_dev_nameS_LDADD) $(LIBS)
+biosdevname$(EXEEXT): $(biosdevname_OBJECTS) $(biosdevname_DEPENDENCIES) 
+	@rm -f biosdevname$(EXEEXT)
+	$(LINK) $(biosdevname_OBJECTS) $(biosdevname_LDADD) $(LIBS)
+biosdevnameS$(EXEEXT): $(biosdevnameS_OBJECTS) $(biosdevnameS_DEPENDENCIES) 
+	@rm -f biosdevnameS$(EXEEXT)
+	$(biosdevnameS_LINK) $(biosdevnameS_OBJECTS) $(biosdevnameS_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
