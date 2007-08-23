@@ -33,7 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-sbin_PROGRAMS = biosdevname$(EXEEXT) biosdevnameS$(EXEEXT)
+sbin_PROGRAMS = biosdevname$(EXEEXT)
+EXTRA_PROGRAMS = biosdevnameS$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -563,6 +564,7 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-sbinPROGRAMS
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-libLTLIBRARIES uninstall-sbinPROGRAMS
 
+@BUILD_STATIC_BIN_TRUE@	sbin_PROGRAMS += biosdevnameS
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

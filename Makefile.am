@@ -1,6 +1,6 @@
 SUBDIRS = src
 
-dist_noinst_DATA = biosdevname.rules.in biosdevname.spec
+dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse
 
 biosdevname.rules: biosdevname.rules.in
 	sed -e 's#/usr/sbin/#$(sbindir)/#' biosdevname.rules.in > biosdevname.rules

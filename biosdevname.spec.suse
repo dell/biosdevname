@@ -1,0 +1,64 @@
+Name:		biosdevname
+Version:	0.2.1
+Release:	1%{?dist}
+Summary:	udev helper for naming devices per BIOS names
+
+Group:		System Environment/Base
+License:	GPLv2
+URL:		http://linux.dell.com/files/%{name}
+Source0:	http://linux.dell.com/files/%{name}/%{name}-%{version}.tar.gz
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRequires:	pciutils-devel, zlib-devel
+# for ownership of /etc/udev/rules.d
+Requires: udev
+
+# SLES 9 doesn't have sysfsutils at all
+BuildRequires:  sysfsutils
+
+%description
+biosdevname in its simplest form takes an kernel name name as an
+argument, and returns the BIOS-given name it "should" be.  This is necessary
+on systems where the BIOS name for a given device (e.g. the label on
+the chassis is "Gb1") doesn't map directly and obviously to the kernel
+name (e.g. eth0).
+
+%prep
+%setup -q
+
+%build
+%configure --disable-rpath --disable-static
+make %{?_smp_mflags}
+
+
+%install
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
+# remove some files that may or may not exist
+(rm %{buildroot}%{_libdir}/libbiosdevname.a; \
+ rm %{buildroot}%{_libdir}/libbiosdevname.la; \
+ rm %{buildroot}%{_libdir}/libbiosdevname.so; \
+ rm %{buildroot}%{_sbindir}/%{name}S ) || :
+
+# some distros won't have a static lib version of libsysfs, which
+# would be needed to generate these .so files
+touch list-of-filenames.txt
+ls %{buildroot}%{_libdir}/libbiosdevname.so.* && \
+  (cd %{buildroot}; ls %{_libdir}/libbiosdevname.so.* ) >> list-of-filenames.txt
+
+
+%clean
+rm -rf %{buildroot}
+
+%files -f list-of-filenames.txt
+%defattr(-,root,root,-)
+%doc COPYING README
+%{_sbindir}/%{name}
+%config(noreplace) %{_sysconfdir}/udev/rules.d/*biosdevname.rules
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+
+%changelog
+* Mon Aug 20 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.1-1
+- initial release

@@ -25,6 +25,13 @@ if [[ -n "$READELF"  -a -e $LIBPCI_PATH/libpci.a ]]; then
 fi
 AC_PROG_LIBTOOL
 
+BUILD_STATIC_BIN=0
+for d in /usr/lib /usr/lib64 /lib /lib64; do
+      [[ -e $d/libsysfs.a ]] && BUILD_STATIC_BIN=1
+done
+[[ $${enable_static} == 'no' ]] && BUILD_STATIC_BIN=0
+AM_CONDITIONAL([BUILD_STATIC_BIN], [$BUILD_STATIC_BIN])
+
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
 # libz has to come before libpci because libpci needs it now.
@@ -85,6 +92,7 @@ elif [[ -e /etc/udev/rules.d/25-iftab.rules ]]; then
      RULEDEST=25-biosdevname.rules
 fi
 AC_SUBST(RULEDEST, $RULEDEST)
+
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
