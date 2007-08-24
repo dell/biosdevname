@@ -1,19 +1,24 @@
 Name:		biosdevname
-Version:	0.2.1
+Version:	0.2.2
 Release:	1%{?dist}
-Summary:	udev helper for naming devices per BIOS names
+Summary:	Udev helper for naming devices per BIOS names
 
 Group:		System Environment/Base
 License:	GPLv2
 URL:		http://linux.dell.com/files/%{name}
+# SMBIOS and PCI IRQ Routing Tables only exist on these arches.  It's
+# also likely that other arches don't expect the PCI bus to be sorted
+# breadth-first, or of so, there haven't been any comments about that
+# on LKML.
+ExclusiveArch:	%{ix86} x86_64 ia64
 Source0:	http://linux.dell.com/files/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires:	pciutils-devel, zlib-devel
+# to figure out how to name the rules file
+BuildRequires:	udev
 # for ownership of /etc/udev/rules.d
 Requires: udev
 
-# SLES 9 doesn't have sysfsutils at all
-BuildRequires:  sysfsutils
 
 %description
 biosdevname in its simplest form takes an kernel name name as an
@@ -26,7 +31,8 @@ name (e.g. eth0).
 %setup -q
 
 %build
-%configure --disable-rpath --disable-static
+# this is a udev rule, so it needs to live in / rather than /usr
+%configure --disable-rpath --libdir=/%{_lib} --prefix=/ --bindir=/bin --sbindir=/sbin
 make %{?_smp_mflags}
 
 
@@ -34,16 +40,16 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 # remove some files that may or may not exist
-(rm %{buildroot}%{_libdir}/libbiosdevname.a; \
- rm %{buildroot}%{_libdir}/libbiosdevname.la; \
- rm %{buildroot}%{_libdir}/libbiosdevname.so; \
- rm %{buildroot}%{_sbindir}/%{name}S ) || :
+(rm %{buildroot}/%{_lib}/lib%{name}.a; \
+ rm %{buildroot}/%{_lib}/lib%{name}.la; \
+ rm %{buildroot}/%{_lib}/lib%{name}.so; \
+ rm %{buildroot}/sbin/%{name}S ) || :
 
 # some distros won't have a static lib version of libsysfs, which
 # would be needed to generate these .so files
 touch list-of-filenames.txt
-ls %{buildroot}%{_libdir}/libbiosdevname.so.* && \
-  (cd %{buildroot}; ls %{_libdir}/libbiosdevname.so.* ) >> list-of-filenames.txt
+ls %{buildroot}/%{_lib}/lib%{name}.so.* && \
+  (cd %{buildroot}; ls ./%{_lib}/lib%{name}.so.*|sed -e 's#^\.##g' ) >> list-of-filenames.txt
 
 
 %clean
@@ -52,13 +58,18 @@ rm -rf %{buildroot}
 %files -f list-of-filenames.txt
 %defattr(-,root,root,-)
 %doc COPYING README
-%{_sbindir}/%{name}
-%config(noreplace) %{_sysconfdir}/udev/rules.d/*biosdevname.rules
+/sbin/%{name}
+%config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 
 %changelog
+* Fri Aug 24 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.2-1
+- ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables
+- eliminate libsysfs dependency, move app to / for use before /usr is mounted.
+- build static
+-
 * Mon Aug 20 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.1-1
 - initial release
