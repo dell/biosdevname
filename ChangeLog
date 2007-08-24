@@ -1,3 +1,12 @@
+* Fri Aug 24 2007
+- add spec files for Fedora and OpenSUSE
+- ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables
+- eliminate libsysfs dependency, move app to / for use before /usr is mounted.
+
+* Fri Jul 27 2007
+- add SMBIOS Type 9 and 41 extensions, and HP OEM-specific extension parsing
+- Release 0.2	
+	
 * Wed Nov 28 2006
 - fix usage() being printed on success
 - don't assign BIOS device names to Linux virtual devices (tun0)
