@@ -17,8 +17,7 @@
 #include <string.h>
 #include <errno.h>
 #include <syslog.h>
-
-#include <sysfs/libsysfs.h>
+#include <linux/limits.h>
 
 #include "cistpl.h"
 
@@ -227,12 +226,12 @@ int pcmcia_get_tuple_data(tuple_t *tuple)
 
 int read_out_cis (unsigned int socket_no, FILE *fd)
 {
-        char file[SYSFS_PATH_MAX];
+        char file[PATH_MAX];
         int ret, i;
 	tuple_t tuple;
 	unsigned char buf[256];
 
-        snprintf(file, SYSFS_PATH_MAX, PATH_TO_SOCKET "pcmcia_socket%d/cis",
+        snprintf(file, sizeof(file), PATH_TO_SOCKET "pcmcia_socket%d/cis",
 		 socket_no);
 
 	if (!fd) {

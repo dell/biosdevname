@@ -22,8 +22,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <libgen.h>
+#include <linux/limits.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
-#include <sysfs/libsysfs.h>
+
 #include "state.h"
 #include "pcmcia.h"
 
@@ -104,11 +108,36 @@ int get_network_type(unsigned int socket_no, unsigned char *network_type)
 	return (ret);
 }
 
+/**
+ * sysfs_path_is_file: Check if the path supplied points to a file
+ * @path: path to validate
+ * Returns 0 if path points to file, 1 otherwise
+ * Copied from sysfsutils-2.1.0 (which is LGPL2.1 or later), relicensed GPLv2 for use here.
+ */
+static int sysfs_path_is_file(const char *path)
+{
+        struct stat astats;
+
+        if (!path) {
+                errno = EINVAL;
+                return 1;
+        }
+        if ((lstat(path, &astats)) != 0) {
+                return 1;
+        }
+        if (S_ISREG(astats.st_mode))
+                return 0;
+
+        return 1;
+}
+
+
+
 static int pccardctl_socket_exists(unsigned long socket_no)
 {
-	char file[SYSFS_PATH_MAX];
+	char file[PATH_MAX];
 
-	snprintf(file, SYSFS_PATH_MAX,
+	snprintf(file, sizeof(file),
 		 "/sys/class/pcmcia_socket/pcmcia_socket%lu/card_insert",
 		 socket_no);
 
@@ -117,41 +146,52 @@ static int pccardctl_socket_exists(unsigned long socket_no)
 
 static int read_out_file(char * file, char **output)
 {
-	struct sysfs_attribute *attr = sysfs_open_attribute(file);
 	int ret;
 	char *result = NULL;
+	int fd;
+	unsigned long resultsize = 0;
+	ssize_t length = 0;
+
 
 	*output = NULL;
 
-	if (!attr)
-		return -EIO;
-	ret = sysfs_read_attribute(attr);
+	resultsize = getpagesize() + 1;
+	result = malloc(resultsize);
+	if (!result)
+		return -ENOMEM;
+	memset(result, 0, resultsize);
 
-	if (ret || !attr->value || !attr->len || (attr->len > SYSFS_PATH_MAX))
-		goto close_out;
+	fd = open(file, O_RDONLY);
+	if (fd < 0) {
+		ret = -1;
+		goto free_out;
+	}
 
-	result = malloc(attr->len + 1);
-	if (result) {
-		memcpy(result, attr->value, attr->len);
-		result[attr->len] = '\0';
-		if (result[attr->len - 1] == '\n')
-			result[attr->len - 1] = '\0';
-		*output = result;
-	} else
-		ret = -ENOMEM;
-
- close_out:
-	sysfs_close_attribute(attr);
+	length = read(fd, result, resultsize-1);
+	if (length < 0) {
+		close(fd);
+		ret = -1;
+		goto free_out;
+	}
+	result[length] = '\0';
+	if (result[length-1] == '\n')
+		result[length-1] = '\0';
+	*output = result;
+	ret = 0;
+	goto out;
+free_out:
+	free(result);
+out:
 	return ret;
 }
 
 static int pccardctl_get_one_f(unsigned long socket_no, unsigned int dev, const char *in_file, unsigned int *result)
 {
 	char *value;
-	char file[SYSFS_PATH_MAX];
+	char file[PATH_MAX];
 	int ret;
 
-	snprintf(file, SYSFS_PATH_MAX, "/sys/bus/pcmcia/devices/%lu.%u/%s",
+	snprintf(file, sizeof(file), "/sys/bus/pcmcia/devices/%lu.%u/%s",
 		 socket_no, dev, in_file);
 	ret = read_out_file(file, &value);
 	if (ret || !value)
@@ -170,8 +210,8 @@ static int pccardctl_get_one(unsigned long socket_no, const char *in_file, unsig
 static int alloc_pcmcia(struct libbiosdevname_state *state,
 			unsigned long int socket_no)
 {
-	char file[SYSFS_PATH_MAX];
-	char dev_s[SYSFS_PATH_MAX];
+	char file[PATH_MAX];
+	char dev_s[PATH_MAX];
 	char *dev;
 	int ret, i;
 	int rc;
@@ -179,13 +219,13 @@ static int alloc_pcmcia(struct libbiosdevname_state *state,
 	if (!pccardctl_socket_exists(socket_no))
 		return -ENODEV;
 
-	snprintf(file, SYSFS_PATH_MAX, "/sys/class/pcmcia_socket/pcmcia_socket%lu/device", socket_no);
+	snprintf(file, sizeof(file), "/sys/class/pcmcia_socket/pcmcia_socket%lu/device", socket_no);
 	ret = readlink(file, dev_s, sizeof(dev_s) - 1);
 	if (ret > 0) {
 		dev_s[ret]='\0';
 		dev = basename(dev_s);
 	} else {
-		snprintf(file, SYSFS_PATH_MAX, "/sys/class/pcmcia_socket/pcmcia_socket%lu", socket_no);
+		snprintf(file, sizeof(file), "/sys/class/pcmcia_socket/pcmcia_socket%lu", socket_no);
 		ret = readlink(file, dev_s, sizeof(dev_s) - 1);
 		if (ret <= 0)
 			return -ENODEV;
