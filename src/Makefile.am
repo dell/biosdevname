@@ -16,14 +16,10 @@ libbiosdevname_la_SOURCES = bios_device.c bios_device.h pirq.c pirq.h pci.c pci.
 	dmidecode/util.h
 
 
-sbin_PROGRAMS = biosdevname
-if BUILD_STATIC_BIN
-	sbin_PROGRAMS += biosdevnameS
-endif
+sbin_PROGRAMS = biosdevname biosdevnameS
 biosdevname_SOURCES =  bios_dev_name.c bios_dev_name.h
 biosdevname_LDADD = libbiosdevname.la
 
 biosdevnameS_SOURCES =  bios_dev_name.c bios_dev_name.h
 biosdevnameS_LDADD = libbiosdevname.la
 biosdevnameS_LDFLAGS = -all-static
-EXTRA_PROGRAMS = biosdevnameS

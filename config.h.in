@@ -45,9 +45,6 @@
 /* Define to 1 if you have the `pci' library (-lpci). */
 #undef HAVE_LIBPCI
 
-/* Define to 1 if you have the `sysfs' library (-lsysfs). */
-#undef HAVE_LIBSYSFS
-
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
 

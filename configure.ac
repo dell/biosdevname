@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([biosdevname],[0.2.1],[Matt_Domsch@dell.com])
+AC_INIT([biosdevname],[0.2.2],[Matt_Domsch@dell.com])
 AC_LANG([C])
 AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
@@ -25,12 +25,6 @@ if [[ -n "$READELF"  -a -e $LIBPCI_PATH/libpci.a ]]; then
 fi
 AC_PROG_LIBTOOL
 
-BUILD_STATIC_BIN=0
-for d in /usr/lib /usr/lib64 /lib /lib64; do
-      [[ -e $d/libsysfs.a ]] && BUILD_STATIC_BIN=1
-done
-[[ $${enable_static} == 'no' ]] && BUILD_STATIC_BIN=0
-AM_CONDITIONAL([BUILD_STATIC_BIN], [$BUILD_STATIC_BIN])
 
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
@@ -40,8 +34,6 @@ AC_CHECK_LIB([z], [gzopen], [],
 AC_CHECK_LIB([pci], [pci_alloc], [],
 	    [AC_MSG_ERROR([You must install pciutils or equivalent])],
 	    -lz)
-AC_CHECK_LIB([sysfs], [sysfs_get_mnt_path], [],
-	    [AC_MSG_ERROR([You must install sysfsutils, libsysfs, libsysfs-devel, or equivalent])])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -49,8 +41,6 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([fcntl.h limits.h locale.h stddef.h stdint.h stdlib.h string.h sys/ioctl.h sys/time.h syslog.h unistd.h])
 AC_CHECK_HEADER([pci/pci.h], ,
 	    [AC_MSG_ERROR([You must install pciutils-devel or equivalent])])
-AC_CHECK_HEADER([sysfs/libsysfs.h], ,
-	    [AC_MSG_ERROR([You must install sysfsutils-devel, libsysfs-dev or equivalent])])
 AC_CHECK_HEADER([zlib.h], ,
 	    [AC_MSG_ERROR([You must install zlib-devel or equivalent])])
 
