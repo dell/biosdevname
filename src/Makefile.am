@@ -1,8 +1,9 @@
 INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 
-lib_LTLIBRARIES = libbiosdevname.la
-libbiosdevname_la_SOURCES = bios_device.c bios_device.h pirq.c pirq.h pci.c pci.h eths.c eths.h \
+sbin_PROGRAMS = biosdevname biosdevnameS
+biosdevname_SOURCES =  bios_dev_name.c bios_dev_name.h \
+	bios_device.c bios_device.h pirq.c pirq.h pci.c pci.h eths.c eths.h \
 	ethtool-util.h ethtool-copy.h list.h \
         read_proc.c naming_policy.c naming_policy.h \
 	pcmcia.h pcmcia.c cistpl.h read-cis.c parse_cis.c state.h libbiosdevname.h \
@@ -15,11 +16,5 @@ libbiosdevname_la_SOURCES = bios_device.c bios_device.h pirq.c pirq.h pci.c pci.
 	dmidecode/util.c \
 	dmidecode/util.h
 
-
-sbin_PROGRAMS = biosdevname biosdevnameS
-biosdevname_SOURCES =  bios_dev_name.c bios_dev_name.h
-biosdevname_LDADD = libbiosdevname.la
-
-biosdevnameS_SOURCES =  bios_dev_name.c bios_dev_name.h
-biosdevnameS_LDADD = libbiosdevname.la
+biosdevnameS_SOURCES =  $(biosdevname_SOURCES)
 biosdevnameS_LDFLAGS = -all-static
