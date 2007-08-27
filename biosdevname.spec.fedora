@@ -1,5 +1,5 @@
 Name:		biosdevname
-Version:	0.2.2
+Version:	0.2.3
 Release:	1%{?dist}
 Summary:	Udev helper for naming devices per BIOS names
 
@@ -39,23 +39,12 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
-# remove some files that may or may not exist
-(rm %{buildroot}/%{_lib}/lib%{name}.a; \
- rm %{buildroot}/%{_lib}/lib%{name}.la; \
- rm %{buildroot}/%{_lib}/lib%{name}.so; \
- rm %{buildroot}/sbin/%{name}S ) || :
-
-# some distros won't have a static lib version of libsysfs, which
-# would be needed to generate these .so files
-touch list-of-filenames.txt
-ls %{buildroot}/%{_lib}/lib%{name}.so.* && \
-  (cd %{buildroot}; ls ./%{_lib}/lib%{name}.so.*|sed -e 's#^\.##g' ) >> list-of-filenames.txt
-
+rm %{buildroot}/sbin/%{name}S  || :
 
 %clean
 rm -rf %{buildroot}
 
-%files -f list-of-filenames.txt
+%files
 %defattr(-,root,root,-)
 %doc COPYING README
 /sbin/%{name}
@@ -66,6 +55,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Aug 27 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.3-1
+- eliminate libbiosdevname.*
+
 * Fri Aug 24 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.2-1
 - ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables
 - eliminate libsysfs dependency, move app to / for use before /usr is mounted.
