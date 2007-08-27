@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([biosdevname],[0.2.2],[Matt_Domsch@dell.com])
+AC_INIT([biosdevname],[0.2.3],[Matt_Domsch@dell.com])
 AC_LANG([C])
 AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
@@ -14,17 +14,6 @@ AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_LN_S
 AC_CHECK_PROGS([READELF], [readelf])
-
-# Disable libtool shared libraries when libpci.a
-# isn't linked to be included in a shared library.
-[[ `uname -m | grep -c i.86` -gt 0 ]] && LIBPCI_PATH=/usr/lib
-[[ `uname -m | grep -c 64`   -gt 0 ]] && LIBPCI_PATH=/usr/lib64
-if [[ -n "$READELF"  -a -e $LIBPCI_PATH/libpci.a ]]; then
-    $READELF -a $LIBPCI_PATH/libpci.a | grep R_X86_64_32 > /dev/null 2>&1
-    [[ $? -eq 0 ]] && enable_shared=no
-fi
-AC_PROG_LIBTOOL
-
 
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
