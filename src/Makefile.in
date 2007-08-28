@@ -166,41 +166,41 @@ INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 srcPath = src/
 src_biosdevname_SOURCES = \
-	$(srcPath)/bios_dev_name.c \
-	$(srcPath)/bios_device.c \
-	$(srcPath)/pirq.c \
-	$(srcPath)/pci.c \
-	$(srcPath)/eths.c \
-	$(srcPath)/read_proc.c \
-	$(srcPath)/naming_policy.c \
-	$(srcPath)/pcmcia.c \
-	$(srcPath)/read-cis.c \
-	$(srcPath)/parse_cis.c \
-	$(srcPath)/dmidecode/dmidecode.c \
-	$(srcPath)/dmidecode/dmioem.c \
-	$(srcPath)/dmidecode/util.c
+	src/bios_dev_name.c \
+	src/bios_device.c \
+	src/pirq.c \
+	src/pci.c \
+	src/eths.c \
+	src/read_proc.c \
+	src/naming_policy.c \
+	src/pcmcia.c \
+	src/read-cis.c \
+	src/parse_cis.c \
+	src/dmidecode/dmidecode.c \
+	src/dmidecode/dmioem.c \
+	src/dmidecode/util.c
 
 src_biosdevnameS_SOURCES = $(src_biosdevname_SOURCES)
 src_biosdevnameS_LDFLAGS = -all-static
 EXTRA_DIST = \
-	$(srcPath)/bios_dev_name.h \
-	$(srcPath)/bios_device.h \
-	$(srcPath)/pirq.h \
-	$(srcPath)/pci.h \
-	$(srcPath)/eths.h \
-	$(srcPath)/ethtool-util.h \
-	$(srcPath)/ethtool-copy.h \
-	$(srcPath)/list.h \
-	$(srcPath)/naming_policy.h \
-	$(srcPath)/pcmcia.h \
-	$(srcPath)/cistpl.h \
-	$(srcPath)/state.h \
-	$(srcPath)/libbiosdevname.h \
-	$(srcPath)/dmidecode/config.h \
-	$(srcPath)/dmidecode/dmidecode.h \
-	$(srcPath)/dmidecode/dmioem.h \
-	$(srcPath)/dmidecode/types.h \
-	$(srcPath)/dmidecode/util.h
+	src/bios_dev_name.h \
+	src/bios_device.h \
+	src/pirq.h \
+	src/pci.h \
+	src/eths.h \
+	src/ethtool-util.h \
+	src/ethtool-copy.h \
+	src/list.h \
+	src/naming_policy.h \
+	src/pcmcia.h \
+	src/cistpl.h \
+	src/state.h \
+	src/libbiosdevname.h \
+	src/dmidecode/config.h \
+	src/dmidecode/dmidecode.h \
+	src/dmidecode/dmioem.h \
+	src/dmidecode/types.h \
+	src/dmidecode/util.h
 
 all: all-am
 
@@ -302,187 +302,187 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
 
-bios_dev_name.o: $(srcPath)/bios_dev_name.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_dev_name.o -MD -MP -MF $(DEPDIR)/bios_dev_name.Tpo -c -o bios_dev_name.o `test -f '$(srcPath)/bios_dev_name.c' || echo '$(srcdir)/'`$(srcPath)/bios_dev_name.c
+bios_dev_name.o: src/bios_dev_name.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_dev_name.o -MD -MP -MF $(DEPDIR)/bios_dev_name.Tpo -c -o bios_dev_name.o `test -f 'src/bios_dev_name.c' || echo '$(srcdir)/'`src/bios_dev_name.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/bios_dev_name.Tpo $(DEPDIR)/bios_dev_name.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/bios_dev_name.c' object='bios_dev_name.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/bios_dev_name.c' object='bios_dev_name.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_dev_name.o `test -f '$(srcPath)/bios_dev_name.c' || echo '$(srcdir)/'`$(srcPath)/bios_dev_name.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_dev_name.o `test -f 'src/bios_dev_name.c' || echo '$(srcdir)/'`src/bios_dev_name.c
 
-bios_dev_name.obj: $(srcPath)/bios_dev_name.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_dev_name.obj -MD -MP -MF $(DEPDIR)/bios_dev_name.Tpo -c -o bios_dev_name.obj `if test -f '$(srcPath)/bios_dev_name.c'; then $(CYGPATH_W) '$(srcPath)/bios_dev_name.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/bios_dev_name.c'; fi`
+bios_dev_name.obj: src/bios_dev_name.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_dev_name.obj -MD -MP -MF $(DEPDIR)/bios_dev_name.Tpo -c -o bios_dev_name.obj `if test -f 'src/bios_dev_name.c'; then $(CYGPATH_W) 'src/bios_dev_name.c'; else $(CYGPATH_W) '$(srcdir)/src/bios_dev_name.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/bios_dev_name.Tpo $(DEPDIR)/bios_dev_name.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/bios_dev_name.c' object='bios_dev_name.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/bios_dev_name.c' object='bios_dev_name.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_dev_name.obj `if test -f '$(srcPath)/bios_dev_name.c'; then $(CYGPATH_W) '$(srcPath)/bios_dev_name.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/bios_dev_name.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_dev_name.obj `if test -f 'src/bios_dev_name.c'; then $(CYGPATH_W) 'src/bios_dev_name.c'; else $(CYGPATH_W) '$(srcdir)/src/bios_dev_name.c'; fi`
 
-bios_device.o: $(srcPath)/bios_device.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_device.o -MD -MP -MF $(DEPDIR)/bios_device.Tpo -c -o bios_device.o `test -f '$(srcPath)/bios_device.c' || echo '$(srcdir)/'`$(srcPath)/bios_device.c
+bios_device.o: src/bios_device.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_device.o -MD -MP -MF $(DEPDIR)/bios_device.Tpo -c -o bios_device.o `test -f 'src/bios_device.c' || echo '$(srcdir)/'`src/bios_device.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/bios_device.Tpo $(DEPDIR)/bios_device.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/bios_device.c' object='bios_device.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/bios_device.c' object='bios_device.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_device.o `test -f '$(srcPath)/bios_device.c' || echo '$(srcdir)/'`$(srcPath)/bios_device.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_device.o `test -f 'src/bios_device.c' || echo '$(srcdir)/'`src/bios_device.c
 
-bios_device.obj: $(srcPath)/bios_device.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_device.obj -MD -MP -MF $(DEPDIR)/bios_device.Tpo -c -o bios_device.obj `if test -f '$(srcPath)/bios_device.c'; then $(CYGPATH_W) '$(srcPath)/bios_device.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/bios_device.c'; fi`
+bios_device.obj: src/bios_device.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bios_device.obj -MD -MP -MF $(DEPDIR)/bios_device.Tpo -c -o bios_device.obj `if test -f 'src/bios_device.c'; then $(CYGPATH_W) 'src/bios_device.c'; else $(CYGPATH_W) '$(srcdir)/src/bios_device.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/bios_device.Tpo $(DEPDIR)/bios_device.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/bios_device.c' object='bios_device.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/bios_device.c' object='bios_device.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_device.obj `if test -f '$(srcPath)/bios_device.c'; then $(CYGPATH_W) '$(srcPath)/bios_device.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/bios_device.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bios_device.obj `if test -f 'src/bios_device.c'; then $(CYGPATH_W) 'src/bios_device.c'; else $(CYGPATH_W) '$(srcdir)/src/bios_device.c'; fi`
 
-pirq.o: $(srcPath)/pirq.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pirq.o -MD -MP -MF $(DEPDIR)/pirq.Tpo -c -o pirq.o `test -f '$(srcPath)/pirq.c' || echo '$(srcdir)/'`$(srcPath)/pirq.c
+pirq.o: src/pirq.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pirq.o -MD -MP -MF $(DEPDIR)/pirq.Tpo -c -o pirq.o `test -f 'src/pirq.c' || echo '$(srcdir)/'`src/pirq.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pirq.Tpo $(DEPDIR)/pirq.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pirq.c' object='pirq.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pirq.c' object='pirq.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pirq.o `test -f '$(srcPath)/pirq.c' || echo '$(srcdir)/'`$(srcPath)/pirq.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pirq.o `test -f 'src/pirq.c' || echo '$(srcdir)/'`src/pirq.c
 
-pirq.obj: $(srcPath)/pirq.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pirq.obj -MD -MP -MF $(DEPDIR)/pirq.Tpo -c -o pirq.obj `if test -f '$(srcPath)/pirq.c'; then $(CYGPATH_W) '$(srcPath)/pirq.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pirq.c'; fi`
+pirq.obj: src/pirq.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pirq.obj -MD -MP -MF $(DEPDIR)/pirq.Tpo -c -o pirq.obj `if test -f 'src/pirq.c'; then $(CYGPATH_W) 'src/pirq.c'; else $(CYGPATH_W) '$(srcdir)/src/pirq.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pirq.Tpo $(DEPDIR)/pirq.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pirq.c' object='pirq.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pirq.c' object='pirq.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pirq.obj `if test -f '$(srcPath)/pirq.c'; then $(CYGPATH_W) '$(srcPath)/pirq.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pirq.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pirq.obj `if test -f 'src/pirq.c'; then $(CYGPATH_W) 'src/pirq.c'; else $(CYGPATH_W) '$(srcdir)/src/pirq.c'; fi`
 
-pci.o: $(srcPath)/pci.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pci.o -MD -MP -MF $(DEPDIR)/pci.Tpo -c -o pci.o `test -f '$(srcPath)/pci.c' || echo '$(srcdir)/'`$(srcPath)/pci.c
+pci.o: src/pci.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pci.o -MD -MP -MF $(DEPDIR)/pci.Tpo -c -o pci.o `test -f 'src/pci.c' || echo '$(srcdir)/'`src/pci.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pci.Tpo $(DEPDIR)/pci.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pci.c' object='pci.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pci.c' object='pci.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pci.o `test -f '$(srcPath)/pci.c' || echo '$(srcdir)/'`$(srcPath)/pci.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pci.o `test -f 'src/pci.c' || echo '$(srcdir)/'`src/pci.c
 
-pci.obj: $(srcPath)/pci.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pci.obj -MD -MP -MF $(DEPDIR)/pci.Tpo -c -o pci.obj `if test -f '$(srcPath)/pci.c'; then $(CYGPATH_W) '$(srcPath)/pci.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pci.c'; fi`
+pci.obj: src/pci.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pci.obj -MD -MP -MF $(DEPDIR)/pci.Tpo -c -o pci.obj `if test -f 'src/pci.c'; then $(CYGPATH_W) 'src/pci.c'; else $(CYGPATH_W) '$(srcdir)/src/pci.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pci.Tpo $(DEPDIR)/pci.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pci.c' object='pci.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pci.c' object='pci.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pci.obj `if test -f '$(srcPath)/pci.c'; then $(CYGPATH_W) '$(srcPath)/pci.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pci.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pci.obj `if test -f 'src/pci.c'; then $(CYGPATH_W) 'src/pci.c'; else $(CYGPATH_W) '$(srcdir)/src/pci.c'; fi`
 
-eths.o: $(srcPath)/eths.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eths.o -MD -MP -MF $(DEPDIR)/eths.Tpo -c -o eths.o `test -f '$(srcPath)/eths.c' || echo '$(srcdir)/'`$(srcPath)/eths.c
+eths.o: src/eths.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eths.o -MD -MP -MF $(DEPDIR)/eths.Tpo -c -o eths.o `test -f 'src/eths.c' || echo '$(srcdir)/'`src/eths.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/eths.Tpo $(DEPDIR)/eths.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/eths.c' object='eths.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/eths.c' object='eths.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eths.o `test -f '$(srcPath)/eths.c' || echo '$(srcdir)/'`$(srcPath)/eths.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eths.o `test -f 'src/eths.c' || echo '$(srcdir)/'`src/eths.c
 
-eths.obj: $(srcPath)/eths.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eths.obj -MD -MP -MF $(DEPDIR)/eths.Tpo -c -o eths.obj `if test -f '$(srcPath)/eths.c'; then $(CYGPATH_W) '$(srcPath)/eths.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/eths.c'; fi`
+eths.obj: src/eths.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eths.obj -MD -MP -MF $(DEPDIR)/eths.Tpo -c -o eths.obj `if test -f 'src/eths.c'; then $(CYGPATH_W) 'src/eths.c'; else $(CYGPATH_W) '$(srcdir)/src/eths.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/eths.Tpo $(DEPDIR)/eths.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/eths.c' object='eths.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/eths.c' object='eths.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eths.obj `if test -f '$(srcPath)/eths.c'; then $(CYGPATH_W) '$(srcPath)/eths.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/eths.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eths.obj `if test -f 'src/eths.c'; then $(CYGPATH_W) 'src/eths.c'; else $(CYGPATH_W) '$(srcdir)/src/eths.c'; fi`
 
-read_proc.o: $(srcPath)/read_proc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read_proc.o -MD -MP -MF $(DEPDIR)/read_proc.Tpo -c -o read_proc.o `test -f '$(srcPath)/read_proc.c' || echo '$(srcdir)/'`$(srcPath)/read_proc.c
+read_proc.o: src/read_proc.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read_proc.o -MD -MP -MF $(DEPDIR)/read_proc.Tpo -c -o read_proc.o `test -f 'src/read_proc.c' || echo '$(srcdir)/'`src/read_proc.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/read_proc.Tpo $(DEPDIR)/read_proc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/read_proc.c' object='read_proc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/read_proc.c' object='read_proc.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read_proc.o `test -f '$(srcPath)/read_proc.c' || echo '$(srcdir)/'`$(srcPath)/read_proc.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read_proc.o `test -f 'src/read_proc.c' || echo '$(srcdir)/'`src/read_proc.c
 
-read_proc.obj: $(srcPath)/read_proc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read_proc.obj -MD -MP -MF $(DEPDIR)/read_proc.Tpo -c -o read_proc.obj `if test -f '$(srcPath)/read_proc.c'; then $(CYGPATH_W) '$(srcPath)/read_proc.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/read_proc.c'; fi`
+read_proc.obj: src/read_proc.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read_proc.obj -MD -MP -MF $(DEPDIR)/read_proc.Tpo -c -o read_proc.obj `if test -f 'src/read_proc.c'; then $(CYGPATH_W) 'src/read_proc.c'; else $(CYGPATH_W) '$(srcdir)/src/read_proc.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/read_proc.Tpo $(DEPDIR)/read_proc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/read_proc.c' object='read_proc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/read_proc.c' object='read_proc.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read_proc.obj `if test -f '$(srcPath)/read_proc.c'; then $(CYGPATH_W) '$(srcPath)/read_proc.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/read_proc.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read_proc.obj `if test -f 'src/read_proc.c'; then $(CYGPATH_W) 'src/read_proc.c'; else $(CYGPATH_W) '$(srcdir)/src/read_proc.c'; fi`
 
-naming_policy.o: $(srcPath)/naming_policy.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT naming_policy.o -MD -MP -MF $(DEPDIR)/naming_policy.Tpo -c -o naming_policy.o `test -f '$(srcPath)/naming_policy.c' || echo '$(srcdir)/'`$(srcPath)/naming_policy.c
+naming_policy.o: src/naming_policy.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT naming_policy.o -MD -MP -MF $(DEPDIR)/naming_policy.Tpo -c -o naming_policy.o `test -f 'src/naming_policy.c' || echo '$(srcdir)/'`src/naming_policy.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/naming_policy.Tpo $(DEPDIR)/naming_policy.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/naming_policy.c' object='naming_policy.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/naming_policy.c' object='naming_policy.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o naming_policy.o `test -f '$(srcPath)/naming_policy.c' || echo '$(srcdir)/'`$(srcPath)/naming_policy.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o naming_policy.o `test -f 'src/naming_policy.c' || echo '$(srcdir)/'`src/naming_policy.c
 
-naming_policy.obj: $(srcPath)/naming_policy.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT naming_policy.obj -MD -MP -MF $(DEPDIR)/naming_policy.Tpo -c -o naming_policy.obj `if test -f '$(srcPath)/naming_policy.c'; then $(CYGPATH_W) '$(srcPath)/naming_policy.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/naming_policy.c'; fi`
+naming_policy.obj: src/naming_policy.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT naming_policy.obj -MD -MP -MF $(DEPDIR)/naming_policy.Tpo -c -o naming_policy.obj `if test -f 'src/naming_policy.c'; then $(CYGPATH_W) 'src/naming_policy.c'; else $(CYGPATH_W) '$(srcdir)/src/naming_policy.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/naming_policy.Tpo $(DEPDIR)/naming_policy.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/naming_policy.c' object='naming_policy.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/naming_policy.c' object='naming_policy.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o naming_policy.obj `if test -f '$(srcPath)/naming_policy.c'; then $(CYGPATH_W) '$(srcPath)/naming_policy.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/naming_policy.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o naming_policy.obj `if test -f 'src/naming_policy.c'; then $(CYGPATH_W) 'src/naming_policy.c'; else $(CYGPATH_W) '$(srcdir)/src/naming_policy.c'; fi`
 
-pcmcia.o: $(srcPath)/pcmcia.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pcmcia.o -MD -MP -MF $(DEPDIR)/pcmcia.Tpo -c -o pcmcia.o `test -f '$(srcPath)/pcmcia.c' || echo '$(srcdir)/'`$(srcPath)/pcmcia.c
+pcmcia.o: src/pcmcia.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pcmcia.o -MD -MP -MF $(DEPDIR)/pcmcia.Tpo -c -o pcmcia.o `test -f 'src/pcmcia.c' || echo '$(srcdir)/'`src/pcmcia.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pcmcia.Tpo $(DEPDIR)/pcmcia.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pcmcia.c' object='pcmcia.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pcmcia.c' object='pcmcia.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pcmcia.o `test -f '$(srcPath)/pcmcia.c' || echo '$(srcdir)/'`$(srcPath)/pcmcia.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pcmcia.o `test -f 'src/pcmcia.c' || echo '$(srcdir)/'`src/pcmcia.c
 
-pcmcia.obj: $(srcPath)/pcmcia.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pcmcia.obj -MD -MP -MF $(DEPDIR)/pcmcia.Tpo -c -o pcmcia.obj `if test -f '$(srcPath)/pcmcia.c'; then $(CYGPATH_W) '$(srcPath)/pcmcia.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pcmcia.c'; fi`
+pcmcia.obj: src/pcmcia.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pcmcia.obj -MD -MP -MF $(DEPDIR)/pcmcia.Tpo -c -o pcmcia.obj `if test -f 'src/pcmcia.c'; then $(CYGPATH_W) 'src/pcmcia.c'; else $(CYGPATH_W) '$(srcdir)/src/pcmcia.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/pcmcia.Tpo $(DEPDIR)/pcmcia.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/pcmcia.c' object='pcmcia.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/pcmcia.c' object='pcmcia.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pcmcia.obj `if test -f '$(srcPath)/pcmcia.c'; then $(CYGPATH_W) '$(srcPath)/pcmcia.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/pcmcia.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pcmcia.obj `if test -f 'src/pcmcia.c'; then $(CYGPATH_W) 'src/pcmcia.c'; else $(CYGPATH_W) '$(srcdir)/src/pcmcia.c'; fi`
 
-read-cis.o: $(srcPath)/read-cis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read-cis.o -MD -MP -MF $(DEPDIR)/read-cis.Tpo -c -o read-cis.o `test -f '$(srcPath)/read-cis.c' || echo '$(srcdir)/'`$(srcPath)/read-cis.c
+read-cis.o: src/read-cis.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read-cis.o -MD -MP -MF $(DEPDIR)/read-cis.Tpo -c -o read-cis.o `test -f 'src/read-cis.c' || echo '$(srcdir)/'`src/read-cis.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/read-cis.Tpo $(DEPDIR)/read-cis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/read-cis.c' object='read-cis.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/read-cis.c' object='read-cis.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read-cis.o `test -f '$(srcPath)/read-cis.c' || echo '$(srcdir)/'`$(srcPath)/read-cis.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read-cis.o `test -f 'src/read-cis.c' || echo '$(srcdir)/'`src/read-cis.c
 
-read-cis.obj: $(srcPath)/read-cis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read-cis.obj -MD -MP -MF $(DEPDIR)/read-cis.Tpo -c -o read-cis.obj `if test -f '$(srcPath)/read-cis.c'; then $(CYGPATH_W) '$(srcPath)/read-cis.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/read-cis.c'; fi`
+read-cis.obj: src/read-cis.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT read-cis.obj -MD -MP -MF $(DEPDIR)/read-cis.Tpo -c -o read-cis.obj `if test -f 'src/read-cis.c'; then $(CYGPATH_W) 'src/read-cis.c'; else $(CYGPATH_W) '$(srcdir)/src/read-cis.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/read-cis.Tpo $(DEPDIR)/read-cis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/read-cis.c' object='read-cis.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/read-cis.c' object='read-cis.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read-cis.obj `if test -f '$(srcPath)/read-cis.c'; then $(CYGPATH_W) '$(srcPath)/read-cis.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/read-cis.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o read-cis.obj `if test -f 'src/read-cis.c'; then $(CYGPATH_W) 'src/read-cis.c'; else $(CYGPATH_W) '$(srcdir)/src/read-cis.c'; fi`
 
-parse_cis.o: $(srcPath)/parse_cis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT parse_cis.o -MD -MP -MF $(DEPDIR)/parse_cis.Tpo -c -o parse_cis.o `test -f '$(srcPath)/parse_cis.c' || echo '$(srcdir)/'`$(srcPath)/parse_cis.c
+parse_cis.o: src/parse_cis.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT parse_cis.o -MD -MP -MF $(DEPDIR)/parse_cis.Tpo -c -o parse_cis.o `test -f 'src/parse_cis.c' || echo '$(srcdir)/'`src/parse_cis.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/parse_cis.Tpo $(DEPDIR)/parse_cis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/parse_cis.c' object='parse_cis.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/parse_cis.c' object='parse_cis.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o parse_cis.o `test -f '$(srcPath)/parse_cis.c' || echo '$(srcdir)/'`$(srcPath)/parse_cis.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o parse_cis.o `test -f 'src/parse_cis.c' || echo '$(srcdir)/'`src/parse_cis.c
 
-parse_cis.obj: $(srcPath)/parse_cis.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT parse_cis.obj -MD -MP -MF $(DEPDIR)/parse_cis.Tpo -c -o parse_cis.obj `if test -f '$(srcPath)/parse_cis.c'; then $(CYGPATH_W) '$(srcPath)/parse_cis.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/parse_cis.c'; fi`
+parse_cis.obj: src/parse_cis.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT parse_cis.obj -MD -MP -MF $(DEPDIR)/parse_cis.Tpo -c -o parse_cis.obj `if test -f 'src/parse_cis.c'; then $(CYGPATH_W) 'src/parse_cis.c'; else $(CYGPATH_W) '$(srcdir)/src/parse_cis.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/parse_cis.Tpo $(DEPDIR)/parse_cis.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/parse_cis.c' object='parse_cis.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/parse_cis.c' object='parse_cis.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o parse_cis.obj `if test -f '$(srcPath)/parse_cis.c'; then $(CYGPATH_W) '$(srcPath)/parse_cis.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/parse_cis.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o parse_cis.obj `if test -f 'src/parse_cis.c'; then $(CYGPATH_W) 'src/parse_cis.c'; else $(CYGPATH_W) '$(srcdir)/src/parse_cis.c'; fi`
 
-dmidecode.o: $(srcPath)/dmidecode/dmidecode.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmidecode.o -MD -MP -MF $(DEPDIR)/dmidecode.Tpo -c -o dmidecode.o `test -f '$(srcPath)/dmidecode/dmidecode.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/dmidecode.c
+dmidecode.o: src/dmidecode/dmidecode.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmidecode.o -MD -MP -MF $(DEPDIR)/dmidecode.Tpo -c -o dmidecode.o `test -f 'src/dmidecode/dmidecode.c' || echo '$(srcdir)/'`src/dmidecode/dmidecode.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/dmidecode.Tpo $(DEPDIR)/dmidecode.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/dmidecode.c' object='dmidecode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/dmidecode.c' object='dmidecode.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmidecode.o `test -f '$(srcPath)/dmidecode/dmidecode.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/dmidecode.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmidecode.o `test -f 'src/dmidecode/dmidecode.c' || echo '$(srcdir)/'`src/dmidecode/dmidecode.c
 
-dmidecode.obj: $(srcPath)/dmidecode/dmidecode.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmidecode.obj -MD -MP -MF $(DEPDIR)/dmidecode.Tpo -c -o dmidecode.obj `if test -f '$(srcPath)/dmidecode/dmidecode.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/dmidecode.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/dmidecode.c'; fi`
+dmidecode.obj: src/dmidecode/dmidecode.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmidecode.obj -MD -MP -MF $(DEPDIR)/dmidecode.Tpo -c -o dmidecode.obj `if test -f 'src/dmidecode/dmidecode.c'; then $(CYGPATH_W) 'src/dmidecode/dmidecode.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/dmidecode.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/dmidecode.Tpo $(DEPDIR)/dmidecode.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/dmidecode.c' object='dmidecode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/dmidecode.c' object='dmidecode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmidecode.obj `if test -f '$(srcPath)/dmidecode/dmidecode.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/dmidecode.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/dmidecode.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmidecode.obj `if test -f 'src/dmidecode/dmidecode.c'; then $(CYGPATH_W) 'src/dmidecode/dmidecode.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/dmidecode.c'; fi`
 
-dmioem.o: $(srcPath)/dmidecode/dmioem.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmioem.o -MD -MP -MF $(DEPDIR)/dmioem.Tpo -c -o dmioem.o `test -f '$(srcPath)/dmidecode/dmioem.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/dmioem.c
+dmioem.o: src/dmidecode/dmioem.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmioem.o -MD -MP -MF $(DEPDIR)/dmioem.Tpo -c -o dmioem.o `test -f 'src/dmidecode/dmioem.c' || echo '$(srcdir)/'`src/dmidecode/dmioem.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/dmioem.Tpo $(DEPDIR)/dmioem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/dmioem.c' object='dmioem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/dmioem.c' object='dmioem.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmioem.o `test -f '$(srcPath)/dmidecode/dmioem.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/dmioem.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmioem.o `test -f 'src/dmidecode/dmioem.c' || echo '$(srcdir)/'`src/dmidecode/dmioem.c
 
-dmioem.obj: $(srcPath)/dmidecode/dmioem.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmioem.obj -MD -MP -MF $(DEPDIR)/dmioem.Tpo -c -o dmioem.obj `if test -f '$(srcPath)/dmidecode/dmioem.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/dmioem.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/dmioem.c'; fi`
+dmioem.obj: src/dmidecode/dmioem.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dmioem.obj -MD -MP -MF $(DEPDIR)/dmioem.Tpo -c -o dmioem.obj `if test -f 'src/dmidecode/dmioem.c'; then $(CYGPATH_W) 'src/dmidecode/dmioem.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/dmioem.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/dmioem.Tpo $(DEPDIR)/dmioem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/dmioem.c' object='dmioem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/dmioem.c' object='dmioem.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmioem.obj `if test -f '$(srcPath)/dmidecode/dmioem.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/dmioem.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/dmioem.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dmioem.obj `if test -f 'src/dmidecode/dmioem.c'; then $(CYGPATH_W) 'src/dmidecode/dmioem.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/dmioem.c'; fi`
 
-util.o: $(srcPath)/dmidecode/util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT util.o -MD -MP -MF $(DEPDIR)/util.Tpo -c -o util.o `test -f '$(srcPath)/dmidecode/util.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/util.c
+util.o: src/dmidecode/util.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT util.o -MD -MP -MF $(DEPDIR)/util.Tpo -c -o util.o `test -f 'src/dmidecode/util.c' || echo '$(srcdir)/'`src/dmidecode/util.c
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/util.Tpo $(DEPDIR)/util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/util.c' object='util.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/util.c' object='util.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o util.o `test -f '$(srcPath)/dmidecode/util.c' || echo '$(srcdir)/'`$(srcPath)/dmidecode/util.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o util.o `test -f 'src/dmidecode/util.c' || echo '$(srcdir)/'`src/dmidecode/util.c
 
-util.obj: $(srcPath)/dmidecode/util.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT util.obj -MD -MP -MF $(DEPDIR)/util.Tpo -c -o util.obj `if test -f '$(srcPath)/dmidecode/util.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/util.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/util.c'; fi`
+util.obj: src/dmidecode/util.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT util.obj -MD -MP -MF $(DEPDIR)/util.Tpo -c -o util.obj `if test -f 'src/dmidecode/util.c'; then $(CYGPATH_W) 'src/dmidecode/util.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/util.c'; fi`
 @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/util.Tpo $(DEPDIR)/util.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcPath)/dmidecode/util.c' object='util.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='src/dmidecode/util.c' object='util.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o util.obj `if test -f '$(srcPath)/dmidecode/util.c'; then $(CYGPATH_W) '$(srcPath)/dmidecode/util.c'; else $(CYGPATH_W) '$(srcdir)/$(srcPath)/dmidecode/util.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o util.obj `if test -f 'src/dmidecode/util.c'; then $(CYGPATH_W) 'src/dmidecode/util.c'; else $(CYGPATH_W) '$(srcdir)/src/dmidecode/util.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

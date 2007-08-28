@@ -53,26 +53,21 @@ am__installdirs = "$(DESTDIR)$(sbindir)"
 sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(sbin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_src_biosdevname_OBJECTS = $(srcPath)/bios_dev_name.$(OBJEXT) \
-	$(srcPath)/bios_device.$(OBJEXT) $(srcPath)/pirq.$(OBJEXT) \
-	$(srcPath)/pci.$(OBJEXT) $(srcPath)/eths.$(OBJEXT) \
-	$(srcPath)/read_proc.$(OBJEXT) \
-	$(srcPath)/naming_policy.$(OBJEXT) $(srcPath)/pcmcia.$(OBJEXT) \
-	$(srcPath)/read-cis.$(OBJEXT) $(srcPath)/parse_cis.$(OBJEXT) \
-	$(srcPath)/dmidecode/dmidecode.$(OBJEXT) \
-	$(srcPath)/dmidecode/dmioem.$(OBJEXT) \
-	$(srcPath)/dmidecode/util.$(OBJEXT)
+am_src_biosdevname_OBJECTS = src/bios_dev_name.$(OBJEXT) \
+	src/bios_device.$(OBJEXT) src/pirq.$(OBJEXT) src/pci.$(OBJEXT) \
+	src/eths.$(OBJEXT) src/read_proc.$(OBJEXT) \
+	src/naming_policy.$(OBJEXT) src/pcmcia.$(OBJEXT) \
+	src/read-cis.$(OBJEXT) src/parse_cis.$(OBJEXT) \
+	src/dmidecode/dmidecode.$(OBJEXT) \
+	src/dmidecode/dmioem.$(OBJEXT) src/dmidecode/util.$(OBJEXT)
 src_biosdevname_OBJECTS = $(am_src_biosdevname_OBJECTS)
 src_biosdevname_LDADD = $(LDADD)
-am__objects_1 = $(srcPath)/bios_dev_name.$(OBJEXT) \
-	$(srcPath)/bios_device.$(OBJEXT) $(srcPath)/pirq.$(OBJEXT) \
-	$(srcPath)/pci.$(OBJEXT) $(srcPath)/eths.$(OBJEXT) \
-	$(srcPath)/read_proc.$(OBJEXT) \
-	$(srcPath)/naming_policy.$(OBJEXT) $(srcPath)/pcmcia.$(OBJEXT) \
-	$(srcPath)/read-cis.$(OBJEXT) $(srcPath)/parse_cis.$(OBJEXT) \
-	$(srcPath)/dmidecode/dmidecode.$(OBJEXT) \
-	$(srcPath)/dmidecode/dmioem.$(OBJEXT) \
-	$(srcPath)/dmidecode/util.$(OBJEXT)
+am__objects_1 = src/bios_dev_name.$(OBJEXT) src/bios_device.$(OBJEXT) \
+	src/pirq.$(OBJEXT) src/pci.$(OBJEXT) src/eths.$(OBJEXT) \
+	src/read_proc.$(OBJEXT) src/naming_policy.$(OBJEXT) \
+	src/pcmcia.$(OBJEXT) src/read-cis.$(OBJEXT) \
+	src/parse_cis.$(OBJEXT) src/dmidecode/dmidecode.$(OBJEXT) \
+	src/dmidecode/dmioem.$(OBJEXT) src/dmidecode/util.$(OBJEXT)
 am_src_biosdevnameS_OBJECTS = $(am__objects_1)
 src_biosdevnameS_OBJECTS = $(am_src_biosdevnameS_OBJECTS)
 src_biosdevnameS_LDADD = $(LDADD)
@@ -208,41 +203,41 @@ INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 srcPath = src/
 src_biosdevname_SOURCES = \
-	$(srcPath)/bios_dev_name.c \
-	$(srcPath)/bios_device.c \
-	$(srcPath)/pirq.c \
-	$(srcPath)/pci.c \
-	$(srcPath)/eths.c \
-	$(srcPath)/read_proc.c \
-	$(srcPath)/naming_policy.c \
-	$(srcPath)/pcmcia.c \
-	$(srcPath)/read-cis.c \
-	$(srcPath)/parse_cis.c \
-	$(srcPath)/dmidecode/dmidecode.c \
-	$(srcPath)/dmidecode/dmioem.c \
-	$(srcPath)/dmidecode/util.c
+	src/bios_dev_name.c \
+	src/bios_device.c \
+	src/pirq.c \
+	src/pci.c \
+	src/eths.c \
+	src/read_proc.c \
+	src/naming_policy.c \
+	src/pcmcia.c \
+	src/read-cis.c \
+	src/parse_cis.c \
+	src/dmidecode/dmidecode.c \
+	src/dmidecode/dmioem.c \
+	src/dmidecode/util.c
 
 src_biosdevnameS_SOURCES = $(src_biosdevname_SOURCES)
 src_biosdevnameS_LDFLAGS = -all-static
 EXTRA_DIST = \
-	$(srcPath)/bios_dev_name.h \
-	$(srcPath)/bios_device.h \
-	$(srcPath)/pirq.h \
-	$(srcPath)/pci.h \
-	$(srcPath)/eths.h \
-	$(srcPath)/ethtool-util.h \
-	$(srcPath)/ethtool-copy.h \
-	$(srcPath)/list.h \
-	$(srcPath)/naming_policy.h \
-	$(srcPath)/pcmcia.h \
-	$(srcPath)/cistpl.h \
-	$(srcPath)/state.h \
-	$(srcPath)/libbiosdevname.h \
-	$(srcPath)/dmidecode/config.h \
-	$(srcPath)/dmidecode/dmidecode.h \
-	$(srcPath)/dmidecode/dmioem.h \
-	$(srcPath)/dmidecode/types.h \
-	$(srcPath)/dmidecode/util.h
+	src/bios_dev_name.h \
+	src/bios_device.h \
+	src/pirq.h \
+	src/pci.h \
+	src/eths.h \
+	src/ethtool-util.h \
+	src/ethtool-copy.h \
+	src/list.h \
+	src/naming_policy.h \
+	src/pcmcia.h \
+	src/cistpl.h \
+	src/state.h \
+	src/libbiosdevname.h \
+	src/dmidecode/config.h \
+	src/dmidecode/dmidecode.h \
+	src/dmidecode/dmioem.h \
+	src/dmidecode/types.h \
+	src/dmidecode/util.h
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -326,50 +321,41 @@ uninstall-sbinPROGRAMS:
 
 clean-sbinPROGRAMS:
 	-test -z "$(sbin_PROGRAMS)" || rm -f $(sbin_PROGRAMS)
-$(srcPath)/$(am__dirstamp):
-	@$(MKDIR_P) $(srcPath)
-	@: > $(srcPath)/$(am__dirstamp)
-$(srcPath)/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) $(srcPath)/$(DEPDIR)
-	@: > $(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/bios_dev_name.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/bios_device.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/pirq.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/pci.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/eths.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/read_proc.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/naming_policy.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/pcmcia.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/read-cis.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/parse_cis.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
-	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/dmidecode/$(am__dirstamp):
-	@$(MKDIR_P) $(srcPath)/dmidecode
-	@: > $(srcPath)/dmidecode/$(am__dirstamp)
-$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) $(srcPath)/dmidecode/$(DEPDIR)
-	@: > $(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/dmidecode/dmidecode.$(OBJEXT):  \
-	$(srcPath)/dmidecode/$(am__dirstamp) \
-	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/dmidecode/dmioem.$(OBJEXT):  \
-	$(srcPath)/dmidecode/$(am__dirstamp) \
-	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
-$(srcPath)/dmidecode/util.$(OBJEXT):  \
-	$(srcPath)/dmidecode/$(am__dirstamp) \
-	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
 src/$(am__dirstamp):
 	@$(MKDIR_P) src
 	@: > src/$(am__dirstamp)
+src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/$(DEPDIR)
+	@: > src/$(DEPDIR)/$(am__dirstamp)
+src/bios_dev_name.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/bios_device.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/pirq.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/pci.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/eths.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/read_proc.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/naming_policy.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/pcmcia.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/read-cis.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/parse_cis.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/dmidecode/$(am__dirstamp):
+	@$(MKDIR_P) src/dmidecode
+	@: > src/dmidecode/$(am__dirstamp)
+src/dmidecode/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/dmidecode/$(DEPDIR)
+	@: > src/dmidecode/$(DEPDIR)/$(am__dirstamp)
+src/dmidecode/dmidecode.$(OBJEXT): src/dmidecode/$(am__dirstamp) \
+	src/dmidecode/$(DEPDIR)/$(am__dirstamp)
+src/dmidecode/dmioem.$(OBJEXT): src/dmidecode/$(am__dirstamp) \
+	src/dmidecode/$(DEPDIR)/$(am__dirstamp)
+src/dmidecode/util.$(OBJEXT): src/dmidecode/$(am__dirstamp) \
+	src/dmidecode/$(DEPDIR)/$(am__dirstamp)
 src/biosdevname$(EXEEXT): $(src_biosdevname_OBJECTS) $(src_biosdevname_DEPENDENCIES) src/$(am__dirstamp)
 	@rm -f src/biosdevname$(EXEEXT)
 	$(LINK) $(src_biosdevname_OBJECTS) $(src_biosdevname_LDADD) $(LIBS)
@@ -379,36 +365,36 @@ src/biosdevnameS$(EXEEXT): $(src_biosdevnameS_OBJECTS) $(src_biosdevnameS_DEPEND
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f $(srcPath)/bios_dev_name.$(OBJEXT)
-	-rm -f $(srcPath)/bios_device.$(OBJEXT)
-	-rm -f $(srcPath)/dmidecode/dmidecode.$(OBJEXT)
-	-rm -f $(srcPath)/dmidecode/dmioem.$(OBJEXT)
-	-rm -f $(srcPath)/dmidecode/util.$(OBJEXT)
-	-rm -f $(srcPath)/eths.$(OBJEXT)
-	-rm -f $(srcPath)/naming_policy.$(OBJEXT)
-	-rm -f $(srcPath)/parse_cis.$(OBJEXT)
-	-rm -f $(srcPath)/pci.$(OBJEXT)
-	-rm -f $(srcPath)/pcmcia.$(OBJEXT)
-	-rm -f $(srcPath)/pirq.$(OBJEXT)
-	-rm -f $(srcPath)/read-cis.$(OBJEXT)
-	-rm -f $(srcPath)/read_proc.$(OBJEXT)
+	-rm -f src/bios_dev_name.$(OBJEXT)
+	-rm -f src/bios_device.$(OBJEXT)
+	-rm -f src/dmidecode/dmidecode.$(OBJEXT)
+	-rm -f src/dmidecode/dmioem.$(OBJEXT)
+	-rm -f src/dmidecode/util.$(OBJEXT)
+	-rm -f src/eths.$(OBJEXT)
+	-rm -f src/naming_policy.$(OBJEXT)
+	-rm -f src/parse_cis.$(OBJEXT)
+	-rm -f src/pci.$(OBJEXT)
+	-rm -f src/pcmcia.$(OBJEXT)
+	-rm -f src/pirq.$(OBJEXT)
+	-rm -f src/read-cis.$(OBJEXT)
+	-rm -f src/read_proc.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/bios_dev_name.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/bios_device.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/eths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/naming_policy.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/parse_cis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pci.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pcmcia.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pirq.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/read-cis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/read_proc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/dmidecode.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/dmioem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/util.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/bios_dev_name.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/bios_device.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/eths.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/naming_policy.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/parse_cis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/pci.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/pcmcia.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/pirq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/read-cis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/read_proc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/dmidecode/$(DEPDIR)/dmidecode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/dmidecode/$(DEPDIR)/dmioem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/dmidecode/$(DEPDIR)/util.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -728,11 +714,10 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
-	-test -z "$(srcPath)/$(DEPDIR)/$(am__dirstamp)" || rm -f $(srcPath)/$(DEPDIR)/$(am__dirstamp)
-	-test -z "$(srcPath)/$(am__dirstamp)" || rm -f $(srcPath)/$(am__dirstamp)
-	-test -z "$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)" || rm -f $(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
-	-test -z "$(srcPath)/dmidecode/$(am__dirstamp)" || rm -f $(srcPath)/dmidecode/$(am__dirstamp)
+	-rm -f src/dmidecode/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/dmidecode/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -743,7 +728,7 @@ clean-am: clean-generic clean-sbinPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf $(srcPath)/$(DEPDIR) $(srcPath)/dmidecode/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/dmidecode/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -779,7 +764,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf $(srcPath)/$(DEPDIR) $(srcPath)/dmidecode/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/dmidecode/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
