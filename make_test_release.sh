@@ -22,4 +22,5 @@ make -e srpm
 
 . version
 
+popd
 /var/ftp/pub/yum/dell-repo/testing/_tools/upload_rpm.sh ./_builddir/dist/SRPMS/${PACKAGE_NAME}-${PACKAGE_VERSION}-*.src.rpm
