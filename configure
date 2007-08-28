@@ -8115,7 +8115,7 @@ RULEDEST=$RULEDEST
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile biosdevname.spec.fedora biosdevname.spec.suse"
+ac_config_files="$ac_config_files Makefile biosdevname.spec.fedora biosdevname.spec.suse"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8704,7 +8704,6 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "biosdevname.spec.fedora") CONFIG_FILES="$CONFIG_FILES biosdevname.spec.fedora" ;;
     "biosdevname.spec.suse") CONFIG_FILES="$CONFIG_FILES biosdevname.spec.suse" ;;
 
