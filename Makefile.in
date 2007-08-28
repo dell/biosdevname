@@ -164,6 +164,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src
 dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse
+CLEANFILES = biosdevname.rules
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -518,6 +519,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -600,13 +602,12 @@ uninstall-am:
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
 	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am
 
-
 biosdevname.rules: biosdevname.rules.in
-	sed -e 's#/usr/sbin/#$(sbindir)/#' biosdevname.rules.in > biosdevname.rules
+	sed -e 's#/usr/sbin/#$(sbindir)/#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules
 
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
-	$(INSTALL_DATA) $(srcdir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
