@@ -1,5 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
+# vim:tw=0:ts=8:sw=8:et
 
 AC_PREREQ(2.59)
 AC_INIT([biosdevname],[0.2.3],[Matt_Domsch@dell.com])
@@ -73,5 +74,5 @@ fi
 AC_SUBST(RULEDEST, $RULEDEST)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile biosdevname.spec.fedora biosdevname.spec.suse])
 AC_OUTPUT
