@@ -239,6 +239,7 @@ EXTRA_DIST = \
 	src/dmidecode/types.h \
 	src/dmidecode/util.h
 
+SPEC_FILE = biosdevname.spec.fedora
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -808,6 +809,12 @@ biosdevname.rules: biosdevname.rules.in
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+rpm: dist
+	mkdir -p dist/{SOURCES,BUILD,RPMS,SRPMS,SPECS}
+	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz dist/SOURCES
+	cp $(SPEC_FILE) dist/SPECS/@PACKAGE_NAME@.spec
+	rpmbuild --define "_topdir $$PWD/dist" -ba --nodeps dist/SPECS/@PACKAGE_NAME@.spec ;
+	rm -rf dist/{SOURCES,BUILD,SPECS}
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

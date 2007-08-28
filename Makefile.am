@@ -12,3 +12,11 @@ install-data-local: biosdevname.rules
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
 
 include src/Makefile.am
+
+SPEC_FILE=biosdevname.spec.fedora
+rpm: dist
+	mkdir -p dist/{SOURCES,BUILD,RPMS,SRPMS,SPECS}
+	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz dist/SOURCES
+	cp $(SPEC_FILE) dist/SPECS/@PACKAGE_NAME@.spec
+	rpmbuild --define "_topdir $$PWD/dist" -ba --nodeps dist/SPECS/@PACKAGE_NAME@.spec ;
+	rm -rf dist/{SOURCES,BUILD,SPECS}
