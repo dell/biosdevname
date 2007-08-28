@@ -14,6 +14,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -30,14 +31,15 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_noinst_DATA) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/biosdevname.spec.fedora.in \
 	$(srcdir)/biosdevname.spec.suse.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	TODO config.guess config.sub depcomp install-sh ltmain.sh \
-	missing
+	$(srcdir)/src/Makefile.am $(top_srcdir)/configure AUTHORS \
+	COPYING ChangeLog INSTALL NEWS TODO compile depcomp install-sh \
+	ltmain.sh missing
+sbin_PROGRAMS = src/biosdevname$(EXEEXT) src/biosdevnameS$(EXEEXT)
+subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -47,8 +49,44 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = biosdevname.spec.fedora biosdevname.spec.suse
-SOURCES =
-DIST_SOURCES =
+am__installdirs = "$(DESTDIR)$(sbindir)"
+sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(sbin_PROGRAMS)
+am__dirstamp = $(am__leading_dot)dirstamp
+am_src_biosdevname_OBJECTS = $(srcPath)/bios_dev_name.$(OBJEXT) \
+	$(srcPath)/bios_device.$(OBJEXT) $(srcPath)/pirq.$(OBJEXT) \
+	$(srcPath)/pci.$(OBJEXT) $(srcPath)/eths.$(OBJEXT) \
+	$(srcPath)/read_proc.$(OBJEXT) \
+	$(srcPath)/naming_policy.$(OBJEXT) $(srcPath)/pcmcia.$(OBJEXT) \
+	$(srcPath)/read-cis.$(OBJEXT) $(srcPath)/parse_cis.$(OBJEXT) \
+	$(srcPath)/dmidecode/dmidecode.$(OBJEXT) \
+	$(srcPath)/dmidecode/dmioem.$(OBJEXT) \
+	$(srcPath)/dmidecode/util.$(OBJEXT)
+src_biosdevname_OBJECTS = $(am_src_biosdevname_OBJECTS)
+src_biosdevname_LDADD = $(LDADD)
+am__objects_1 = $(srcPath)/bios_dev_name.$(OBJEXT) \
+	$(srcPath)/bios_device.$(OBJEXT) $(srcPath)/pirq.$(OBJEXT) \
+	$(srcPath)/pci.$(OBJEXT) $(srcPath)/eths.$(OBJEXT) \
+	$(srcPath)/read_proc.$(OBJEXT) \
+	$(srcPath)/naming_policy.$(OBJEXT) $(srcPath)/pcmcia.$(OBJEXT) \
+	$(srcPath)/read-cis.$(OBJEXT) $(srcPath)/parse_cis.$(OBJEXT) \
+	$(srcPath)/dmidecode/dmidecode.$(OBJEXT) \
+	$(srcPath)/dmidecode/dmioem.$(OBJEXT) \
+	$(srcPath)/dmidecode/util.$(OBJEXT)
+am_src_biosdevnameS_OBJECTS = $(am__objects_1)
+src_biosdevnameS_OBJECTS = $(am_src_biosdevnameS_OBJECTS)
+src_biosdevnameS_LDADD = $(LDADD)
+src_biosdevnameS_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(src_biosdevnameS_LDFLAGS) $(LDFLAGS) -o $@
+DEFAULT_INCLUDES = -I.@am__isrc@
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(src_biosdevname_SOURCES) $(src_biosdevnameS_SOURCES)
+DIST_SOURCES = $(src_biosdevname_SOURCES) $(src_biosdevnameS_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -162,16 +200,58 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src
+AUTOMAKE_OPTIONS = subdir-objects
+SUBDIRS = 
 dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse
 CLEANFILES = biosdevname.rules
+INCLUDES = -I..
+AM_CFLAGS = -Wall -fno-strict-aliasing
+srcPath = src/
+src_biosdevname_SOURCES = \
+	$(srcPath)/bios_dev_name.c \
+	$(srcPath)/bios_device.c \
+	$(srcPath)/pirq.c \
+	$(srcPath)/pci.c \
+	$(srcPath)/eths.c \
+	$(srcPath)/read_proc.c \
+	$(srcPath)/naming_policy.c \
+	$(srcPath)/pcmcia.c \
+	$(srcPath)/read-cis.c \
+	$(srcPath)/parse_cis.c \
+	$(srcPath)/dmidecode/dmidecode.c \
+	$(srcPath)/dmidecode/dmioem.c \
+	$(srcPath)/dmidecode/util.c
+
+src_biosdevnameS_SOURCES = $(src_biosdevname_SOURCES)
+src_biosdevnameS_LDFLAGS = -all-static
+EXTRA_DIST = \
+	$(srcPath)/bios_dev_name.h \
+	$(srcPath)/bios_device.h \
+	$(srcPath)/pirq.h \
+	$(srcPath)/pci.h \
+	$(srcPath)/eths.h \
+	$(srcPath)/ethtool-util.h \
+	$(srcPath)/ethtool-copy.h \
+	$(srcPath)/list.h \
+	$(srcPath)/naming_policy.h \
+	$(srcPath)/pcmcia.h \
+	$(srcPath)/cistpl.h \
+	$(srcPath)/state.h \
+	$(srcPath)/libbiosdevname.h \
+	$(srcPath)/dmidecode/config.h \
+	$(srcPath)/dmidecode/dmidecode.h \
+	$(srcPath)/dmidecode/dmioem.h \
+	$(srcPath)/dmidecode/types.h \
+	$(srcPath)/dmidecode/util.h
+
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
+.SUFFIXES: .c .o .obj
 am--refresh:
 	@:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/src/Makefile.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -223,6 +303,128 @@ biosdevname.spec.fedora: $(top_builddir)/config.status $(srcdir)/biosdevname.spe
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 biosdevname.spec.suse: $(top_builddir)/config.status $(srcdir)/biosdevname.spec.suse.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+install-sbinPROGRAMS: $(sbin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	test -z "$(sbindir)" || $(MKDIR_P) "$(DESTDIR)$(sbindir)"
+	@list='$(sbin_PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(sbinPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(sbindir)/$$f'"; \
+	   $(INSTALL_PROGRAM_ENV) $(sbinPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(sbindir)/$$f" || exit 1; \
+	  else :; fi; \
+	done
+
+uninstall-sbinPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(sbin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f '$(DESTDIR)$(sbindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(sbindir)/$$f"; \
+	done
+
+clean-sbinPROGRAMS:
+	-test -z "$(sbin_PROGRAMS)" || rm -f $(sbin_PROGRAMS)
+$(srcPath)/$(am__dirstamp):
+	@$(MKDIR_P) $(srcPath)
+	@: > $(srcPath)/$(am__dirstamp)
+$(srcPath)/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) $(srcPath)/$(DEPDIR)
+	@: > $(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/bios_dev_name.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/bios_device.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/pirq.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/pci.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/eths.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/read_proc.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/naming_policy.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/pcmcia.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/read-cis.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/parse_cis.$(OBJEXT): $(srcPath)/$(am__dirstamp) \
+	$(srcPath)/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/dmidecode/$(am__dirstamp):
+	@$(MKDIR_P) $(srcPath)/dmidecode
+	@: > $(srcPath)/dmidecode/$(am__dirstamp)
+$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) $(srcPath)/dmidecode/$(DEPDIR)
+	@: > $(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/dmidecode/dmidecode.$(OBJEXT):  \
+	$(srcPath)/dmidecode/$(am__dirstamp) \
+	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/dmidecode/dmioem.$(OBJEXT):  \
+	$(srcPath)/dmidecode/$(am__dirstamp) \
+	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
+$(srcPath)/dmidecode/util.$(OBJEXT):  \
+	$(srcPath)/dmidecode/$(am__dirstamp) \
+	$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
+src/$(am__dirstamp):
+	@$(MKDIR_P) src
+	@: > src/$(am__dirstamp)
+src/biosdevname$(EXEEXT): $(src_biosdevname_OBJECTS) $(src_biosdevname_DEPENDENCIES) src/$(am__dirstamp)
+	@rm -f src/biosdevname$(EXEEXT)
+	$(LINK) $(src_biosdevname_OBJECTS) $(src_biosdevname_LDADD) $(LIBS)
+src/biosdevnameS$(EXEEXT): $(src_biosdevnameS_OBJECTS) $(src_biosdevnameS_DEPENDENCIES) src/$(am__dirstamp)
+	@rm -f src/biosdevnameS$(EXEEXT)
+	$(src_biosdevnameS_LINK) $(src_biosdevnameS_OBJECTS) $(src_biosdevnameS_LDADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+	-rm -f $(srcPath)/bios_dev_name.$(OBJEXT)
+	-rm -f $(srcPath)/bios_device.$(OBJEXT)
+	-rm -f $(srcPath)/dmidecode/dmidecode.$(OBJEXT)
+	-rm -f $(srcPath)/dmidecode/dmioem.$(OBJEXT)
+	-rm -f $(srcPath)/dmidecode/util.$(OBJEXT)
+	-rm -f $(srcPath)/eths.$(OBJEXT)
+	-rm -f $(srcPath)/naming_policy.$(OBJEXT)
+	-rm -f $(srcPath)/parse_cis.$(OBJEXT)
+	-rm -f $(srcPath)/pci.$(OBJEXT)
+	-rm -f $(srcPath)/pcmcia.$(OBJEXT)
+	-rm -f $(srcPath)/pirq.$(OBJEXT)
+	-rm -f $(srcPath)/read-cis.$(OBJEXT)
+	-rm -f $(srcPath)/read_proc.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/bios_dev_name.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/bios_device.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/eths.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/naming_policy.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/parse_cis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pci.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pcmcia.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/pirq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/read-cis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/$(DEPDIR)/read_proc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/dmidecode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/dmioem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(srcPath)/dmidecode/$(DEPDIR)/util.Po@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	mv -f $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	mv -f $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -499,9 +701,12 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(DATA) config.h
+all-am: Makefile $(PROGRAMS) $(DATA) config.h
 installdirs: installdirs-recursive
 installdirs-am:
+	for dir in "$(DESTDIR)$(sbindir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -523,18 +728,25 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f src/$(am__dirstamp)
+	-test -z "$(srcPath)/$(DEPDIR)/$(am__dirstamp)" || rm -f $(srcPath)/$(DEPDIR)/$(am__dirstamp)
+	-test -z "$(srcPath)/$(am__dirstamp)" || rm -f $(srcPath)/$(am__dirstamp)
+	-test -z "$(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)" || rm -f $(srcPath)/dmidecode/$(DEPDIR)/$(am__dirstamp)
+	-test -z "$(srcPath)/dmidecode/$(am__dirstamp)" || rm -f $(srcPath)/dmidecode/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic mostlyclean-am
+clean-am: clean-generic clean-sbinPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+	-rm -rf $(srcPath)/$(DEPDIR) $(srcPath)/dmidecode/$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-hdr distclean-tags
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-hdr distclean-tags
 
 dvi: dvi-recursive
 
@@ -550,7 +762,7 @@ install-data-am: install-data-local
 
 install-dvi: install-dvi-recursive
 
-install-exec-am:
+install-exec-am: install-sbinPROGRAMS
 
 install-html: install-html-recursive
 
@@ -567,12 +779,13 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
+	-rm -rf $(srcPath)/$(DEPDIR) $(srcPath)/dmidecode/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic
 
 pdf: pdf-recursive
 
@@ -582,25 +795,27 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-sbinPROGRAMS
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
 	install-strip
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
-	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
-	dist-shar dist-tarZ dist-zip distcheck distclean \
-	distclean-generic distclean-hdr distclean-tags distcleancheck \
-	distdir distuninstallcheck dvi dvi-am html html-am info \
-	info-am install install-am install-data install-data-am \
-	install-data-local install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
+	clean-sbinPROGRAMS ctags ctags-recursive dist dist-all \
+	dist-bzip2 dist-gzip dist-shar dist-tarZ dist-zip distcheck \
+	distclean distclean-compile distclean-generic distclean-hdr \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-data-local install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-sbinPROGRAMS install-strip installcheck \
 	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-sbinPROGRAMS
 
 biosdevname.rules: biosdevname.rules.in
 	sed -e 's#/usr/sbin/#$(sbindir)/#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules

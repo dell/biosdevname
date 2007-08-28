@@ -14,6 +14,7 @@ AM_MAINTAINER_MODE
 # Checks for programs.
 AC_PROG_AWK
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_LN_S
 AC_CHECK_PROGS([READELF], [readelf])
 

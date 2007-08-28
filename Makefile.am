@@ -1,4 +1,5 @@
-SUBDIRS = src
+AUTOMAKE_OPTIONS = subdir-objects
+SUBDIRS = 
 
 dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse
 
@@ -9,3 +10,5 @@ biosdevname.rules: biosdevname.rules.in
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+
+include src/Makefile.am
