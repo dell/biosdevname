@@ -198,7 +198,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = 
 dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse
-CLEANFILES = biosdevname.rules
+CLEANFILES = biosdevname.rules version
 INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 srcPath = src/
@@ -809,11 +809,22 @@ biosdevname.rules: biosdevname.rules.in
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+
+# extra space at beginning to work around automake... :(
+ ifndef SPEC_FILE
+ endif
 rpm: dist
 	mkdir -p dist/{SOURCES,BUILD,RPMS,SRPMS,SPECS}
 	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz dist/SOURCES
 	cp $(SPEC_FILE) dist/SPECS/@PACKAGE_NAME@.spec
 	rpmbuild --define "_topdir $$PWD/dist" -ba --nodeps dist/SPECS/@PACKAGE_NAME@.spec ;
+	rm -rf dist/{SOURCES,BUILD,SPECS}
+
+srpm: dist
+	mkdir -p dist/{SOURCES,BUILD,RPMS,SRPMS,SPECS}
+	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz dist/SOURCES
+	cp $(SPEC_FILE) dist/SPECS/@PACKAGE_NAME@.spec
+	rpmbuild --define "_topdir $$PWD/dist" -bs --nodeps dist/SPECS/@PACKAGE_NAME@.spec ;
 	rm -rf dist/{SOURCES,BUILD,SPECS}
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
