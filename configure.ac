@@ -75,6 +75,9 @@ elif [[ -e /etc/udev/rules.d/25-iftab.rules ]]; then
 fi
 AC_SUBST(RULEDEST, $RULEDEST)
 
+echo "PACKAGE_NAME='$PACKAGE_NAME'" > version
+echo "PACKAGE_VERSION='$PACKAGE_VERSION'" >> version
+echo "PACKAGE_STRING='$PACKAGE_STRING'" >> version
 
 AC_CONFIG_FILES([Makefile biosdevname.spec.fedora biosdevname.spec.suse])
 AC_OUTPUT
