@@ -9,6 +9,7 @@ AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT()
 AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
 
 # Checks for programs.
 AC_PROG_AWK
