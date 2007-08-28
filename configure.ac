@@ -76,5 +76,5 @@ fi
 AC_SUBST(RULEDEST, $RULEDEST)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile biosdevname.spec.fedora biosdevname.spec.suse])
+AC_CONFIG_FILES([Makefile biosdevname.spec.fedora biosdevname.spec.suse])
 AC_OUTPUT
