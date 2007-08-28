@@ -39,6 +39,8 @@ for i in *.tar.{gz,bz2} *.zip dist/SRPMS/*.src.rpm; do
     cp $i $DEST
 done
 
-/var/ftp/pub/yum/dell-repo/software/_tools/upload_rpm.sh ./_builddir/dist/SRPMS/${PACKAGE_NAME}-${PACKAGE_VERSION}-*.src.rpm
+/var/ftp/pub/yum/dell-repo/software/_tools/upload_rpm.sh     \
+        -c /var/ftp/pub/yum/dell-repo/testing/_tools/repo-biosdevname.cfg   \
+        ./_builddir/dist/SRPMS/${PACKAGE_NAME}-${PACKAGE_VERSION}-*.src.rpm
 
 git push --tags origin master:master
