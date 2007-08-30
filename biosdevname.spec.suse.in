@@ -21,7 +21,7 @@ Requires: udev
 
 
 %description
-biosdevname in its simplest form takes an kernel name name as an
+biosdevname in its simplest form takes a kernel device name as an
 argument, and returns the BIOS-given name it "should" be.  This is necessary
 on systems where the BIOS name for a given device (e.g. the label on
 the chassis is "Gb1") doesn't map directly and obviously to the kernel
