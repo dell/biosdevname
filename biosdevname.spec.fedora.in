@@ -50,13 +50,10 @@ rm -rf %{buildroot}
 /sbin/%{name}
 %config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 
 %changelog
 * Mon Aug 27 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.3-1
-- eliminate libbiosdevname.*
+- eliminate libbiosdevname.*, pre and post scripts
 
 * Fri Aug 24 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.2-1
 - ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables
