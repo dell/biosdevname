@@ -804,7 +804,7 @@ uninstall-am: uninstall-sbinPROGRAMS
 	uninstall uninstall-am uninstall-sbinPROGRAMS
 
 biosdevname.rules: biosdevname.rules.in
-	sed -e 's#/usr/sbin/#$(sbindir)/#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules
+	sed -e 's#/usr/sbin#$(sbindir)#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules
 
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
