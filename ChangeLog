@@ -1,3 +1,8 @@
+* Thu Aug 30 2007
+- drop libbiosdevname
+- autoconf/automake magic by Michael Brown
+- rpm spec cleanups per Fedora review
+
 * Fri Aug 24 2007
 - add spec files for Fedora and OpenSUSE
 - ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables

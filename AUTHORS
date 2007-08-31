@@ -18,3 +18,7 @@ pcmcia.c sysfs_path_is_file()
 
 dmidecode/*
  Cribbed from dmidecode 2.9
+
+
+Michael Brown <Michael_E_Brown@dell.com>
+ autoconf/automake cleanups
