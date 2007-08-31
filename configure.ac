@@ -62,7 +62,7 @@ AC_CHECK_FUNCS([dup2 gettimeofday memset munmap select socket strcasecmp strchr 
 
 # this is ugly, but accounts for SLES 10, Red Hat/Fedora, and Ubuntu
 # handles default udev rules as of udev 114 or thereabouts
-RULEDEST=60-biosdevname.rules
+RULEDEST=71-biosdevname.rules
 if [[ -e /etc/udev/rules.d/60-net.rules ]]; then
      # RHEL / Fedora
      RULEDEST=60-biosdevname.rules
