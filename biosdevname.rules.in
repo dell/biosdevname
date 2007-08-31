@@ -1,1 +1,7 @@
-KERNEL=="eth*", ACTION=="add", PROGRAM="/usr/sbin/biosdevname --policy=embedded_ethN_slots_names -i %k", NAME="%c"
+KERNEL!="eth*", GOTO="biosdevname_end"
+ACTION!="add",  GOTO="biosdevname_end"
+NAME=="?*",     GOTO="biosdevname_end"
+
+PROGRAM="/usr/sbin/biosdevname --policy=embedded_ethN_slots_names -i %k", NAME="%c"
+
+LABEL="biosdevname_end"
