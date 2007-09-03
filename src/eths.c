@@ -207,7 +207,7 @@ int is_ethernet(struct network_device *dev)
 		"bridge",
 		"tun",
 	};
-	for (i=0; i<sizeof(nonethernet_drivers); i++) {
+	for (i=0; i<sizeof(nonethernet_drivers)/sizeof(nonethernet_drivers[0]); i++) {
 		if (strncmp(dev->drvinfo.driver, nonethernet_drivers[i], sizeof(dev->drvinfo.driver)) == 0)
 			goto out;
 	}
