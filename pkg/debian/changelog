@@ -1,0 +1,13 @@
+biosdevname (0.2.3-1) unstable; urgency=low
+
+  * Initial working release
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Sat, 08 Sep 2007 14:30:13 -0500
+
+biosdevname (0.1-1) unstable; urgency=low
+
+  * Initial release.
+  * bios_dev_name-0.1-usage-and-virtual-device-fix.patch is applied
+
+ -- Rudy Gevaert <Rudy.Gevaert@UGent.be>  Wed, 16 May 2007 09:25:13 +0200
+
