@@ -2,6 +2,7 @@ INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 
 srcPath=src/
+man_MANS = biosdevname.1
 
 sbin_PROGRAMS = src/biosdevname src/biosdevnameS
 src_biosdevname_SOURCES =  \

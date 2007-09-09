@@ -32,7 +32,7 @@ name (e.g. eth0).
 
 %build
 # this is a udev rule, so it needs to live in / rather than /usr
-%configure --disable-rpath --libdir=/%{_lib} --prefix=/ --bindir=/bin --sbindir=/sbin
+%configure --disable-rpath --prefix=/ --sbindir=/sbin
 make %{?_smp_mflags}
 
 
@@ -49,6 +49,7 @@ rm -rf %{buildroot}
 %doc COPYING README
 /sbin/%{name}
 %config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
+%{_mandir}/1/%{name}.1
 
 
 %changelog
