@@ -44,3 +44,16 @@ cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz $${tmp_dir}/$(PACKAGE_NAME)_$(PACKA
 	pdebuild --buildresult $$oldpwd/.. ; \
 	cd - ;\
 	rm -rf $${tmp_dir}
+
+sdeb: dist
+	oldpwd=`pwd` ; \
+	tmp_dir=`mktemp -d /tmp/biosdevname.XXXXXXXX` ; \
+	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz $${tmp_dir}/$(PACKAGE_NAME)_$(PACKAGE_VERSION).orig.tar.gz ; \
+	tar -C $${tmp_dir} -xzf $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz ; \
+	mv $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION)/pkg/debian $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION)/debian ; \
+	rmdir pkg/ ; \
+	cd $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION) ; \
+	dpkg-buildpackage -S -sa -rfakeroot -k92F0FC09 ; \
+	mv ../biosdevname_* $$oldpwd/.. ; \
+	cd - ;\
+	rm -rf $${tmp_dir}
