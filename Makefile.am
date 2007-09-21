@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = 
 
-dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1
+dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1 pkg/*/*
+
+
 
 CLEANFILES = biosdevname.rules version
 biosdevname.rules: biosdevname.rules.in
@@ -34,10 +36,11 @@ srpm: dist
 deb: dist
 	oldpwd=`pwd` ; \
 	tmp_dir=`mktemp -d /tmp/$(PACKAGE_NAME).XXXXXXXX` ; \
-	cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz $${tmpdir}/$(PACKAGE_NAME)_$(PACKAGE_VERSION).orig.tar.gz \
+cp $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz $${tmp_dir}/$(PACKAGE_NAME)_$(PACKAGE_VERSION).orig.tar.gz ; \
 	tar -C $${tmp_dir} -xzf $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz ; \
-	mv $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION)/pkg/debian $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION)/debian ; \
 	cd $${tmp_dir}/$(PACKAGE_NAME)-$(PACKAGE_VERSION) ; \
+	mv pkg/debian debian ; \
+	rmdir pkg/ ; \
 	pdebuild --buildresult $$oldpwd/.. ; \
 	cd - ;\
 	rm -rf $${tmp_dir}
