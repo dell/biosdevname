@@ -49,7 +49,7 @@ rm -rf %{buildroot}
 %doc COPYING README
 /sbin/%{name}
 %config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
-%{_mandir}/1/%{name}.1*
+%{_mandir}/man1/%{name}.1*
 
 
 %changelog
