@@ -268,7 +268,7 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 		INIT_LIST_HEAD(&b->node);
 		b->pcidev = p;
 		b->netdev = n;
-		claim_netdev(b->netdev);
+		claim_netdev(n);
 		list_add(&b->node, &state->bios_devices);
 	}
 }
@@ -277,10 +277,16 @@ static void match_eth_and_pcmcia(struct libbiosdevname_state *state)
 {
 	struct pcmcia_device *p;
 	struct bios_device *b;
+	struct network_device *n;
 	char pcmcia_name[40];
 
 	list_for_each_entry(p, &state->pcmcia_devices, node) {
 		if (!is_pcmcia_network(p))
+			continue;
+
+		unparse_pcmcia_name(pcmcia_name, sizeof(pcmcia_name), p);
+		n = find_net_device_by_bus_info(state, pcmcia_name);
+		if (!n)
 			continue;
 
 		b = malloc(sizeof(*b));
@@ -289,12 +295,8 @@ static void match_eth_and_pcmcia(struct libbiosdevname_state *state)
 		memset(b, 0, sizeof(*b));
 		INIT_LIST_HEAD(&b->node);
 		b->pcmciadev = p;
-
-		unparse_pcmcia_name(pcmcia_name, sizeof(pcmcia_name), p);
-		b->netdev = find_net_device_by_bus_info(state, pcmcia_name);
-
-		memset(b->bios_name, 0, sizeof(b->bios_name));
-		claim_netdev(b->netdev);
+		b->netdev = n;
+		claim_netdev(n);
 		list_add(&b->node, &state->bios_devices);
 	}
 }
