@@ -14,6 +14,9 @@ install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
 
+uninstall-local: biosdevname.rules
+	rm -f $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+
 include src/Makefile.am
 
 # extra space at beginning to work around automake... :(
