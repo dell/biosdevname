@@ -1,7 +1,6 @@
 INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
 
-srcPath=src/
 man_MANS = biosdevname.1
 
 sbin_PROGRAMS = src/biosdevname src/biosdevnameS
@@ -23,7 +22,7 @@ src_biosdevname_SOURCES =  \
 src_biosdevnameS_SOURCES =  $(src_biosdevname_SOURCES)
 src_biosdevnameS_LDFLAGS = -all-static
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	src/bios_dev_name.h \
 	src/bios_device.h \
 	src/pirq.h \

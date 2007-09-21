@@ -200,11 +200,16 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = 
-dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1 pkg/*/*
+EXTRA_DIST = pkg src/bios_dev_name.h src/bios_device.h src/pirq.h \
+	src/pci.h src/eths.h src/ethtool-util.h src/ethtool-copy.h \
+	src/list.h src/naming_policy.h src/pcmcia.h src/cistpl.h \
+	src/state.h src/libbiosdevname.h src/dmidecode/config.h \
+	src/dmidecode/dmidecode.h src/dmidecode/dmioem.h \
+	src/dmidecode/types.h src/dmidecode/util.h
+dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1
 CLEANFILES = biosdevname.rules version
 INCLUDES = -I..
 AM_CFLAGS = -Wall -fno-strict-aliasing
-srcPath = src/
 man_MANS = biosdevname.1
 src_biosdevname_SOURCES = \
 	src/bios_dev_name.c \
@@ -223,26 +228,6 @@ src_biosdevname_SOURCES = \
 
 src_biosdevnameS_SOURCES = $(src_biosdevname_SOURCES)
 src_biosdevnameS_LDFLAGS = -all-static
-EXTRA_DIST = \
-	src/bios_dev_name.h \
-	src/bios_device.h \
-	src/pirq.h \
-	src/pci.h \
-	src/eths.h \
-	src/ethtool-util.h \
-	src/ethtool-copy.h \
-	src/list.h \
-	src/naming_policy.h \
-	src/pcmcia.h \
-	src/cistpl.h \
-	src/state.h \
-	src/libbiosdevname.h \
-	src/dmidecode/config.h \
-	src/dmidecode/dmidecode.h \
-	src/dmidecode/dmioem.h \
-	src/dmidecode/types.h \
-	src/dmidecode/util.h
-
 SPEC_FILE = biosdevname.spec.fedora
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
