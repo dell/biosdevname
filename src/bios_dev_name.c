@@ -84,8 +84,8 @@ parse_opts(int argc, char **argv)
 	}
 
 	if (optind < argc) {
-		opts.argc = argc;
-		opts.argv = argv;
+		opts.argc = argc-optind;
+		opts.argv = &argv[optind];
 		opts.optind = optind;
 	}
 
