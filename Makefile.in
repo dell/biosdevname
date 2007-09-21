@@ -815,7 +815,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-man uninstall-sbinPROGRAMS
+uninstall-am: uninstall-local uninstall-man uninstall-sbinPROGRAMS
 
 uninstall-man: uninstall-man1
 
@@ -837,8 +837,8 @@ uninstall-man: uninstall-man1
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-man uninstall-man1 \
-	uninstall-sbinPROGRAMS
+	uninstall uninstall-am uninstall-local uninstall-man \
+	uninstall-man1 uninstall-sbinPROGRAMS
 
 biosdevname.rules: biosdevname.rules.in
 	sed -e 's#/usr/sbin#$(sbindir)#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules
@@ -846,6 +846,9 @@ biosdevname.rules: biosdevname.rules.in
 install-data-local: biosdevname.rules
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
 	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+
+uninstall-local: biosdevname.rules
+	rm -f $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
 
 # extra space at beginning to work around automake... :(
  ifndef SPEC_FILE
