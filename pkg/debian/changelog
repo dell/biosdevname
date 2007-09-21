@@ -1,3 +1,12 @@
+biosdevname (0.2.4-1) unstable; urgency=low
+
+  * eliminate libsysfs usage, libbiosdevname
+  * coordinate udev rules usage with udev maintainer
+  * fix crashes in pcmcia search, in_ethernet(), and incorrect command
+    line parsing.
+	
+ -- Matt Domsch <Matt_Domsch@dell.com>  Sat, 21 Sep 2007 10:30:13 -0500
+	
 biosdevname (0.2.3-1) unstable; urgency=low
 
   * Initial working release

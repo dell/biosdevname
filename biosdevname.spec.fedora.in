@@ -53,6 +53,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Sep 21 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-1
+- coordinate udev rules usage with udev maintainer
+- fix crashes in pcmcia search, in_ethernet(), and incorrect command
+  line parsing.
+
 * Mon Aug 27 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.3-1
 - eliminate libbiosdevname.*, pre and post scripts
 
@@ -60,6 +65,6 @@ rm -rf %{buildroot}
 - ExclusiveArch those arches with SMBIOS and PCI IRQ Routing tables
 - eliminate libsysfs dependency, move app to / for use before /usr is mounted.
 - build static
--
+
 * Mon Aug 20 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.1-1
 - initial release
