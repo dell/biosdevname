@@ -18,9 +18,11 @@ struct pci_device {
 	int physical_slot;
 	unsigned int index_in_slot;
 	unsigned short int class;
+	unsigned char uses_smbios;
 	unsigned char smbios_type;
 	unsigned char smbios_instance;
 	unsigned char smbios_enabled;
+	const char *chassis_label;
 };
 
 extern int get_pci_devices(struct libbiosdevname_state *state);

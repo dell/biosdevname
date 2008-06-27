@@ -81,6 +81,8 @@ void free_pci_devices(struct libbiosdevname_state *state)
 {
 	struct pci_device *pos, *next;
 	list_for_each_entry_safe(pos, next, &state->pci_devices, node) {
+		if (pos->chassis_label)
+			free(pos->chassis_label);
 		list_del(&pos->node);
 		free(pos);
 	}
@@ -189,6 +191,8 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "SMBIOS Instance: %u\n", p->smbios_instance);
 		s += snprintf(s, size-(s-buf), "SMBIOS Enabled: %s\n", p->smbios_instance?"True":"False");
 	}
+	if (p->chassis_label)
+		s += sprintf(s, size-(s-buf), "Chassis label: %s\n", p->chassis_label);
 	return (s-buf);
 }
 
