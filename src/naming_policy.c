@@ -11,6 +11,9 @@
 #include "naming_policy.h"
 #include "libbiosdevname.h"
 #include "state.h"
+#include "dmidecode/dmidecode.h"
+
+int system_uses_smbios_names;
 
 static void use_all_ethN(const struct libbiosdevname_state *state)
 {
@@ -39,6 +42,29 @@ static void pcmcia_names(struct bios_device *dev)
 	snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_pccard_%u.%u",
 		 dev->pcmciadev->socket, dev->pcmciadev->function);
 }
+
+
+static void use_smbios_names(const struct libbiosdevname_state *state)
+{
+	struct bios_device *dev;
+	if (!system_uses_smbios_names) {
+		fprintf(stderr, "Error: BIOS does not provide Ethernet device names in SMBIOS.\n");
+		fprintf(stderr, "       Use a different naming policy.\n");
+		return;
+	}
+	list_for_each_entry(dev, &state->bios_devices, node) {
+		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->smbios_instance == DMI_ETHERNET) {
+			if (dev->pcidev->physical_slot == 0)
+				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", dev->pcidev->smbios_instance-1);
+			else snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_s%d_%u",
+				      dev->pcidev->physical_slot,
+				      dev->pcidev->index_in_slot);
+		}
+		else if (is_pcmcia(dev))
+			pcmcia_names(dev);
+	}
+}
+
 
 static void use_embedded_ethN_slots_names(const struct libbiosdevname_state *state)
 {
@@ -84,6 +110,9 @@ int assign_bios_network_names(const struct libbiosdevname_state *state, int sort
 {
 	if (sort != nosort) {
 		switch (policy) {
+		case smbios_names:
+			use_smbios_names(state);
+			break;
 		case all_ethN:
 			use_all_ethN(state);
 			break;

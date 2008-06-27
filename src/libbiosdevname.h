@@ -15,6 +15,7 @@ enum namingpolicy {
 	all_ethN,
 	all_names,
 	embedded_ethN_slots_names,
+	smbios_names,
 	kernelnames,
 };
 

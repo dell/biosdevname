@@ -37,6 +37,7 @@
 #include "dmioem.h"
 #include "../state.h"
 #include "../pci.h"
+#include "../naming_policy.h"
 
 static const char *out_of_spec = "<OUT OF SPEC>";
 static const char *bad_index = "<BAD INDEX>";
@@ -115,7 +116,7 @@ static void dmi_slot_segment_bus_func(u16 code1, u8 code2, u8 code3, u8 type, co
 
 static u8 onboard_device_type(u8 code, const char *prefix)
 {
-	/* 3.3.x.2 */
+	/* 3.3.42.2 */
        u8 e = (code & 0x80)>>7;
 	static const char *type[]={
 		"Other", /* 1 */
@@ -162,9 +163,12 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 					function = data[0x10] & 7;
 					pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
 					if (pdev) {
+						system_uses_smbios_names=1;
+						pdev->uses_smbios = 1;
 						pdev->physical_slot = WORD(data+0x09);
 						pdev->smbios_type = 0;
 						pdev->smbios_instance = 0;
+						pdev->chassis_label=strdup(dmi_string(h, data[0x07]));
 					}
 				}
 			}
@@ -176,10 +180,13 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 			function = data[0xa] & 0x7;
 			pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
 			if (pdev) {
+				system_uses_smbios_names=1;
+				pdev->uses_smbios = 1;
 				pdev->physical_slot = 0;
 				pdev->smbios_enabled = !!(data[0x05] & 0x80);
 				pdev->smbios_type = data[0x05] & 0x7F;
 				pdev->smbios_instance = data[0x06];
+				pdev->chassis_label=strdup(dmi_string(h, data[0x07]));
 			}
 			break;
 

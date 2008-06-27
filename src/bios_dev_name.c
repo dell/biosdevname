@@ -20,7 +20,7 @@ static void usage(void)
 	fprintf(stderr, "   -i        or --interface           treat [args] as ethernet devs\n");
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   -n        or --nosort              don't sort the PCI device list breadth-first\n");
-	fprintf(stderr, "   --policy [kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
+	fprintf(stderr, "   --policy [smbios_names | kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: eth0\n");
 	fprintf(stderr, "  when the BIOS name and kernel name are both eth0.\n");
@@ -32,6 +32,7 @@ static int
 set_policy(const char *arg)
 {
 	int rc = all_ethN;
+
 	if (!strncmp("kernelnames", arg, sizeof("kernelnames")))
 		rc = kernelnames;
 	else if (!strncmp("all_ethN", arg, sizeof("all_ethN")))
@@ -40,6 +41,8 @@ set_policy(const char *arg)
 		rc = all_names;
 	else if (!strncmp("embedded_ethN_slots_names", arg, sizeof("embedded_ethN_slots_names")))
 		rc = embedded_ethN_slots_names;
+	else if (!strncmp("smbios_names", arg, sizeof("smbios_names")))
+		rc = smbios_names;
 	return rc;
 }
 

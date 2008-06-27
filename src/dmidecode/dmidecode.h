@@ -50,6 +50,19 @@ struct dmi_addon_device
 	const char *reference_designation;
 };
 
+enum dmi_onboard_device_type {
+	DMI_OTHER=1,
+	DMI_UNKNOWN,
+	DMI_VIDEO,
+	DMI_SCSI,
+	DMI_ETHERNET,
+	DMI_TOKEN_RING,
+	DMI_SOUND,
+	DMI_PATA,
+	DMI_SATA,
+	DMI_SAS,
+};
+
 struct libbiosdevname_state;
 int dmidecode_main(const struct libbiosdevname_state *state);
 
