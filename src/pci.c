@@ -192,7 +192,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "SMBIOS Enabled: %s\n", p->smbios_instance?"True":"False");
 	}
 	if (p->chassis_label)
-		s += sprintf(s, size-(s-buf), "Chassis label: %s\n", p->chassis_label);
+		s += snprintf(s, size-(s-buf), "Chassis label: %s\n", p->chassis_label);
 	return (s-buf);
 }
 
