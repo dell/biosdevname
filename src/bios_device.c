@@ -28,7 +28,8 @@ void free_bios_devices(void *cookie)
 
 static void unparse_bios_device(struct bios_device *dev)
 {
-	char buf[200];
+	char buf[2048];
+	memset(buf, 0, sizeof(buf));
 	printf("BIOS device: %s\n", dev->bios_name);
 	if (dev->netdev) {
 		unparse_network_device(buf, sizeof(buf), dev->netdev);
