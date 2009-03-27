@@ -168,7 +168,7 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 						pdev->physical_slot = WORD(data+0x09);
 						pdev->smbios_type = 0;
 						pdev->smbios_instance = 0;
-						pdev->chassis_label=strdup(dmi_string(h, data[0x07]));
+						pdev->chassis_label=strdup(dmi_string(h, data[0x04]));
 					}
 				}
 			}
@@ -186,7 +186,7 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 				pdev->smbios_enabled = !!(data[0x05] & 0x80);
 				pdev->smbios_type = data[0x05] & 0x7F;
 				pdev->smbios_instance = data[0x06];
-				pdev->chassis_label=strdup(dmi_string(h, data[0x07]));
+				pdev->chassis_label=strdup(dmi_string(h, data[0x04]));
 			}
 			break;
 
