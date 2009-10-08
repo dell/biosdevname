@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
 	parse_opts(argc, argv);
 	cookie = setup_bios_devices(opts.sortroutine, opts.namingpolicy);
 	if (!cookie) {
-		usage();
 		rc = 1;
 		goto out;
 	}

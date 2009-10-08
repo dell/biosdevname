@@ -44,13 +44,13 @@ static void pcmcia_names(struct bios_device *dev)
 }
 
 
-static void use_smbios_names(const struct libbiosdevname_state *state)
+static int use_smbios_names(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
 	if (!system_uses_smbios_names) {
 		fprintf(stderr, "Error: BIOS does not provide Ethernet device names in SMBIOS.\n");
 		fprintf(stderr, "       Use a different naming policy.\n");
-		return;
+		return 1;
 	}
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->chassis_label) {
@@ -59,6 +59,7 @@ static void use_smbios_names(const struct libbiosdevname_state *state)
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);
 	}
+	return 0;
 }
 
 
@@ -104,10 +105,11 @@ static void use_all_names(const struct libbiosdevname_state *state)
 
 int assign_bios_network_names(const struct libbiosdevname_state *state, int sort, int policy)
 {
+	int rc = 0;
 	if (sort != nosort) {
 		switch (policy) {
 		case smbios_names:
-			use_smbios_names(state);
+			rc = use_smbios_names(state);
 			break;
 		case all_ethN:
 			use_all_ethN(state);
@@ -127,6 +129,6 @@ int assign_bios_network_names(const struct libbiosdevname_state *state, int sort
 	else
 		use_kernel_names(state);
 
-	return 0;
+	return rc;
 }
 

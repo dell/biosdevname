@@ -377,8 +377,9 @@ void * setup_bios_devices(int sortroutine, int namingpolicy)
 	if (sortroutine != nosort) {
 		sort_device_list(state);
 	}
-	assign_bios_network_names(state, sortroutine, namingpolicy);
-	return state;
+	rc = assign_bios_network_names(state, sortroutine, namingpolicy);
+	if (!rc)
+		return state;
 
 out:
 	cleanup_bios_devices(state);
