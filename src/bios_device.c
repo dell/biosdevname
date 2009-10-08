@@ -30,7 +30,7 @@ static void unparse_bios_device(struct bios_device *dev)
 {
 	char buf[2048];
 	memset(buf, 0, sizeof(buf));
-	printf("BIOS device: %s\n", dev->bios_name);
+	printf("BIOS device: %s\n", dev->bios_name ? dev->bios_name : "");
 	if (dev->netdev) {
 		unparse_network_device(buf, sizeof(buf), dev->netdev);
 		printf("%s", buf);
@@ -294,7 +294,6 @@ static void match_eth_and_pcmcia(struct libbiosdevname_state *state)
 		unparse_pcmcia_name(pcmcia_name, sizeof(pcmcia_name), p);
 		b->netdev = find_net_device_by_bus_info(state, pcmcia_name);
 
-		memset(b->bios_name, 0, sizeof(b->bios_name));
 		claim_netdev(b->netdev);
 		list_add(&b->node, &state->bios_devices);
 	}

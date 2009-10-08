@@ -19,20 +19,26 @@ static void use_all_ethN(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
 	unsigned int i=0;
+	char buffer[IFNAMSIZ];
 
+	memset(buffer, 0, sizeof(buffer));
 	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (dev->netdev)
-			snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", i++);
+		if (dev->netdev) {
+			snprintf(buffer, sizeof(buffer), "eth%u", i++);
+			dev->bios_name = strdup(buffer);
+		}
 	}
 }
 
 static void use_kernel_names(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
+	char buffer[IFNAMSIZ];
 
+	memset(buffer, 0, sizeof(buffer));
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (dev->netdev)
-			strncpy(dev->bios_name, dev->netdev->kernel_name, sizeof(dev->bios_name)-1);
+			dev->bios_name = dev->netdev->kernel_name;
 	}
 }
 
@@ -54,7 +60,7 @@ static int use_smbios_names(const struct libbiosdevname_state *state)
 	}
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->chassis_label) {
-			snprintf(dev->bios_name, sizeof(dev->bios_name), "%s", dev->pcidev->chassis_label);
+			dev->bios_name = dev->pcidev->chassis_label;
 		}
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);
@@ -67,20 +73,23 @@ static void use_embedded_ethN_slots_names(const struct libbiosdevname_state *sta
 {
 	struct bios_device *dev;
 	unsigned int i=0;
+	char buffer[IFNAMSIZ];
 
+	memset(buffer, 0, sizeof(buffer));
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0)
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", i++);
+				snprintf(buffer, sizeof(buffer), "eth%u", i++);
 			else if (dev->pcidev->physical_slot < INT_MAX)
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_s%d_%u",
+				snprintf(buffer, sizeof(buffer), "eth_s%d_%u",
 					 dev->pcidev->physical_slot,
 					 dev->pcidev->index_in_slot);
 			else if (dev->pcidev->physical_slot == INT_MAX)
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_unknown_%u", i++);
+				snprintf(buffer, sizeof(buffer), "eth_unknown_%u", i++);
 		}
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);
+		dev->bios_name = strdup(buffer);
 	}
 }
 
@@ -88,18 +97,21 @@ static void use_all_names(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
 	unsigned int i=0;
+	char buffer[IFNAMSIZ];
 
+	memset(buffer, 0, sizeof(buffer));
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot < INT_MAX)
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_s%d_%u",
+				snprintf(buffer, sizeof(buffer), "eth_s%d_%u",
 					 dev->pcidev->physical_slot,
 					 dev->pcidev->index_in_slot);
 			else
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_unknown_%u", i++);
+				snprintf(buffer, sizeof(buffer), "eth_unknown_%u", i++);
 		}
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);
+		dev->bios_name = strdup(buffer);
 	}
 }
 

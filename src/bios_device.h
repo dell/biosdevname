@@ -19,7 +19,7 @@ struct bios_device {
 	struct network_device *netdev;
 	struct pci_device *pcidev;
 	struct pcmcia_device *pcmciadev;
-	char bios_name[IFNAMSIZ];
+	char *bios_name;
 };
 
 static inline int is_pci(const struct bios_device *dev)
