@@ -1,3 +1,7 @@
+* Mon Jul 27 2009
+- add SMBIOS naming policy
+- fix return error check for mmap
+
 * Wed Nov 28 2006
 - fix usage() being printed on success
 - don't assign BIOS device names to Linux virtual devices (tun0)

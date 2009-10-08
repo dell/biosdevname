@@ -53,6 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Jul 27 2009 Jordan Hargrave <Jordan_Hargrave@dell.com> 0.2.5-1
+- fix mmap error checking
+
 * Fri Sep 21 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-1
 - coordinate udev rules usage with udev maintainer
 - fix crashes in pcmcia search, in_ethernet(), and incorrect command
