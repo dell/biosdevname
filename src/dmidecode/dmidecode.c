@@ -145,6 +145,17 @@ static u8 onboard_device_type(u8 code, const char *prefix)
 
 #define        MIN(a,b) (((a)<(b))?(a):(b))
 
+static void strip_right(char *s)
+{
+	int i, len = strlen(s);
+	for (i=len; i>=0; i--) {
+		if (isspace(s[i-1]))
+			s[i-1] = '\0';
+		else
+			break;
+	}
+}
+
 static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevname_state *state)
 {
 	u8 *data=h->data;
@@ -169,6 +180,7 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 						pdev->smbios_type = 0;
 						pdev->smbios_instance = 0;
 						pdev->chassis_label=strdup(dmi_string(h, data[0x04]));
+						strip_right(pdev->chassis_label);
 					}
 				}
 			}
@@ -187,6 +199,7 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 				pdev->smbios_type = data[0x05] & 0x7F;
 				pdev->smbios_instance = data[0x06];
 				pdev->chassis_label=strdup(dmi_string(h, data[0x04]));
+				strip_right(pdev->chassis_label);
 			}
 			break;
 
