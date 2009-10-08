@@ -56,7 +56,7 @@ struct routing_table * pirq_alloc_read_table()
 	}
 
 	mem = mmap(0, 64*1024, PROT_READ, MAP_SHARED, fd, 0xF0000L);
-	if (!mem) {
+	if (mem == (void *)-1LL) {
 		perror("mmap(/dev/mem)");
 		goto out;
 	}
