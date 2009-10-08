@@ -53,12 +53,8 @@ static void use_smbios_names(const struct libbiosdevname_state *state)
 		return;
 	}
 	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->smbios_instance == DMI_ETHERNET) {
-			if (dev->pcidev->physical_slot == 0)
-				snprintf(dev->bios_name, sizeof(dev->bios_name), "eth%u", dev->pcidev->smbios_instance-1);
-			else snprintf(dev->bios_name, sizeof(dev->bios_name), "eth_s%d_%u",
-				      dev->pcidev->physical_slot,
-				      dev->pcidev->index_in_slot);
+		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->chassis_label) {
+			snprintf(dev->bios_name, sizeof(dev->bios_name), "%s", dev->pcidev->chassis_label);
 		}
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);
