@@ -1,8 +1,7 @@
-SUBSYSTEM!="net", GOTO="biosdevname_end"
-KERNEL!="eth*",   GOTO="biosdevname_end"
-ACTION!="add",    GOTO="biosdevname_end"
+SUBSYSTEM!="net", GOTO="netdevicename_end"
+KERNEL!="eth*",   GOTO="netdevicename_end"
+ACTION!="add",    GOTO="netdevicename_end"
 
-PROGRAM="/sbin/biosdevname --policy=all_names -i %k", SYMLINK+="net/by-slot-name/%c",      OPTIONS+="string_escape=replace"
-PROGRAM="/sbin/biosdevname --policy=smbios_names -i %k", SYMLINK+="net/by-chassis-label/%c",  OPTIONS+="string_escape=replace"
+PROGRAM="/lib/udev/netdevice %k", NAME="%c",  OPTIONS+="string_escape=replace"
 
-LABEL="biosdevname_end"
+LABEL="netdevicename_end"

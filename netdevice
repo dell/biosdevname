@@ -1,0 +1,17 @@
+#!/bin/sh
+
+unset POLICY
+POLICY[0]="smbios_names"
+POLICY[1]="all_names"
+# last policy would be kernel names, but if we return 1, then udev won't ever change names
+
+[ -e /etc/sysconfig/udev-netdevice ] && . /etc/sysconfig/udev-netdevice
+
+i=0
+while [ $i -lt ${#POLICY[@]} ]; do
+      answer=$(/sbin/biosdevname --policy=${POLICY[i]} -i $1)
+      RC=$?
+      [ $RC -eq 0 ] && echo $answer && exit 0
+      i=$((i+1))
+done
+exit 1

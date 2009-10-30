@@ -48,6 +48,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc COPYING README
 /sbin/%{name}
+/lib/udev/netdevice
 %config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
 %{_mandir}/man1/%{name}.1*
 
