@@ -2,18 +2,16 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = 
 EXTRA_DIST = pkg
 
-dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1
+dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1 netdevice
 
 
 
-CLEANFILES = biosdevname.rules version
-biosdevname.rules: biosdevname.rules.in
-	sed -e 's#/usr/sbin#$(sbindir)#' $(top_srcdir)/biosdevname.rules.in > $(top_builddir)/biosdevname.rules
-
-install-data-local: biosdevname.rules
+CLEANFILES = version
+install-data-local:
 	mkdir -p $(DESTDIR)@sysconfdir@/udev/rules.d
-	$(INSTALL_DATA) $(top_builddir)/biosdevname.rules $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
-	$(INSTALL_DATA) $(top_builddir)/netdevice $(DESTDIR)/lib/udev/netdevice
+	$(INSTALL_DATA) $(top_srcdir)/biosdevname.rules.in $(DESTDIR)@sysconfdir@/udev/rules.d/netdevice.rules
+	mkdir -p $(DESTDIR)/lib/udev
+	$(INSTALL_DATA) $(top_srcdir)/netdevice $(DESTDIR)/lib/udev/netdevice
 
 uninstall-local: biosdevname.rules
 	rm -f $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@

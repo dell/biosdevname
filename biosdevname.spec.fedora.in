@@ -38,7 +38,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+make install install-data DESTDIR=%{buildroot}
 rm %{buildroot}/sbin/%{name}S  || :
 
 %clean
@@ -49,7 +49,7 @@ rm -rf %{buildroot}
 %doc COPYING README
 /sbin/%{name}
 /lib/udev/netdevice
-%config(noreplace) %{_sysconfdir}/udev/rules.d/*%{name}.rules
+%config(noreplace) %{_sysconfdir}/udev/rules.d/*.rules
 %{_mandir}/man1/%{name}.1*
 
 
