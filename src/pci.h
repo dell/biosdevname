@@ -23,7 +23,13 @@ struct pci_device {
 	unsigned char smbios_instance;
 	unsigned char smbios_enabled;
 	const char *smbios_label;
+	unsigned int sysfs_index;
+	const char * sysfs_label;
+	unsigned char uses_sysfs;
 };
+
+#define HAS_SYSFS_INDEX 1
+#define HAS_SYSFS_LABEL 2
 
 extern int get_pci_devices(struct libbiosdevname_state *state);
 extern void free_pci_devices(struct libbiosdevname_state *state);

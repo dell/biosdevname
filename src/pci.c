@@ -59,6 +59,53 @@ static int pci_dev_to_slot(struct routing_table *table, struct pci_access *pacc,
 	return rc;
 }
 
+static const char *read_pci_sysfs_label(const int domain, const int bus, const int device, const int func)
+{
+	char path[PATH_MAX];
+	int rc;
+	char *label = NULL;
+	snprintf(path, "/sys/devices/pci%04x\:%02x/%04x\:%02x\:%02x.%x/label", domain, bus, domain, bus, device, func);
+	rc = sysfs_read_file(path, &label);
+	if (rc == 0)
+		return label;
+	return NULL;
+}
+
+static int read_pci_sysfs_index(unsigned int *index, const int domain, const int bus, const int device, const int func)
+{
+	char path[PATH_MAX];
+	int rc;
+	char *indexstr = NULL;
+	unsigned int i;
+	snprintf(path, "/sys/devices/pci%04x\:%02x/%04x\:%02x\:%02x.%x/index", domain, bus, domain, bus, device, func);
+	rc = sysfs_read_file(path, &indexstr);
+	if (rc == 0) {
+		rc = sscanf(indexstr, "%u", &i);
+		if (rc == 1)  {
+			*index = i;
+			return 0;
+		}
+	}
+	return 1;
+}
+
+static void fill_pci_dev_sysfs(struct pci_dev *p)
+{
+	int rc;
+	unsigned int index = 0;
+	char *label = NULL;
+	rc = read_pci_sysfs_index(&index, pci_domain_nr(&p->pci_dev), p->pci_dev.bus, p->pci_dev.dev, p->pci_dev.func);
+	if (!rc) {
+		p->sysfs_index = index;
+		p->uses_sysfs |= HAS_SYSFS_INDEX;
+	}
+	label = read_pci_sysfs_label(pci_domain_nr(&p->pci_dev), p->pci_dev.bus, p->pci_dev.dev, p->pci_dev.func);
+	if (label) {
+		p->sysfs_index = index;
+		p->uses_sysfs |= HAS_SYSFS_LABEL;
+	}
+}
+
 static void add_pci_dev(struct libbiosdevname_state *state,
 			struct routing_table *table,
 			struct pci_access *pacc, struct pci_dev *p)
@@ -74,6 +121,7 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	memcpy(&dev->pci_dev, p, sizeof(*p)); /* This doesn't allow us to call PCI functions though */
 	dev->physical_slot = pci_dev_to_slot(table, pacc, p);
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
+	fill_pci_dev_sysfs(p);
 	list_add(&dev->node, &state->pci_devices);
 }
 
@@ -83,6 +131,8 @@ void free_pci_devices(struct libbiosdevname_state *state)
 	list_for_each_entry_safe(pos, next, &state->pci_devices, node) {
 		if (pos->smbios_label)
 			free(pos->smbios_label);
+		if (pos->sysfs_label)
+			free(pos->sysfs_label);
 		list_del(&pos->node);
 		free(pos);
 	}
@@ -192,7 +242,11 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "SMBIOS Enabled: %s\n", p->smbios_instance?"True":"False");
 	}
 	if (p->smbios_label)
-		s += snprintf(s, size-(s-buf), "Chassis label: %s\n", p->smbios_label);
+		s += snprintf(s, size-(s-buf), "SMBIOS Label: %s\n", p->smbios_label);
+	if (p->uses_sysfs & HAS_SYSFS_INDEX)
+		s += snprintf(s, size-(s-buf), "sysfs Index: %u\n", p->sysfs_index);
+	if (p->uses_sysfs & HAS_SYSFS_LABEL)
+		s += snprintf(s, size-(s-buf), "sysfs Label: %s\n", p->sysfs_label);
 	return (s-buf);
 }
 
