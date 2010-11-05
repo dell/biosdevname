@@ -30,6 +30,7 @@
 
 #include "state.h"
 #include "pcmcia.h"
+#include "sysfs.h"
 
 #define MAX_SOCKET 8
 
@@ -108,31 +109,6 @@ int get_network_type(unsigned int socket_no, unsigned char *network_type)
 	return (ret);
 }
 
-/**
- * sysfs_path_is_file: Check if the path supplied points to a file
- * @path: path to validate
- * Returns 0 if path points to file, 1 otherwise
- * Copied from sysfsutils-2.1.0 (which is LGPL2.1 or later), relicensed GPLv2 for use here.
- */
-static int sysfs_path_is_file(const char *path)
-{
-        struct stat astats;
-
-        if (!path) {
-                errno = EINVAL;
-                return 1;
-        }
-        if ((lstat(path, &astats)) != 0) {
-                return 1;
-        }
-        if (S_ISREG(astats.st_mode))
-                return 0;
-
-        return 1;
-}
-
-
-
 static int pccardctl_socket_exists(unsigned long socket_no)
 {
 	char file[PATH_MAX];
@@ -144,47 +120,6 @@ static int pccardctl_socket_exists(unsigned long socket_no)
 	return (!(sysfs_path_is_file(file)));
 }
 
-static int read_out_file(char * file, char **output)
-{
-	int ret;
-	char *result = NULL;
-	int fd;
-	unsigned long resultsize = 0;
-	ssize_t length = 0;
-
-
-	*output = NULL;
-
-	resultsize = getpagesize() + 1;
-	result = malloc(resultsize);
-	if (!result)
-		return -ENOMEM;
-	memset(result, 0, resultsize);
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0) {
-		ret = -1;
-		goto free_out;
-	}
-
-	length = read(fd, result, resultsize-1);
-	if (length < 0) {
-		close(fd);
-		ret = -1;
-		goto free_out;
-	}
-	result[length] = '\0';
-	if (result[length-1] == '\n')
-		result[length-1] = '\0';
-	*output = result;
-	ret = 0;
-	goto out;
-free_out:
-	free(result);
-out:
-	return ret;
-}
-
 static int pccardctl_get_one_f(unsigned long socket_no, unsigned int dev, const char *in_file, unsigned int *result)
 {
 	char *value;
@@ -193,7 +128,7 @@ static int pccardctl_get_one_f(unsigned long socket_no, unsigned int dev, const 
 
 	snprintf(file, sizeof(file), "/sys/bus/pcmcia/devices/%lu.%u/%s",
 		 socket_no, dev, in_file);
-	ret = read_out_file(file, &value);
+	ret = sysfs_read_file(file, &value);
 	if (ret || !value)
 		return -EINVAL;
 
