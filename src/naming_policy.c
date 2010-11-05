@@ -59,8 +59,8 @@ static int use_smbios_names(const struct libbiosdevname_state *state)
 		return 1;
 	}
 	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->chassis_label) {
-			dev->bios_name = dev->pcidev->chassis_label;
+		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->smbios_label) {
+			dev->bios_name = dev->pcidev->smbios_label;
 		}
 		else if (is_pcmcia(dev))
 			pcmcia_names(dev);

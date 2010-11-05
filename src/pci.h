@@ -22,7 +22,7 @@ struct pci_device {
 	unsigned char smbios_type;
 	unsigned char smbios_instance;
 	unsigned char smbios_enabled;
-	const char *chassis_label;
+	const char *smbios_label;
 };
 
 extern int get_pci_devices(struct libbiosdevname_state *state);
