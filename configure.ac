@@ -24,7 +24,7 @@ AC_CHECK_LIB([c], [snprintf])
 AC_CHECK_LIB([z], [gzopen], [],
 	    [AC_MSG_ERROR([You must install zlib-devel or equivalent])])
 AC_CHECK_LIB([pci], [pci_alloc], [],
-	    [AC_MSG_ERROR([You must install pciutils or equivalent])],
+	    [AC_MSG_ERROR([You must install pciutils-devel or equivalent])],
 	    -lz)
 
 # Checks for header files.
