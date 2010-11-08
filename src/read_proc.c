@@ -96,10 +96,8 @@ int get_interfaces(struct libbiosdevname_state *state)
 		s = get_name(&name, line);
 		add_interface(state, name);
 	}
-	if (ferror(fh)) {
-		perror(_PATH_PROCNET_DEV);
+	if (ferror(fh))
 		err = -1;
-	}
 
 out:
 	free(line);
