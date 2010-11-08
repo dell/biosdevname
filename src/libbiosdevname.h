@@ -12,6 +12,7 @@ enum sortroutine {
 };
 
 enum namingpolicy {
+	loms,
 	all_ethN,
 	all_names,
 	embedded_ethN_slots_names,

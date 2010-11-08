@@ -115,6 +115,29 @@ static void use_all_names(const struct libbiosdevname_state *state)
 	}
 }
 
+static void use_loms(const struct libbiosdevname_state *state)
+{
+	struct bios_device *dev;
+	char buffer[IFNAMSIZ];
+
+	memset(buffer, 0, sizeof(buffer));
+	list_for_each_entry(dev, &state->bios_devices, node) {
+		if (is_pci(dev)) {
+			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
+				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
+					snprintf(buffer, sizeof(buffer), "lom%u", dev->pcidev->sysfs_index);
+					dev->bios_name = strdup(buffer);
+				}
+				else if (dev->pcidev->uses_smbios) {
+					snprintf(buffer, sizeof(buffer), "lom%u", dev->pcidev->smbios_instance);
+					dev->bios_name = strdup(buffer);
+				}
+			}
+		}
+	}
+}
+
+
 int assign_bios_network_names(const struct libbiosdevname_state *state, int sort, int policy)
 {
 	int rc = 0;
@@ -133,8 +156,11 @@ int assign_bios_network_names(const struct libbiosdevname_state *state, int sort
 			use_all_names(state);
 			break;
 		case kernelnames:
-		default:
 			use_kernel_names(state);
+			break;
+		case loms:
+		default:
+			use_loms(state);
 			break;
 		}
 	}
