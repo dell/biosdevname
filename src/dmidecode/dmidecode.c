@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #include "config.h"
 #include "types.h"
@@ -39,7 +40,6 @@
 #include "../pci.h"
 #include "../naming_policy.h"
 
-static const char *out_of_spec = "<OUT OF SPEC>";
 static const char *bad_index = "<BAD INDEX>";
 
 /*
@@ -72,71 +72,6 @@ const char *dmi_string(struct dmi_header *dm, u8 s)
 			bp[i]='.';
 
 	return bp;
-}
-
-static const char *dmi_slot_current_usage(u8 code)
-{
-	/* 3.3.10.3 */
-	static const char *usage[]={
-		"Other", /* 0x01 */
-		"Unknown",
-		"Available",
-		"In Use" /* 0x04 */
-	};
-
-	if(code>=0x01 && code<=0x04)
-		return usage[code-0x01];
-	return out_of_spec;
-}
-
-static void dmi_slot_segment_bus_func(u16 code1, u8 code2, u8 code3, u8 type, const char *prefix)
-{
-	/* 3.3.10.8 */
-        if (!(code1==0xFFFF && code2==0xFF && code3==0xFF))
-	      printf("%sSegment Group %u, Bus %u, Device %u, Function %u ",
-		     prefix, code1, code2, (code3>>3)&0x1F, (code3&0x7));
-	switch(type)
-	{
-		case 0x06: /* PCI */
-		case 0x0E: /* PCI */
-		case 0x0F: /* AGP */
-		case 0x10: /* AGP */
-		case 0x11: /* AGP */
-		case 0x12: /* PCI-X */
-		case 0x13: /* AGP */
-		case 0xA5: /* PCI Express */
-			printf("\n");
-			break;
-	        default:
-			if (code1 != 0xFF || code2 != 0xFF || code3 != 0xFF)
-				printf("%s\n", out_of_spec);
-			break;
-	}
-}
-
-static u8 onboard_device_type(u8 code, const char *prefix)
-{
-	/* 3.3.42.2 */
-       u8 e = (code & 0x80)>>7;
-	static const char *type[]={
-		"Other", /* 1 */
-		"Unknown",
-		"Video",
-		"SCSI Controller",
-		"Ethernet",
-		"Token Ring",
-		"Sound",
-		"PATA Controller",
-		"SATA Controller",
-		"SAS Controller" /* 0x0A */
-	};
-	code = code & 0x7F;
-	if(code>=0x01 && code<=0x0A) {
-		printf("%sStatus: %s\n", prefix, e?"Enabled":"Disabled");
-		printf("%sDevice Type: %s\n", prefix, type[code-0x01]);
-	}
-	else
-		printf("%sDevice Type: %s\n", prefix, out_of_spec);
 }
 
 /*
