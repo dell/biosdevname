@@ -7,6 +7,7 @@
 #ifndef PCI_H_INCLUDED
 #define PCI_H_INCLUDED
 
+#include <limits.h>
 #include <pci/pci.h>
 #include "list.h"
 #include "state.h"
@@ -30,6 +31,7 @@ struct pci_device {
 
 #define HAS_SYSFS_INDEX 1
 #define HAS_SYSFS_LABEL 2
+#define PHYSICAL_SLOT_UNKNOWN (INT_MAX)
 
 extern int get_pci_devices(struct libbiosdevname_state *state);
 extern void free_pci_devices(struct libbiosdevname_state *state);

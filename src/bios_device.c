@@ -368,9 +368,9 @@ void * setup_bios_devices(int sortroutine, int namingpolicy)
 	rc = get_pcmcia_devices(state);
 	if (rc)
 		goto out;
-	rc = dmidecode_main(state);
-	if (rc)
-		goto out;
+	/* this will fail on Xen guests, that's OK */
+	dmidecode_main(state);
+
 	get_eths(state);
 	match_all(state);
 	if (sortroutine != nosort) {

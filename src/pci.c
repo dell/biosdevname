@@ -102,7 +102,7 @@ static void fill_pci_dev_sysfs(struct pci_device *p)
 	}
 	label = read_pci_sysfs_label(pci_domain_nr(&p->pci_dev), p->pci_dev.bus, p->pci_dev.dev, p->pci_dev.func);
 	if (label) {
-		p->sysfs_index = index;
+		p->sysfs_label = label;
 		p->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
 }
@@ -120,7 +120,10 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	memset(dev, 0, sizeof(*dev));
 	INIT_LIST_HEAD(&dev->node);
 	memcpy(&dev->pci_dev, p, sizeof(*p)); /* This doesn't allow us to call PCI functions though */
-	dev->physical_slot = pci_dev_to_slot(table, pacc, p);
+	if (table)
+		dev->physical_slot = pci_dev_to_slot(table, pacc, p);
+	else
+		dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
 	fill_pci_dev_sysfs(dev);
 	list_add(&dev->node, &state->pci_devices);
@@ -155,8 +158,6 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	pci_scan_bus(pacc);
 
 	table = pirq_alloc_read_table();
-	if (!table)
-		goto out;
 
 	for (p=pacc->devices; p; p=p->next) {
 		dev = find_dev_by_pci(state, p);
@@ -165,7 +166,6 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	}
 
 	pirq_free_table(table);
-out:
 	pci_cleanup(pacc);
 	return rc;
 }
@@ -234,7 +234,10 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	s += unparse_pci_name(s,  size-(s-buf), &p->pci_dev);
 	s += snprintf(s, size-(s-buf), "\n");
 	s += snprintf(s, size-(s-buf), "PCI Slot      : ");
-	s += unparse_location(s, size-(s-buf), p->physical_slot);
+	if (p->physical_slot < INT_MAX)
+		s += unparse_location(s, size-(s-buf), p->physical_slot);
+	else
+		s += snprintf(s, size-(s-buf), "Unknown");
 	s += snprintf(s, size-(s-buf), "\n");
 	if (p->smbios_type) {
 		s += snprintf(s, size-(s-buf), "SMBIOS Device Type: ");
