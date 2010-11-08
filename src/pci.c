@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Dell, Inc.
+ *  Copyright (c) 2006-2010 Dell, Inc.
  *  by Matt Domsch <Matt_Domsch@dell.com>
  *  Licensed under the GNU General Public license, version 2.
  */
@@ -8,9 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include "pirq.h"
 #include <pci/pci.h>
+#include "pirq.h"
 #include "pci.h"
+#include "sysfs.h"
 
 static int
 is_parent_bridge(struct pci_dev *p, unsigned int target_bus)
@@ -59,12 +60,12 @@ static int pci_dev_to_slot(struct routing_table *table, struct pci_access *pacc,
 	return rc;
 }
 
-static const char *read_pci_sysfs_label(const int domain, const int bus, const int device, const int func)
+static char *read_pci_sysfs_label(const int domain, const int bus, const int device, const int func)
 {
 	char path[PATH_MAX];
 	int rc;
 	char *label = NULL;
-	snprintf(path, "/sys/devices/pci%04x\:%02x/%04x\:%02x\:%02x.%x/label", domain, bus, domain, bus, device, func);
+	snprintf(path, sizeof(path), "/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/label", domain, bus, domain, bus, device, func);
 	rc = sysfs_read_file(path, &label);
 	if (rc == 0)
 		return label;
@@ -77,7 +78,7 @@ static int read_pci_sysfs_index(unsigned int *index, const int domain, const int
 	int rc;
 	char *indexstr = NULL;
 	unsigned int i;
-	snprintf(path, "/sys/devices/pci%04x\:%02x/%04x\:%02x\:%02x.%x/index", domain, bus, domain, bus, device, func);
+	snprintf(path, sizeof(path), "/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/index", domain, bus, domain, bus, device, func);
 	rc = sysfs_read_file(path, &indexstr);
 	if (rc == 0) {
 		rc = sscanf(indexstr, "%u", &i);
@@ -89,7 +90,7 @@ static int read_pci_sysfs_index(unsigned int *index, const int domain, const int
 	return 1;
 }
 
-static void fill_pci_dev_sysfs(struct pci_dev *p)
+static void fill_pci_dev_sysfs(struct pci_device *p)
 {
 	int rc;
 	unsigned int index = 0;
@@ -121,7 +122,7 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	memcpy(&dev->pci_dev, p, sizeof(*p)); /* This doesn't allow us to call PCI functions though */
 	dev->physical_slot = pci_dev_to_slot(table, pacc, p);
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
-	fill_pci_dev_sysfs(p);
+	fill_pci_dev_sysfs(dev);
 	list_add(&dev->node, &state->pci_devices);
 }
 

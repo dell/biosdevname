@@ -22,9 +22,9 @@ struct pci_device {
 	unsigned char smbios_type;
 	unsigned char smbios_instance;
 	unsigned char smbios_enabled;
-	const char *smbios_label;
+	char *smbios_label;
 	unsigned int sysfs_index;
-	const char * sysfs_label;
+	char * sysfs_label;
 	unsigned char uses_sysfs;
 };
 

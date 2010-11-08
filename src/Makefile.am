@@ -13,6 +13,7 @@ src_biosdevname_SOURCES =  \
 	src/read_proc.c \
 	src/naming_policy.c \
 	src/pcmcia.c \
+	src/sysfs.c \
 	src/read-cis.c \
 	src/parse_cis.c \
 	src/dmidecode/dmidecode.c \
@@ -35,6 +36,7 @@ EXTRA_DIST += \
 	src/pcmcia.h \
 	src/cistpl.h \
 	src/state.h \
+	src/sysfs.h \
 	src/libbiosdevname.h \
 	src/dmidecode/config.h \
 	src/dmidecode/dmidecode.h \

@@ -1,6 +1,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 
 /**
  * sysfs_path_is_file: Check if the path supplied points to a file
@@ -25,7 +29,7 @@ int sysfs_path_is_file(const char * path)
         return 1;
 }
 
-static int sysfs_read_file(const char * path, char **output)
+int sysfs_read_file(const char * path, char **output)
 {
 	int ret;
 	char *result = NULL;
