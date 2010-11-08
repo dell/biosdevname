@@ -22,9 +22,9 @@ AC_CHECK_PROGS([READELF], [readelf])
 AC_CHECK_LIB([c], [snprintf])
 # libz has to come before libpci because libpci needs it now.
 AC_CHECK_LIB([z], [gzopen], [],
-	    [AC_MSG_ERROR([You must install zlib-devel or equivalent])])
+	    [AC_MSG_ERROR([You must install zlib-devel (Fedora/Red Hat/SuSE), libzip-dev (Debian/Ubuntu), or equivalent])])
 AC_CHECK_LIB([pci], [pci_alloc], [],
-	    [AC_MSG_ERROR([You must install pciutils-devel or equivalent])],
+	    [AC_MSG_ERROR([You must install pciutils-devel (Fedora/Red Hat/SuSE), pciutils-dev (Debian/Ubuntu), or equivalent])],
 	    -lz)
 
 # Checks for header files.
