@@ -105,7 +105,6 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 	
 	if((fd=open(devmem, O_RDONLY))==-1)
 	{
-		perror(devmem);
 		return NULL;
 	}
 	
