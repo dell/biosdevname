@@ -60,25 +60,30 @@ static int pci_dev_to_slot(struct routing_table *table, struct pci_access *pacc,
 	return rc;
 }
 
-static char *read_pci_sysfs_label(const int domain, const int bus, const int device, const int func)
+static char *read_pci_sysfs_label(const struct pci_dev *pdev)
 {
 	char path[PATH_MAX];
+	char pci_name[16];
 	int rc;
 	char *label = NULL;
-	snprintf(path, sizeof(path), "/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/label", domain, bus, domain, bus, device, func);
+
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/label", pci_name);
 	rc = sysfs_read_file(path, &label);
 	if (rc == 0)
 		return label;
 	return NULL;
 }
 
-static int read_pci_sysfs_index(unsigned int *index, const int domain, const int bus, const int device, const int func)
+static int read_pci_sysfs_index(unsigned int *index, const struct pci_dev *pdev)
 {
 	char path[PATH_MAX];
+	char pci_name[16];
 	int rc;
 	char *indexstr = NULL;
 	unsigned int i;
-	snprintf(path, sizeof(path), "/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/index", domain, bus, domain, bus, device, func);
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/index", pci_name);
 	rc = sysfs_read_file(path, &indexstr);
 	if (rc == 0) {
 		rc = sscanf(indexstr, "%u", &i);
@@ -90,20 +95,22 @@ static int read_pci_sysfs_index(unsigned int *index, const int domain, const int
 	return 1;
 }
 
-static void fill_pci_dev_sysfs(struct pci_device *p)
+static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 {
 	int rc;
 	unsigned int index = 0;
 	char *label = NULL;
-	rc = read_pci_sysfs_index(&index, pci_domain_nr(&p->pci_dev), p->pci_dev.bus, p->pci_dev.dev, p->pci_dev.func);
+	char buf[40];
+	unparse_pci_name(buf, sizeof(buf), p);
+	rc = read_pci_sysfs_index(&index, p);
 	if (!rc) {
-		p->sysfs_index = index;
-		p->uses_sysfs |= HAS_SYSFS_INDEX;
+		dev->sysfs_index = index;
+		dev->uses_sysfs |= HAS_SYSFS_INDEX;
 	}
-	label = read_pci_sysfs_label(pci_domain_nr(&p->pci_dev), p->pci_dev.bus, p->pci_dev.dev, p->pci_dev.func);
+	label = read_pci_sysfs_label(p);
 	if (label) {
-		p->sysfs_label = label;
-		p->uses_sysfs |= HAS_SYSFS_LABEL;
+		dev->sysfs_label = label;
+		dev->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
 }
 
@@ -125,7 +132,7 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	else
 		dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
-	fill_pci_dev_sysfs(dev);
+	fill_pci_dev_sysfs(dev, p);
 	list_add(&dev->node, &state->pci_devices);
 }
 
@@ -187,7 +194,7 @@ static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *f
 
 int unparse_pci_name(char *buf, int size, const struct pci_dev *pdev)
 {
-	return snprintf(buf, size, "%04x:%02x:%02x.%d",
+	return snprintf(buf, size, "%04x:%02x:%02x.%x",
 			pci_domain_nr(pdev), pdev->bus, pdev->dev, pdev->func);
 }
 
