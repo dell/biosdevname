@@ -1,12 +1,19 @@
+biosdevname (0.3.0) unstable; urgency=low
+
+  * add --policy=loms, use it by default.
+  * read index and labels from sysfs if available
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Wed, 10 Nov 2010 22:44:23 -0600
+
 biosdevname (0.2.4-1) unstable; urgency=low
 
   * eliminate libsysfs usage, libbiosdevname
   * coordinate udev rules usage with udev maintainer
   * fix crashes in pcmcia search, in_ethernet(), and incorrect command
     line parsing.
-	
+
  -- Matt Domsch <Matt_Domsch@dell.com>  Sat, 21 Sep 2007 10:30:13 -0500
-	
+
 biosdevname (0.2.3-1) unstable; urgency=low
 
   * Initial working release

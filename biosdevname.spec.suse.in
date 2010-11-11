@@ -53,6 +53,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Nov 10 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.0-1
+- add --policy=loms, make it default
+- read index and labels from sysfs if available
+
 * Mon Jul 27 2009 Jordan Hargrave <Jordan_Hargrave@dell.com> 0.2.5-1
 - fix mmap error checking
 
