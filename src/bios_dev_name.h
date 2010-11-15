@@ -12,6 +12,7 @@ struct bios_dev_name_opts {
 	int optind;
 	int sortroutine;
 	int namingpolicy;
+	const char *prefix;
 	unsigned int verbose:1;
 	unsigned int show_all:1;
 	unsigned int debug:1;

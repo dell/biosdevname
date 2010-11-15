@@ -21,6 +21,7 @@ static void usage(void)
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   -n        or --nosort              don't sort the PCI device list breadth-first\n");
 	fprintf(stderr, "   --policy [embedded | smbios_names | kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
+	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='en')\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: eth0\n");
 	fprintf(stderr, "  when the BIOS name and kernel name are both eth0.\n");
@@ -62,6 +63,7 @@ parse_opts(int argc, char **argv)
 			{"interface",         no_argument, 0, 'i'},
 			{"nosort",            no_argument, 0, 'n'},
 			{"policy",      required_argument, 0, 'p'},
+			{"prefix",      required_argument, 0, 'P'},
 			{0, 0, 0, 0}
 		};
 		c = getopt_long(argc, argv,
@@ -82,6 +84,9 @@ parse_opts(int argc, char **argv)
 		case 'p':
 			opts.namingpolicy = set_policy(optarg);
 			break;
+		case 'P':
+			opts.prefix = optarg;
+			break;
 		default:
 			usage();
 			exit(1);
@@ -96,6 +101,8 @@ parse_opts(int argc, char **argv)
 
 	if (opts.sortroutine == nosort)
 		opts.namingpolicy = kernelnames;
+	if (opts.prefix == NULL)
+		opts.prefix = "en";
 }
 
 int main(int argc, char *argv[])
@@ -105,7 +112,7 @@ int main(int argc, char *argv[])
 	void *cookie = NULL;
 
 	parse_opts(argc, argv);
-	cookie = setup_bios_devices(opts.sortroutine, opts.namingpolicy);
+	cookie = setup_bios_devices(opts.sortroutine, opts.namingpolicy, opts.prefix);
 	if (!cookie) {
 		rc = 1;
 		goto out;

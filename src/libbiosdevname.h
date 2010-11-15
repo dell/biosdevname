@@ -20,7 +20,7 @@ enum namingpolicy {
 	kernelnames,
 };
 
-extern void * setup_bios_devices(int sortroutine, int namingpolicy);
+extern void * setup_bios_devices(int sortroutine, int namingpolicy, const char *prefix);
 extern void cleanup_bios_devices(void *cookie);
 extern char * kern_to_bios(void *cookie, const char *devname);
 extern void unparse_bios_devices(void *cookie);
