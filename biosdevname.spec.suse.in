@@ -53,6 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Nov 15 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.1-1
+- rename --policy=loms to =embedded
+
 * Wed Nov 10 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.0-1
 - add --policy=loms, make it default
 - read index and labels from sysfs if available

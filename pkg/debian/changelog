@@ -1,3 +1,9 @@
+biosdevname (0.3.1) unstable; urgency=low
+
+  * rename --policy=loms to =embedded
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Mon, 15 Nov 2010 11:54:00 -0600
+
 biosdevname (0.3.0) unstable; urgency=low
 
   * add --policy=loms, use it by default.
