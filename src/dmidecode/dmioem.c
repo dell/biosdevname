@@ -91,6 +91,7 @@ static int dmi_decode_hp(struct dmi_header *h, const struct libbiosdevname_state
 						pdev->smbios_enabled = 1;
 						pdev->smbios_type = smbios_type;
 						pdev->smbios_instance = nic;
+						pdev->physical_slot = 0;
 					}
 				}
 				nic++;
