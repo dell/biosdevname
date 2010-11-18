@@ -164,15 +164,13 @@ static void use_pony(const struct libbiosdevname_state *state, const char *prefi
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
 				snprintf(location, sizeof(location), "pci%u", dev->pcidev->physical_slot);
+				if (!dev->pcidev->is_virtual_function)
+					portnum = dev->pcidev->index_in_slot;
+				else
+					portnum = dev->pcidev->pf->index_in_slot;
+				snprintf(port, sizeof(port), "#%u", portnum);
 				known=1;
 			}
-
-			if (!dev->pcidev->is_virtual_function)
-				portnum = dev->pcidev->index_in_slot;
-			else
-				portnum = dev->pcidev->pf->index_in_slot;
-			snprintf(port, sizeof(port), "#%u", portnum);
-
 
 			if (dev->pcidev->is_virtual_function)
 				snprintf(interface, sizeof(interface), "_%u", dev->pcidev->vf_index);
