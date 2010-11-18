@@ -104,7 +104,7 @@ parse_opts(int argc, char **argv)
 	if (opts.sortroutine == nosort)
 		opts.namingpolicy = kernelnames;
 	if (opts.prefix == NULL)
-		opts.prefix = "en";
+		opts.prefix = "em";
 }
 
 int main(int argc, char *argv[])
