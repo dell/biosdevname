@@ -148,19 +148,25 @@ static void use_pony(const struct libbiosdevname_state *state, const char *prefi
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
 				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
 					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->sysfs_index);
-					dev->bios_name = strdup(buffer);
 				}
 				else if (dev->pcidev->uses_smbios) {
 					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->smbios_instance);
-					dev->bios_name = strdup(buffer);
 				}
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
-				snprintf(buffer, sizeof(buffer), "pci%u#%u",
-					 dev->pcidev->physical_slot,
-					 dev->pcidev->index_in_slot);
-				dev->bios_name = strdup(buffer);
+				if (!dev->pcidev->is_virtual_function) {
+					snprintf(buffer, sizeof(buffer), "pci%u#%u",
+						 dev->pcidev->physical_slot,
+						 dev->pcidev->index_in_slot);
+				}
+				else {
+					snprintf(buffer, sizeof(buffer), "pci%u#%u_%u",
+						 dev->pcidev->pf->physical_slot,
+						 dev->pcidev->pf->index_in_slot,
+						 dev->pcidev->vf_index);
+				}
 			}
+			dev->bios_name = strdup(buffer);
 		}
 	}
 }

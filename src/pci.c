@@ -99,10 +99,15 @@ static void add_vf_to_pf(struct pci_access *pacc, struct pci_device *pf, struct 
 {
 	struct pci_dev *pfdev;
 	pfdev = find_physfn(pacc, &vf->pci_dev);
+
 	if (!pfdev)
 		return;
+	vf->is_virtual_function=1;
 	if (is_same_pci(&pf->pci_dev, pfdev)) {
 		list_add_tail(&vf->vfnode, &pf->vfs);
+		vf->vf_index = pf->num_vfs;
+		pf->num_vfs++;
+		vf->pf = pf;
 	}
 }
 
@@ -207,9 +212,6 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 		dev->sysfs_label = label;
 		dev->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
-	rc = read_pci_sysfs_physfn(buf, sizeof(buf), p);
-	if (!rc)
-		dev->is_virtual_function = 1;
 }
 
 static void add_pci_dev(struct libbiosdevname_state *state,
