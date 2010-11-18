@@ -55,7 +55,6 @@ static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *f
 	return 0;
 }
 
-
 static struct pci_dev * find_pdev_by_pci_name(struct pci_access *pacc, const char *s)
 {
 	int domain=0, bus=0, device=0, func=0;
@@ -84,6 +83,27 @@ find_physfn(struct pci_access *pacc, struct pci_dev *p)
 	c++;
 	pdev = find_pdev_by_pci_name(pacc, c);
 	return pdev;
+}
+
+static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
+{
+	if (pci_domain_nr(a) == pci_domain_nr(b) &&
+	    a->bus == b->bus &&
+	    a->dev == b->dev &&
+	    a->func == b->func)
+		return 1;
+	return 0;
+}
+
+static void add_vf_to_pf(struct pci_access *pacc, struct pci_device *pf, struct pci_device *vf)
+{
+	struct pci_dev *pfdev;
+	pfdev = find_physfn(pacc, &vf->pci_dev);
+	if (!pfdev)
+		return;
+	if (is_same_pci(&pf->pci_dev, pfdev)) {
+		list_add_tail(&vf->vfnode, &pf->vfs);
+	}
 }
 
 static struct pci_dev *
@@ -205,6 +225,8 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	}
 	memset(dev, 0, sizeof(*dev));
 	INIT_LIST_HEAD(&dev->node);
+	INIT_LIST_HEAD(&dev->vfnode);
+	INIT_LIST_HEAD(&dev->vfs);
 	memcpy(&dev->pci_dev, p, sizeof(*p)); /* This doesn't allow us to call PCI functions though */
 	dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	if (table)
@@ -231,7 +253,7 @@ int get_pci_devices(struct libbiosdevname_state *state)
 {
 	struct pci_access *pacc;
 	struct pci_dev *p;
-	struct pci_device *dev;
+	struct pci_device *dev, *pfdev, *vfdev;
 	struct routing_table *table;
 	int rc=0;
 
@@ -248,6 +270,13 @@ int get_pci_devices(struct libbiosdevname_state *state)
 		dev = find_dev_by_pci(state, p);
 		if (!dev)
 			add_pci_dev(state, table, pacc, p);
+	}
+
+	/* in a second pass, attach VFs to PFs */
+	list_for_each_entry(pfdev, &state->pci_devices, node) {
+		list_for_each_entry(vfdev, &state->pci_devices, node) {
+			add_vf_to_pf(pacc, pfdev, vfdev);
+		}
 	}
 
 	pirq_free_table(table);
@@ -300,6 +329,8 @@ static int unparse_smbios_type41_type(char *buf, const int size, const int type)
 int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 {
 	char *s = buf;
+	struct pci_device *dev;
+	char pci_name[16];
 	s += snprintf(s, size-(s-buf), "PCI name      : ");
 	s += unparse_pci_name(s,  size-(s-buf), &p->pci_dev);
 	s += snprintf(s, size-(s-buf), "\n");
@@ -322,17 +353,16 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	if (p->uses_sysfs & HAS_SYSFS_LABEL)
 		s += snprintf(s, size-(s-buf), "sysfs Label: %s\n", p->sysfs_label);
 	s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
-	return (s-buf);
-}
 
-static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
-{
-	if (pci_domain_nr(a) == pci_domain_nr(b) &&
-	    a->bus == b->bus &&
-	    a->dev == b->dev &&
-	    a->func == b->func)
-		return 1;
-	return 0;
+	if (!list_empty(&p->vfs)) {
+		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");
+		list_for_each_entry(dev, &p->vfs, vfnode) {
+			unparse_pci_name(pci_name, sizeof(pci_name), &dev->pci_dev);
+			s += snprintf(s, size-(s-buf), "%s\n", pci_name);
+		}
+	}
+
+	return (s-buf);
 }
 
 struct pci_device * find_dev_by_pci(const struct libbiosdevname_state *state,
@@ -346,6 +376,16 @@ struct pci_device * find_dev_by_pci(const struct libbiosdevname_state *state,
 	return NULL;
 }
 
+static struct pci_device * find_pci_device_by_pci_dev(const struct libbiosdevname_state *state, struct pci_dev *p)
+{
+	struct pci_device *dev;
+
+	list_for_each_entry(dev, &state->pci_devices, node) {
+		if (is_same_pci(p, &dev->pci_dev))
+			return dev;
+	}
+	return NULL;
+}
 struct pci_device * find_pci_dev_by_pci_addr(const struct libbiosdevname_state *state,
 					     const int domain, const int bus, const int device, const int func)
 {

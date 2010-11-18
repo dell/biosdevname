@@ -15,6 +15,7 @@
 
 struct pci_device {
 	struct list_head node;
+	struct list_head vfnode;
 	struct pci_dev pci_dev;
 	int physical_slot;
 	unsigned int index_in_slot;
@@ -28,6 +29,7 @@ struct pci_device {
 	char * sysfs_label;
 	unsigned char uses_sysfs;
 	unsigned char is_virtual_function:1;
+	struct list_head vfs;
 };
 
 #define HAS_SYSFS_INDEX 1
