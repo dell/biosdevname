@@ -27,6 +27,7 @@ struct pci_device {
 	unsigned int sysfs_index;
 	char * sysfs_label;
 	unsigned char uses_sysfs;
+	unsigned char is_virtual_function:1;
 };
 
 #define HAS_SYSFS_INDEX 1

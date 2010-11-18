@@ -175,7 +175,7 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 	int rc;
 	unsigned int index = 0;
 	char *label = NULL;
-	char buf[40];
+	char buf[PATH_MAX];
 	unparse_pci_name(buf, sizeof(buf), p);
 	rc = read_pci_sysfs_index(&index, p);
 	if (!rc) {
@@ -187,6 +187,9 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 		dev->sysfs_label = label;
 		dev->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
+	rc = read_pci_sysfs_physfn(buf, sizeof(buf), p);
+	if (!rc)
+		dev->is_virtual_function = 1;
 }
 
 static void add_pci_dev(struct libbiosdevname_state *state,
@@ -318,6 +321,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "sysfs Index: %u\n", p->sysfs_index);
 	if (p->uses_sysfs & HAS_SYSFS_LABEL)
 		s += snprintf(s, size-(s-buf), "sysfs Label: %s\n", p->sysfs_label);
+	s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
 	return (s-buf);
 }
 

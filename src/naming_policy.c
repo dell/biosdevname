@@ -137,6 +137,34 @@ static void use_embedded(const struct libbiosdevname_state *state, const char *p
 	}
 }
 
+static void use_pony(const struct libbiosdevname_state *state, const char *prefix)
+{
+	struct bios_device *dev;
+	char buffer[IFNAMSIZ];
+
+	memset(buffer, 0, sizeof(buffer));
+	list_for_each_entry(dev, &state->bios_devices, node) {
+		if (is_pci(dev)) {
+			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
+				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
+					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->sysfs_index);
+					dev->bios_name = strdup(buffer);
+				}
+				else if (dev->pcidev->uses_smbios) {
+					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->smbios_instance);
+					dev->bios_name = strdup(buffer);
+				}
+			}
+			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
+				snprintf(buffer, sizeof(buffer), "pci%u#%u",
+					 dev->pcidev->physical_slot,
+					 dev->pcidev->index_in_slot);
+				dev->bios_name = strdup(buffer);
+			}
+		}
+	}
+}
+
 
 int assign_bios_network_names(const struct libbiosdevname_state *state, int sort, int policy, const char *prefix)
 {
@@ -159,8 +187,11 @@ int assign_bios_network_names(const struct libbiosdevname_state *state, int sort
 			use_kernel_names(state);
 			break;
 		case embedded:
-		default:
 			use_embedded(state, prefix);
+			break;
+		case pony:
+		default:
+			use_pony(state, prefix);
 			break;
 		}
 	}

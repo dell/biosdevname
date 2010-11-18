@@ -20,7 +20,7 @@ static void usage(void)
 	fprintf(stderr, "   -i        or --interface           treat [args] as ethernet devs\n");
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   -n        or --nosort              don't sort the PCI device list breadth-first\n");
-	fprintf(stderr, "   --policy [embedded | smbios_names | kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
+	fprintf(stderr, "   --policy [pony | embedded | smbios_names | kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
 	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='en')\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: eth0\n");
@@ -32,9 +32,11 @@ static void usage(void)
 static int
 set_policy(const char *arg)
 {
-	int rc = embedded;
+	int rc = pony;
 
-	if (!strncmp("embedded", arg, sizeof("embedded")))
+	if (!strncmp("pony", arg, sizeof("pony")))
+		rc = pony;
+	else if (!strncmp("embedded", arg, sizeof("embedded")))
 		rc = embedded;
 	if (!strncmp("kernelnames", arg, sizeof("kernelnames")))
 		rc = kernelnames;
