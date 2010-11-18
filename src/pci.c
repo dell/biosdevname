@@ -7,55 +7,130 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <limits.h>
+#include <unistd.h>
 #include <pci/pci.h>
 #include "pirq.h"
 #include "pci.h"
 #include "sysfs.h"
 
-static int
-is_parent_bridge(struct pci_dev *p, unsigned int target_bus)
+static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *pdev)
 {
- 	unsigned int primary, secondary;
+	char path[PATH_MAX];
+	char pci_name[16];
+	ssize_t size;
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s", pci_name);
+	size = readlink(path, buf, bufsize);
+	if (size == -1)
+		return 1;
+	return 0;
+}
 
-	if ( (pci_read_word(p, PCI_HEADER_TYPE) & 0x7f) != PCI_HEADER_TYPE_BRIDGE)
-		return 0;
+static int read_pci_sysfs_physfn(char *buf, size_t bufsize, const struct pci_dev *pdev)
+{
+	char path[PATH_MAX];
+	char pci_name[16];
+	ssize_t size;
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn", pci_name);
+	size = readlink(path, buf, bufsize);
+	if (size == -1)
+		return 1;
+	return 0;
+}
 
-	primary=pci_read_byte(p, PCI_PRIMARY_BUS);
-	secondary=pci_read_byte(p, PCI_SECONDARY_BUS);
+static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *func)
+{
+	int err;
+/* The domain part was added in 2.6 kernels.  Test for that first. */
+	err = sscanf(s, "%x:%2x:%2x.%x", domain, bus, dev, func);
+	if (err != 4) {
+		err = sscanf(s, "%2x:%2x.%x", bus, dev, func);
+		if (err != 3) {
+			return 1;
+		}
+	}
+	return 0;
+}
 
-	if (secondary != target_bus)
-		return 0;
 
-	return 1;
+static struct pci_dev * find_pdev_by_pci_name(struct pci_access *pacc, const char *s)
+{
+	int domain=0, bus=0, device=0, func=0;
+	if (parse_pci_name(s, &domain, &bus, &device, &func))
+		return NULL;
+	return pci_get_dev(pacc, domain, bus, device, func);
 }
 
 static struct pci_dev *
-find_parent(struct pci_access *pacc, unsigned int target_bus)
+find_physfn(struct pci_access *pacc, struct pci_dev *p)
 {
-	struct pci_dev *p;
+	int rc;
+	char path[PATH_MAX];
+	char *c;
+	struct pci_dev *pdev;
+	memset(path, 0, sizeof(path));
+	rc = read_pci_sysfs_physfn(path, sizeof(path), p);
+	if (rc != 0)
+		return NULL;
+	/* we get back a string like
+	   ../0000:05:0.0
+	   where the last component is the parent device
+	*/
+	/* find the last backslash */
+	c = rindex(path, '/');
+	c++;
+	pdev = find_pdev_by_pci_name(pacc, c);
+	return pdev;
+}
 
-	for (p=pacc->devices; p; p=p->next)
-		if (is_parent_bridge(p, target_bus))
-			return p;
+static struct pci_dev *
+find_parent(struct pci_access *pacc, struct pci_dev *p)
+{
+	int rc;
+	char path[PATH_MAX];
+	char *c;
+	struct pci_dev *pdev;
+	memset(path, 0, sizeof(path));
+	/* if this device has a physfn pointer, then treat _that_ as the parent */
+	pdev = find_physfn(pacc, p);
+	if (pdev)
+		return pdev;
 
-	return NULL;
+	rc = read_pci_sysfs_path(path, sizeof(path), p);
+	if (rc != 0)
+		return NULL;
+	/* we get back a string like
+	   ../../../devices/pci0000:00/0000:00:09.0/0000:05:17.4
+	   where the last component is the device we asked for
+	*/
+	/* find the last backslash */
+	c = rindex(path, '/');
+	*c = '\0';
+	/* find the last backslash again */
+	c = rindex(path, '/');
+	c++;
+	pdev = find_pdev_by_pci_name(pacc, c);
+	return pdev;
 }
 
 /*
- * Check our parent in case the device itself isn't listed
+ * Check our parents in case the device itself isn't listed
  * in the PCI IRQ Routing Table.  This has a problem, as
  * our parent bridge on a card may not be included
  * in the $PIR table.  In that case, it falls back to "unknown".
  */
 static int pci_dev_to_slot(struct routing_table *table, struct pci_access *pacc, struct pci_dev *p)
 {
-	int rc;
+	int rc = INT_MAX;
 	rc = pirq_pci_dev_to_slot(table, p->bus, p->dev);
-	if (rc == INT_MAX) {
-		p = find_parent(pacc, p->bus);
-		if (p)
-			rc = pirq_pci_dev_to_slot(table, p->bus, p->dev);
+	while (rc == INT_MAX) {
+		p = find_parent(pacc, p);
+		if (p == NULL)
+			break;
+		rc = pirq_pci_dev_to_slot(table, p->bus, p->dev);
 	}
 	return rc;
 }
@@ -116,7 +191,8 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 
 static void add_pci_dev(struct libbiosdevname_state *state,
 			struct routing_table *table,
-			struct pci_access *pacc, struct pci_dev *p)
+			struct pci_access *pacc,
+			struct pci_dev *p)
 {
 	struct pci_device *dev;
 	dev = malloc(sizeof(*dev));
@@ -127,10 +203,9 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	memset(dev, 0, sizeof(*dev));
 	INIT_LIST_HEAD(&dev->node);
 	memcpy(&dev->pci_dev, p, sizeof(*p)); /* This doesn't allow us to call PCI functions though */
+	dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	if (table)
 		dev->physical_slot = pci_dev_to_slot(table, pacc, p);
-	else
-		dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
 	fill_pci_dev_sysfs(dev, p);
 	list_add(&dev->node, &state->pci_devices);
@@ -175,21 +250,6 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	pirq_free_table(table);
 	pci_cleanup(pacc);
 	return rc;
-}
-
-
-static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *func)
-{
-	int err;
-/* The domain part was added in 2.6 kernels.  Test for that first. */
-	err = sscanf(s, "%x:%2x:%2x.%x", domain, bus, dev, func);
-	if (err != 4) {
-		err = sscanf(s, "%2x:%2x.%x", bus, dev, func);
-		if (err != 3) {
-			return 1;
-		}
-	}
-	return 0;
 }
 
 int unparse_pci_name(char *buf, int size, const struct pci_dev *pdev)
