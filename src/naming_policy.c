@@ -141,32 +141,46 @@ static void use_pony(const struct libbiosdevname_state *state, const char *prefi
 {
 	struct bios_device *dev;
 	char buffer[IFNAMSIZ];
+	char location[IFNAMSIZ];
+	char port[IFNAMSIZ];
+	char interface[IFNAMSIZ];
+	unsigned int portnum=0;
+	int known=0;
 
 	memset(buffer, 0, sizeof(buffer));
+	memset(location, 0, sizeof(location));
+	memset(port, 0, sizeof(port));
+	memset(interface, 0, sizeof(interface));
+
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
-				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
-					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->sysfs_index);
-				}
-				else if (dev->pcidev->uses_smbios) {
-					snprintf(buffer, sizeof(buffer), "%s%u", prefix, dev->pcidev->smbios_instance);
-				}
+				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX)
+					portnum = dev->pcidev->sysfs_index;
+				else if (dev->pcidev->uses_smbios)
+					portnum = dev->pcidev->smbios_instance;
+				snprintf(location, sizeof(location), "%s%u", prefix, portnum);
+				known=1;
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
-				if (!dev->pcidev->is_virtual_function) {
-					snprintf(buffer, sizeof(buffer), "pci%u#%u",
-						 dev->pcidev->physical_slot,
-						 dev->pcidev->index_in_slot);
-				}
-				else {
-					snprintf(buffer, sizeof(buffer), "pci%u#%u_%u",
-						 dev->pcidev->pf->physical_slot,
-						 dev->pcidev->pf->index_in_slot,
-						 dev->pcidev->vf_index);
-				}
+				snprintf(location, sizeof(location), "pci%u", dev->pcidev->physical_slot);
+				known=1;
 			}
-			dev->bios_name = strdup(buffer);
+
+			if (!dev->pcidev->is_virtual_function)
+				portnum = dev->pcidev->index_in_slot;
+			else
+				portnum = dev->pcidev->pf->index_in_slot;
+			snprintf(port, sizeof(port), "#%u", portnum);
+
+
+			if (dev->pcidev->is_virtual_function)
+				snprintf(interface, sizeof(interface), "_%u", dev->pcidev->vf_index);
+
+			if (known) {
+				snprintf(buffer, sizeof(buffer), "%s%s%s", location, port, interface);
+				dev->bios_name = strdup(buffer);
+			}
 		}
 	}
 }
