@@ -12,7 +12,7 @@ enum sortroutine {
 };
 
 enum namingpolicy {
-	pony,
+	physical,
 	embedded,
 	all_ethN,
 	all_names,

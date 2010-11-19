@@ -137,7 +137,7 @@ static void use_embedded(const struct libbiosdevname_state *state, const char *p
 	}
 }
 
-static void use_pony(const struct libbiosdevname_state *state, const char *prefix)
+static void use_physical(const struct libbiosdevname_state *state, const char *prefix)
 {
 	struct bios_device *dev;
 	char buffer[IFNAMSIZ];
@@ -207,9 +207,9 @@ int assign_bios_network_names(const struct libbiosdevname_state *state, int sort
 		case embedded:
 			use_embedded(state, prefix);
 			break;
-		case pony:
+		case physical:
 		default:
-			use_pony(state, prefix);
+			use_physical(state, prefix);
 			break;
 		}
 	}
