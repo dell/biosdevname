@@ -378,16 +378,6 @@ struct pci_device * find_dev_by_pci(const struct libbiosdevname_state *state,
 	return NULL;
 }
 
-static struct pci_device * find_pci_device_by_pci_dev(const struct libbiosdevname_state *state, struct pci_dev *p)
-{
-	struct pci_device *dev;
-
-	list_for_each_entry(dev, &state->pci_devices, node) {
-		if (is_same_pci(p, &dev->pci_dev))
-			return dev;
-	}
-	return NULL;
-}
 struct pci_device * find_pci_dev_by_pci_addr(const struct libbiosdevname_state *state,
 					     const int domain, const int bus, const int device, const int func)
 {
