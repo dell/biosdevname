@@ -5,6 +5,7 @@
 AC_PREREQ(2.59)
 AC_INIT([biosdevname],[0.3.0],[Matt_Domsch@dell.com])
 AC_LANG([C])
+AC_USE_SYSTEM_EXTENSIONS
 AC_CONFIG_SRCDIR([src/read_proc.c])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT()
@@ -16,8 +17,10 @@ AC_PROG_AWK
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_LN_S
+AC_PROG_CXX
+AC_PROG_RANLIB
 AC_CHECK_PROGS([READELF], [readelf])
-
+AC_CHECK_FUNCS([realpath])
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
 # libz has to come before libpci because libpci needs it now.
@@ -44,6 +47,9 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT8_T
+AC_TYPE_UINT16_T
 AC_HEADER_TIME
 AC_STRUCT_TM
 
