@@ -50,15 +50,37 @@ static int virtfn_filter(const struct dirent *dent)
         return (!strncmp(dent->d_name,"virtfn",6));
 }
 
+static int _read_virtfn_index(unsigned int *index, const char *name, const char *basename, const char *pci_name)
+{
+	char buf[PATH_MAX], *b;
+	ssize_t size;
+	unsigned int u;
+	int scanned, rc=1;
+
+	size = readlink(name, buf, sizeof(buf));
+	if (size > 0) {
+		/* form is ../0000:05:10.0/ */
+		b=buf+3; /* skip ../ */
+		if (!strcmp(b, pci_name)) {
+			scanned = sscanf(basename, "virtfn%u", &u);
+			if (scanned == 1) {
+				rc = 0;
+				*index = u;
+			}
+		}
+	}
+	return rc;
+}
+
+
 static int read_virtfn_index(unsigned int *index, const struct pci_dev *pdev)
 {
 	char pci_name[16];
 	char path[PATH_MAX];
 	char cpath[PATH_MAX];
-	char buf[PATH_MAX], *b;
-	ssize_t size;
+	char fullpath[PATH_MAX];
 	struct dirent **namelist;
-	int n, i=-1, scanned, rc=1;
+	int n, rc=1;
 
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn", pci_name);
@@ -71,19 +93,8 @@ static int read_virtfn_index(unsigned int *index, const struct pci_dev *pdev)
 	else {
 		while (n--) {
 			if (rc) {
-				size = readlink(namelist[n]->d_name, buf, sizeof(buf));
-				if (size > 0) {
-					/* form is ../0000:05:10.0/ */
-					b=buf+3; /* skip ../ */
-					b[(strlen(b)-1)] = '\0'; /* nuke trailing / */
-					if (!strcmp(b, pci_name)) {
-						scanned = sscanf(namelist[n]->d_name, "virtfn%u", &i);
-						if (scanned == 1) {
-							rc = 0;
-							*index = i;
-						}
-					}
-				}
+				snprintf(fullpath, sizeof(fullpath), "%s/%s", cpath, namelist[n]->d_name);
+				rc = _read_virtfn_index(index, fullpath, namelist[n]->d_name, pci_name);
 			}
 			free(namelist[n]);
 		}
