@@ -3,6 +3,9 @@
  *  by Matt Domsch <Matt_Domsch@dell.com>
  *  Licensed under the GNU General Public license, version 2.
  */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +13,7 @@
 #include <strings.h>
 #include <limits.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <pci/pci.h>
 #include "pirq.h"
 #include "pci.h"
@@ -39,6 +43,54 @@ static int read_pci_sysfs_physfn(char *buf, size_t bufsize, const struct pci_dev
 	if (size == -1)
 		return 1;
 	return 0;
+}
+
+static int virtfn_filter(const struct dirent *dent)
+{
+        return (!strncmp(dent->d_name,"virtfn",6));
+}
+
+static int read_virtfn_index(unsigned int *index, const struct pci_dev *pdev)
+{
+	char pci_name[16];
+	char path[PATH_MAX];
+	char cpath[PATH_MAX];
+	char buf[PATH_MAX], *b;
+	ssize_t size;
+	struct dirent **namelist;
+	int n, i=-1, scanned, rc=1;
+
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn", pci_name);
+	if (realpath(path, cpath) == NULL)
+		return rc;
+
+	n = scandir(cpath, &namelist, virtfn_filter, versionsort);
+	if (n < 0)
+		return rc;
+	else {
+		while (n--) {
+			if (rc) {
+				size = readlink(namelist[n]->d_name, buf, sizeof(buf));
+				if (size > 0) {
+					/* form is ../0000:05:10.0/ */
+					b=buf+3; /* skip ../ */
+					b[(strlen(b)-1)] = '\0'; /* nuke trailing / */
+					if (!strcmp(b, pci_name)) {
+						scanned = sscanf(namelist[n]->d_name, "virtfn%u", &i);
+						if (scanned == 1) {
+							rc = 0;
+							*index = i;
+						}
+					}
+				}
+			}
+			free(namelist[n]);
+		}
+		free(namelist);
+	}
+
+	return rc;
 }
 
 static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *func)
@@ -98,6 +150,8 @@ static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
 static void add_vf_to_pf(struct pci_access *pacc, struct pci_device *pf, struct pci_device *vf)
 {
 	struct pci_dev *pfdev;
+	unsigned int index;
+	int rc;
 	pfdev = find_physfn(pacc, &vf->pci_dev);
 
 	if (!pfdev)
@@ -105,8 +159,9 @@ static void add_vf_to_pf(struct pci_access *pacc, struct pci_device *pf, struct 
 	vf->is_virtual_function=1;
 	if (is_same_pci(&pf->pci_dev, pfdev)) {
 		list_add_tail(&vf->vfnode, &pf->vfs);
-		vf->vf_index = pf->num_vfs;
-		pf->num_vfs++;
+		rc = read_virtfn_index(&index, &vf->pci_dev);
+		if (!rc)
+			vf->vf_index = index;
 		vf->pf = pf;
 	}
 }

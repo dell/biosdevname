@@ -32,7 +32,6 @@ struct pci_device {
 	struct pci_device *pf;
 	struct list_head vfnode;
 	struct list_head vfs;
-	unsigned int num_vfs;
 };
 
 #define HAS_SYSFS_INDEX 1
