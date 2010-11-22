@@ -27,7 +27,8 @@ struct pci_device {
 	unsigned int sysfs_index;
 	char * sysfs_label;
 	unsigned char uses_sysfs;
-	unsigned int is_virtual_function:1;
+	unsigned int is_sriov_physical_function:1;
+	unsigned int is_sriov_virtual_function:1;
 	unsigned int vf_index;
 	struct pci_device *pf;
 	struct list_head vfnode;
@@ -37,6 +38,7 @@ struct pci_device {
 #define HAS_SYSFS_INDEX 1
 #define HAS_SYSFS_LABEL 2
 #define PHYSICAL_SLOT_UNKNOWN (INT_MAX)
+#define INDEX_IN_SLOT_UNKNOWN (INT_MAX)
 
 extern int get_pci_devices(struct libbiosdevname_state *state);
 extern void free_pci_devices(struct libbiosdevname_state *state);

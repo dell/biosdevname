@@ -225,6 +225,8 @@ static int set_slot_index(struct libbiosdevname_state *state)
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (!dev->pcidev)
 			continue;
+		if (dev->pcidev->is_sriov_virtual_function)
+			continue;
 		if (dev->pcidev->physical_slot != prevslot)
 			index=0;
 		else
