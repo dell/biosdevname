@@ -20,11 +20,10 @@ static void usage(void)
 	fprintf(stderr, "   -i        or --interface           treat [args] as ethernet devs\n");
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   --policy [physical | all_ethN ]\n");
-	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='en')\n");
+	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='em')\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
-	fprintf(stderr, "  returns: eth0\n");
-	fprintf(stderr, "  when the BIOS name and kernel name are both eth0.\n");
-	fprintf(stderr, " --nosort implies --policy kernelnames.\n");
+	fprintf(stderr, "  returns: em1\n");
+	fprintf(stderr, "  when eth0 is an embedded NIC with label '1' on the chassis.\n");
 	fprintf(stderr, " You must be root to run this, as it must read from /dev/mem.\n");
 }
 
