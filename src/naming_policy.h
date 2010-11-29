@@ -8,8 +8,6 @@
 
 #include "state.h"
 
-extern int system_uses_smbios_names;
-
 extern int assign_bios_network_names(const struct libbiosdevname_state *state,
 				     int sortroutine, int namingpolicy, const char *prefix);
 

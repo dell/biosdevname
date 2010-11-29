@@ -13,8 +13,6 @@
 #include "state.h"
 #include "dmidecode/dmidecode.h"
 
-int system_uses_smbios_names;
-
 static void use_all_ethN(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
@@ -53,17 +51,22 @@ static void pcmcia_names(struct bios_device *dev)
 static int use_smbios_names(const struct libbiosdevname_state *state)
 {
 	struct bios_device *dev;
+	int system_uses_smbios_names=0;
+
+	list_for_each_entry(dev, &state->bios_devices, node) {
+		if (is_pci(dev) && (dev->pcidev->uses_smbios & HAS_SMBIOS_LABEL) && dev->pcidev->smbios_label) {
+			dev->bios_name = dev->pcidev->smbios_label;
+			system_uses_smbios_names=1;
+		}
+		else if (is_pcmcia(dev))
+			pcmcia_names(dev);
+
+	}
 	if (!system_uses_smbios_names) {
 		fprintf(stderr, "Error: BIOS does not provide Ethernet device names in SMBIOS.\n");
 		fprintf(stderr, "       Use a different naming policy.\n");
 		return 1;
-	}
-	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (is_pci(dev) && dev->pcidev->uses_smbios && dev->pcidev->smbios_label) {
-			dev->bios_name = dev->pcidev->smbios_label;
-		}
-		else if (is_pcmcia(dev))
-			pcmcia_names(dev);
+
 	}
 	return 0;
 }
@@ -155,12 +158,16 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
-				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX)
+				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
 					portnum = dev->pcidev->sysfs_index;
-				else if (dev->pcidev->uses_smbios)
+					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
+					known=1;
+				}
+				else if (dev->pcidev->uses_smbios & HAS_SMBIOS_INSTANCE) {
 					portnum = dev->pcidev->smbios_instance;
-				snprintf(location, sizeof(location), "%s%u", prefix, portnum);
-				known=1;
+					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
+					known=1;
+				}
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
 				snprintf(location, sizeof(location), "pci%u", dev->pcidev->physical_slot);

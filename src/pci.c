@@ -327,6 +327,27 @@ void free_pci_devices(struct libbiosdevname_state *state)
 	}
 }
 
+static int set_pci_slot_index(struct libbiosdevname_state *state)
+{
+	struct pci_device *pcidev;
+	int prevslot=-1;
+	int index=0;
+
+	/* FIXME: only iterate over the PCI devices, because the bios_device list may be incomplete due to renames happening in parallel */
+	list_for_each_entry(pcidev, &state->pci_devices, node) {
+		if (pcidev->is_sriov_virtual_function)
+			continue;
+		if (pcidev->physical_slot != prevslot) {
+			index=0;
+			prevslot = pcidev->physical_slot;
+		}
+		else
+			index++;
+		pcidev->index_in_slot = index;
+	}
+	return 0;
+}
+
 int get_pci_devices(struct libbiosdevname_state *state)
 {
 	struct pci_access *pacc;
@@ -335,8 +356,6 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	struct routing_table *table;
 	int rc=0;
 
-	/* ugly hack */
-	sleep(5);
 	pacc = pci_alloc();
 	if (!pacc)
 		return rc;
@@ -351,6 +370,7 @@ int get_pci_devices(struct libbiosdevname_state *state)
 			add_pci_dev(state, table, pacc, p);
 	}
 
+	set_pci_slot_index(state);
 	/* in a second pass, attach VFs to PFs */
 	list_for_each_entry(vfdev, &state->pci_devices, node) {
 		if (!vfdev->is_sriov_virtual_function)

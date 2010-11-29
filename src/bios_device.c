@@ -216,26 +216,6 @@ static void insertion_sort_devices(struct bios_device *a, struct list_head *list
 	list_move_tail(&a->node, list);
 }
 
-static int set_slot_index(struct libbiosdevname_state *state)
-{
-	struct bios_device *dev;
-	int prevslot=-1;
-	int index=0;
-
-	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (!dev->pcidev)
-			continue;
-		if (dev->pcidev->is_sriov_virtual_function)
-			continue;
-		if (dev->pcidev->physical_slot != prevslot)
-			index=0;
-		else
-			index++;
-		dev->pcidev->index_in_slot = index;
-		prevslot = dev->pcidev->physical_slot;
-	}
-	return 0;
-}
 
 static void sort_device_list(struct libbiosdevname_state *state)
 {
@@ -245,7 +225,6 @@ static void sort_device_list(struct libbiosdevname_state *state)
 		insertion_sort_devices(dev, &sorted_devices, sort_by_type);
 	}
 	list_splice(&sorted_devices, &state->bios_devices);
-	set_slot_index(state);
 }
 
 static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
