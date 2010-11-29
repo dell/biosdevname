@@ -54,9 +54,6 @@ static int eths_get_hwaddr(const char *devname, unsigned char *buf, int size, in
 		memcpy(buf, ifr.ifr_hwaddr.sa_data, min(size, sizeof(ifr.ifr_hwaddr.sa_data)));
 		*type = ifr.ifr_hwaddr.sa_family;
 	}
-	else {
-		perror("SIOCGIFHWADDR failed");
-	}
 	close(fd);
 	return err;
 }
