@@ -53,8 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Mon Nov 15 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.1-1
-- rename --policy=loms to =embedded
+* Mon Nov 28 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.1-1
+- remove all policies except 'physical' and 'all_ethN'
+- handle SR-IOV devices properly
 
 * Wed Nov 10 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.0-1
 - add --policy=loms, make it default

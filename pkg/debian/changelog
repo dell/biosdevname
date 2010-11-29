@@ -1,8 +1,9 @@
 biosdevname (0.3.1) unstable; urgency=low
 
-  * rename --policy=loms to =embedded
+  * remove all policies except 'physical' and 'all_ethN'
+  * handle SR-IOV devices properly
 
- -- Matt Domsch <Matt_Domsch@dell.com>  Mon, 15 Nov 2010 11:54:00 -0600
+ -- Matt Domsch <Matt_Domsch@dell.com>  Mon, 28 Nov 2010 22:05:00 -0600
 
 biosdevname (0.3.0) unstable; urgency=low
 
