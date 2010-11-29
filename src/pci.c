@@ -453,7 +453,8 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "sysfs Index: %u\n", p->sysfs_index);
 	if (p->uses_sysfs & HAS_SYSFS_LABEL)
 		s += snprintf(s, size-(s-buf), "sysfs Label: %s\n", p->sysfs_label);
-	s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
+	if (p->physical_slot > 0 && !p->is_sriov_virtual_function)
+		s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
 
 	if (!list_empty(&p->vfs)) {
 		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");
