@@ -17,7 +17,7 @@ struct pci_device {
 	struct list_head node;
 	struct pci_dev pci_dev;
 	int physical_slot;
-	unsigned int index_in_slot;
+	unsigned int index_in_slot; /* only valid if physical_slot > 0 and not a VF */
 	unsigned short int class;
 	unsigned char uses_smbios;
 	unsigned char smbios_type;

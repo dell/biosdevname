@@ -335,6 +335,8 @@ static int set_pci_slot_index(struct libbiosdevname_state *state)
 
 	/* FIXME: only iterate over the PCI devices, because the bios_device list may be incomplete due to renames happening in parallel */
 	list_for_each_entry(pcidev, &state->pci_devices, node) {
+		if (pcidev->physical_slot == 0) /* skip embedded devices */
+			continue;
 		if (pcidev->is_sriov_virtual_function)
 			continue;
 		if (pcidev->physical_slot != prevslot) {
