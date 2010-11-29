@@ -447,7 +447,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "SMBIOS Instance: %u\n", p->smbios_instance);
 		s += snprintf(s, size-(s-buf), "SMBIOS Enabled: %s\n", p->smbios_instance?"True":"False");
 	}
-	if (p->smbios_label)
+	if (p->uses_smbios & HAS_SMBIOS_LABEL && p->smbios_label)
 		s += snprintf(s, size-(s-buf), "SMBIOS Label: %s\n", p->smbios_label);
 	if (p->uses_sysfs & HAS_SYSFS_INDEX)
 		s += snprintf(s, size-(s-buf), "sysfs Index: %u\n", p->sysfs_index);

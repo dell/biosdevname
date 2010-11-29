@@ -112,10 +112,10 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 						pdev->physical_slot = WORD(data+0x09);
 						pdev->smbios_type = 0;
 						pdev->smbios_instance = 0;
-						pdev->uses_smbios = HAS_SMBIOS_SLOT;
+						pdev->uses_smbios |= HAS_SMBIOS_SLOT;
 						if (dmi_string(h, data[0x04])) {
 							pdev->smbios_label=strdup(dmi_string(h, data[0x04]));
-							pdev->uses_smbios = HAS_SMBIOS_LABEL;
+							pdev->uses_smbios |= HAS_SMBIOS_LABEL;
 						}
 						strip_right(pdev->smbios_label);
 					}
@@ -129,7 +129,6 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 			function = data[0xa] & 0x7;
 			pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
 			if (pdev) {
-				pdev->uses_smbios = 1;
 				pdev->physical_slot = 0;
 				pdev->smbios_enabled = !!(data[0x05] & 0x80);
 				pdev->smbios_type = data[0x05] & 0x7F;
