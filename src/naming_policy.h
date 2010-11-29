@@ -9,6 +9,6 @@
 #include "state.h"
 
 extern int assign_bios_network_names(const struct libbiosdevname_state *state,
-				     int sortroutine, int namingpolicy, const char *prefix);
+				     int namingpolicy, const char *prefix);
 
 #endif /* NAMING_POLICY_H_INCLUDED */

@@ -334,7 +334,7 @@ void cleanup_bios_devices(void *cookie)
 	free_pci_devices(state);
 }
 
-void * setup_bios_devices(int sortroutine, int namingpolicy, const char *prefix)
+void * setup_bios_devices(int namingpolicy, const char *prefix)
 {
 	int rc=1;
 	struct libbiosdevname_state *state = alloc_state();
@@ -354,10 +354,8 @@ void * setup_bios_devices(int sortroutine, int namingpolicy, const char *prefix)
 
 	get_eths(state);
 	match_all(state);
-	if (sortroutine != nosort) {
-		sort_device_list(state);
-	}
-	rc = assign_bios_network_names(state, sortroutine, namingpolicy, prefix);
+	sort_device_list(state);
+	rc = assign_bios_network_names(state, namingpolicy, prefix);
 	if (!rc)
 		return state;
 

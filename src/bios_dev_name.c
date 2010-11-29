@@ -19,8 +19,7 @@ static void usage(void)
 	fprintf(stderr, " Options:\n");
 	fprintf(stderr, "   -i        or --interface           treat [args] as ethernet devs\n");
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
-	fprintf(stderr, "   -n        or --nosort              don't sort the PCI device list breadth-first\n");
-	fprintf(stderr, "   --policy [physical | embedded | smbios_names | kernelnames | all_ethN | all_names | embedded_ethN_slots_names]\n");
+	fprintf(stderr, "   --policy [physical | all_ethN ]\n");
 	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='en')\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: eth0\n");
@@ -36,18 +35,8 @@ set_policy(const char *arg)
 
 	if (!strncmp("physical", arg, sizeof("physical")))
 		rc = physical;
-	else if (!strncmp("embedded", arg, sizeof("embedded")))
-		rc = embedded;
-	if (!strncmp("kernelnames", arg, sizeof("kernelnames")))
-		rc = kernelnames;
 	else if (!strncmp("all_ethN", arg, sizeof("all_ethN")))
 		rc = all_ethN;
-	else if (!strncmp("all_names", arg, sizeof("all_names")))
-		rc = all_names;
-	else if (!strncmp("embedded_ethN_slots_names", arg, sizeof("embedded_ethN_slots_names")))
-		rc = embedded_ethN_slots_names;
-	else if (!strncmp("smbios_names", arg, sizeof("smbios_names")))
-		rc = smbios_names;
 	return rc;
 }
 
@@ -63,7 +52,6 @@ parse_opts(int argc, char **argv)
 		{
 			{"debug",             no_argument, 0, 'd'},
 			{"interface",         no_argument, 0, 'i'},
-			{"nosort",            no_argument, 0, 'n'},
 			{"policy",      required_argument, 0, 'p'},
 			{"prefix",      required_argument, 0, 'P'},
 			{0, 0, 0, 0}
@@ -79,9 +67,6 @@ parse_opts(int argc, char **argv)
 			break;
 		case 'i':
 			opts.interface = 1;
-			break;
-		case 'n':
-			opts.sortroutine = nosort;
 			break;
 		case 'p':
 			opts.namingpolicy = set_policy(optarg);
@@ -101,8 +86,6 @@ parse_opts(int argc, char **argv)
 		opts.optind = optind;
 	}
 
-	if (opts.sortroutine == nosort)
-		opts.namingpolicy = kernelnames;
 	if (opts.prefix == NULL)
 		opts.prefix = "em";
 }
@@ -114,7 +97,7 @@ int main(int argc, char *argv[])
 	void *cookie = NULL;
 
 	parse_opts(argc, argv);
-	cookie = setup_bios_devices(opts.sortroutine, opts.namingpolicy, opts.prefix);
+	cookie = setup_bios_devices(opts.namingpolicy, opts.prefix);
 	if (!cookie) {
 		rc = 1;
 		goto out;
