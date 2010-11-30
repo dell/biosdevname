@@ -58,6 +58,11 @@ static inline int is_pci_network(struct pci_device *dev)
 	return (dev->class & 0xFF00) == 0x0200;
 }
 
+static inline int is_pci_smbios_type_ethernet(struct pci_device *dev)
+{
+	return (dev->smbios_type == 0x05);
+}
+
 #ifdef HAVE_STRUCT_PCI_DEV_DOMAIN
 static inline int pci_domain_nr(const struct pci_dev *dev)
 {

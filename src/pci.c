@@ -426,7 +426,6 @@ static int unparse_smbios_type41_type(char *buf, const int size, const int type)
 	return (s-buf);
 }
 
-
 int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 {
 	char *s = buf;
