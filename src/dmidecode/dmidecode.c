@@ -91,25 +91,29 @@ static void strip_right(char *s)
 	}
 }
 
-static void fill_all_functions(const struct libbiosdevname_state *state, int domain, int bus, int device, struct dmi_header *h)
+static void fill_one_slot_function(struct pci_device *pdev, struct dmi_header *h)
 {
 	u8 *data = h->data;
+	pdev->physical_slot = WORD(data+0x09);
+	pdev->smbios_type = 0;
+	pdev->smbios_instance = 0;
+	pdev->uses_smbios |= HAS_SMBIOS_SLOT;
+	if (dmi_string(h, data[0x04])) {
+		pdev->smbios_label=strdup(dmi_string(h, data[0x04]));
+		pdev->uses_smbios |= HAS_SMBIOS_LABEL;
+	}
+	strip_right(pdev->smbios_label);
+}
+
+static void fill_all_slot_functions(const struct libbiosdevname_state *state, int domain, int bus, int device, struct dmi_header *h)
+{
 	struct pci_device *pdev;
 	list_for_each_entry(pdev, &state->pci_devices, node) {
 		if (pdev->pci_dev->domain == domain &&
 		    pdev->pci_dev->bus    == bus &&
-		    pdev->pci_dev->dev    == device) {
-			pdev->physical_slot = WORD(data+0x09);
-			pdev->smbios_type = 0;
-			pdev->smbios_instance = 0;
-			pdev->uses_smbios |= HAS_SMBIOS_SLOT;
-			if (dmi_string(h, data[0x04])) {
-				pdev->smbios_label=strdup(dmi_string(h, data[0x04]));
-				pdev->uses_smbios |= HAS_SMBIOS_LABEL;
-			}
-			strip_right(pdev->smbios_label);
-
-		}
+		    pdev->pci_dev->dev    == device &&
+		    ! (pdev->uses_smbios & HAS_SMBIOS_EXACT_MATCH))
+			fill_one_slot_function(pdev, h);
 	}
 }
 
@@ -129,7 +133,12 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 				if (! (domain == 0xFFFF && bus == 0xFF && data[0x10] == 0xFF)) {
 					device = (data[0x10]>>3)&0x1F;
 					function = data[0x10] & 7;
-					fill_all_functions(state, domain, bus, device, h);
+					pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
+					if (pdev) {
+						fill_one_slot_function(pdev, h);
+						pdev->uses_smbios |= HAS_SMBIOS_EXACT_MATCH;
+					}
+					fill_all_slot_functions(state, domain, bus, device, h);
 				}
 			}
 			break;

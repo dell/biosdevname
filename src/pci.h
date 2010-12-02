@@ -38,6 +38,7 @@ struct pci_device {
 #define HAS_SMBIOS_INSTANCE 1
 #define HAS_SMBIOS_LABEL 2
 #define HAS_SMBIOS_SLOT  4
+#define HAS_SMBIOS_EXACT_MATCH 8
 
 #define HAS_SYSFS_INDEX 1
 #define HAS_SYSFS_LABEL 2
