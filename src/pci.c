@@ -340,6 +340,8 @@ static int set_pci_slot_index(struct libbiosdevname_state *state)
 	list_for_each_entry(pcidev, &state->pci_devices, node) {
 		if (pcidev->physical_slot == 0) /* skip embedded devices */
 			continue;
+		if (is_pci_bridge(pcidev))
+			continue;
 		if (pcidev->is_sriov_virtual_function)
 			continue;
 		if (pcidev->physical_slot != prevslot) {
