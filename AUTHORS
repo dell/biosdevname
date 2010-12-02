@@ -10,12 +10,6 @@ read_proc.c:
 ethtool-copy.h:
  Cribbed from ethtool
 
-pcmcia.c, cistpl.h, parse_cis.c, read-cis.c:
- Cribbed from pcmciautils-014
-
-pcmcia.c sysfs_path_is_file()
- Cribbed from sysfsutils-2.1.0 (LGPLv2+, relicensed and used here as GPLv2)
-
 dmidecode/*
  Cribbed from dmidecode 2.9
 

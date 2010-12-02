@@ -42,10 +42,6 @@ static void unparse_bios_device(struct bios_device *dev)
 		unparse_pci_device(buf, sizeof(buf), dev->pcidev);
 		printf("%s", buf);
 	}
-	else if (is_pcmcia(dev)) {
-		unparse_pcmcia_device(buf, sizeof(buf), dev->pcmciadev);
-		printf("%s", buf);
-	}
 
 	printf("\n");
 }
@@ -156,24 +152,8 @@ static int sort_smbios(const struct bios_device *x, const struct bios_device *y)
 	return sort_pci(x, y);
 }
 
-
-static int sort_pcmcia(const struct bios_device *bdev_a, const struct bios_device *bdev_b)
-{
-	const struct pcmcia_device *a = bdev_a->pcmciadev;
-	const struct pcmcia_device *b = bdev_b->pcmciadev;
-
-	if      (a->socket < b->socket) return -1;
-	else if (a->socket > b->socket) return 1;
-
-	if      (a->function < b->function) return -1;
-	else if (a->function > b->function) return  1;
-
-	return 0;
-}
-
 enum bios_device_types {
 	IS_PCI,
-	IS_PCMCIA,
 	IS_UNKNOWN_TYPE,
 };
 
@@ -181,8 +161,6 @@ static int bios_device_type_num(const struct bios_device *dev)
 {
 	if (is_pci(dev))
 		return IS_PCI;
-	else if (is_pcmcia(dev))
-		return IS_PCMCIA;
 	return IS_UNKNOWN_TYPE;
 }
 
@@ -193,8 +171,6 @@ static int sort_by_type(const struct bios_device *a, const struct bios_device *b
 	else if (bios_device_type_num(a) == bios_device_type_num(b)) {
 		if (is_pci(a))
 			return sort_smbios(a, b);
-		else if (is_pcmcia(a))
-			return sort_pcmcia(a, b);
 		else return 0;
 	}
 	else if (bios_device_type_num(a) > bios_device_type_num(b))
@@ -255,31 +231,6 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 	}
 }
 
-static void match_eth_and_pcmcia(struct libbiosdevname_state *state)
-{
-	struct pcmcia_device *p;
-	struct bios_device *b;
-	char pcmcia_name[40];
-
-	list_for_each_entry(p, &state->pcmcia_devices, node) {
-		if (!is_pcmcia_network(p))
-			continue;
-
-		b = malloc(sizeof(*b));
-		if (!b)
-			continue;
-		memset(b, 0, sizeof(*b));
-		INIT_LIST_HEAD(&b->node);
-		b->pcmciadev = p;
-
-		unparse_pcmcia_name(pcmcia_name, sizeof(pcmcia_name), p);
-		b->netdev = find_net_device_by_bus_info(state, pcmcia_name);
-
-		claim_netdev(b->netdev);
-		list_add(&b->node, &state->bios_devices);
-	}
-}
-
 static void match_unknown_eths(struct libbiosdevname_state *state)
 {
 	struct bios_device *b;
@@ -306,7 +257,6 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 static void match_all(struct libbiosdevname_state *state)
 {
 	match_eth_and_pci_devs(state);
-	match_eth_and_pcmcia(state);
 	match_unknown_eths(state);
 }
 
@@ -319,7 +269,6 @@ static struct libbiosdevname_state * alloc_state(void)
 	INIT_LIST_HEAD(&state->bios_devices);
 	INIT_LIST_HEAD(&state->pci_devices);
 	INIT_LIST_HEAD(&state->network_devices);
-	INIT_LIST_HEAD(&state->pcmcia_devices);
 	state->pacc = NULL;
 	return state;
 }
@@ -331,7 +280,6 @@ void cleanup_bios_devices(void *cookie)
 		return;
 	free_bios_devices(state);
 	free_eths(state);
-	free_pcmcia_devices(state);
 	free_pci_devices(state);
 	if (state->pacc)
 		pci_cleanup(state->pacc);
@@ -349,9 +297,6 @@ void * setup_bios_devices(int namingpolicy, const char *prefix)
 	if (rc)
 		goto out;
 
-	rc = get_pcmcia_devices(state);
-	if (rc)
-		goto out;
 	get_eths(state);
 	match_all(state);
 	sort_device_list(state);

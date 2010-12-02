@@ -46,7 +46,7 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
-				if (0 && dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) { /* HACK - ignore sysfs index until we have SMBIOS type info exposed */
+				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
 					portnum = dev->pcidev->sysfs_index;
 					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
 					known=1;

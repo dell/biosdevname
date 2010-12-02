@@ -12,7 +12,6 @@
 struct libbiosdevname_state {
 	struct list_head bios_devices;
 	struct list_head pci_devices;
-	struct list_head pcmcia_devices;
 	struct list_head network_devices;
 	struct pci_access *pacc;
 };
