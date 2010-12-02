@@ -7,7 +7,6 @@ sbin_PROGRAMS = src/biosdevname src/biosdevnameS
 src_biosdevname_SOURCES =  \
 	src/bios_dev_name.c \
 	src/bios_device.c \
-	src/pirq.c \
 	src/pci.c \
 	src/eths.c \
 	src/read_proc.c \
@@ -26,7 +25,6 @@ src_biosdevnameS_LDFLAGS = -all-static
 EXTRA_DIST += \
 	src/bios_dev_name.h \
 	src/bios_device.h \
-	src/pirq.h \
 	src/pci.h \
 	src/eths.h \
 	src/ethtool-util.h \

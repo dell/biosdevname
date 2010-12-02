@@ -6,12 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <pci/pci.h>
 #include <net/if.h>
 #include "list.h"
 #include "bios_device.h"
 #include "state.h"
 #include "libbiosdevname.h"
-#include "dmidecode/dmidecode.h"
 
 void free_bios_devices(void *cookie)
 {
@@ -117,17 +117,17 @@ static int sort_pci(const struct bios_device *bdev_a, const struct bios_device *
 	if      (a->physical_slot < b->physical_slot) return -1;
 	else if (a->physical_slot > b->physical_slot) return 1;
 
-	if      (a->pci_dev.domain < b->pci_dev.domain) return -1;
-	else if (a->pci_dev.domain > b->pci_dev.domain) return  1;
+	if      (a->pci_dev->domain < b->pci_dev->domain) return -1;
+	else if (a->pci_dev->domain > b->pci_dev->domain) return  1;
 
-	if      (a->pci_dev.bus < b->pci_dev.bus) return -1;
-	else if (a->pci_dev.bus > b->pci_dev.bus) return  1;
+	if      (a->pci_dev->bus < b->pci_dev->bus) return -1;
+	else if (a->pci_dev->bus > b->pci_dev->bus) return  1;
 
-	if      (a->pci_dev.dev < b->pci_dev.dev) return -1;
-	else if (a->pci_dev.dev > b->pci_dev.dev) return  1;
+	if      (a->pci_dev->dev < b->pci_dev->dev) return -1;
+	else if (a->pci_dev->dev > b->pci_dev->dev) return  1;
 
-	if      (a->pci_dev.func < b->pci_dev.func) return -1;
-	else if (a->pci_dev.func > b->pci_dev.func) return  1;
+	if      (a->pci_dev->func < b->pci_dev->func) return -1;
+	else if (a->pci_dev->func > b->pci_dev->func) return  1;
 
 	return 0;
 }
@@ -238,7 +238,7 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 		if (!is_pci_network(p))
 			continue;
 
-		unparse_pci_name(pci_name, sizeof(pci_name), &p->pci_dev);
+		unparse_pci_name(pci_name, sizeof(pci_name), p->pci_dev);
 		n = find_net_device_by_bus_info(state, pci_name);
 		if (!n)
 			continue;
@@ -320,6 +320,7 @@ static struct libbiosdevname_state * alloc_state(void)
 	INIT_LIST_HEAD(&state->pci_devices);
 	INIT_LIST_HEAD(&state->network_devices);
 	INIT_LIST_HEAD(&state->pcmcia_devices);
+	state->pacc = NULL;
 	return state;
 }
 
@@ -332,6 +333,8 @@ void cleanup_bios_devices(void *cookie)
 	free_eths(state);
 	free_pcmcia_devices(state);
 	free_pci_devices(state);
+	if (state->pacc)
+		pci_cleanup(state->pacc);
 }
 
 void * setup_bios_devices(int namingpolicy, const char *prefix)
@@ -349,9 +352,6 @@ void * setup_bios_devices(int namingpolicy, const char *prefix)
 	rc = get_pcmcia_devices(state);
 	if (rc)
 		goto out;
-	/* this will fail on Xen guests, that's OK */
-	dmidecode_main(state);
-
 	get_eths(state);
 	match_all(state);
 	sort_device_list(state);
@@ -364,4 +364,3 @@ out:
 	free(state);
 	return NULL;
 }
-

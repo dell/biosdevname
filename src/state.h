@@ -6,6 +6,7 @@
 #ifndef LIBBIOSDEVICE_STATE_H_INCLUDED
 #define LIBBIOSDEVICE_STATE_H_INCLUDED
 
+#include <pci/pci.h>
 #include "list.h"
 
 struct libbiosdevname_state {
@@ -13,6 +14,7 @@ struct libbiosdevname_state {
 	struct list_head pci_devices;
 	struct list_head pcmcia_devices;
 	struct list_head network_devices;
+	struct pci_access *pacc;
 };
 
 #endif /* LIBBIOSDEVICESTATE_H_INCLUDED */
