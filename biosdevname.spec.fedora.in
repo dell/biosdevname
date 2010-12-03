@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Dec  2 2010 Matt Domsch <Matt_Domsch@dell.com> - 0.3.2-1
+- fix for multi-port cards with bridges
+- removal of code for seriously obsolete systems
+
 * Mon Nov 28 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.1-1
 - remove all policies except 'physical' and 'all_ethN'
 - handle SR-IOV devices properly
@@ -62,6 +66,24 @@ rm -rf %{buildroot}
 
 * Mon Jul 27 2009 Jordan Hargrave <Jordan_Hargrave@dell.com> 0.2.5-1
 - fix mmap error checking
+
+* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.4-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
+* Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.4-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
+* Tue May 06 2008 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-5
+- use policy=all_names to find breakage
+
+* Sun Feb 10 2008 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-4
+- rebuild for gcc43
+
+* Fri Sep 21 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-3
+- fix manpage entry in files
+ 
+* Fri Sep 21 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-2
+- rebuild with Requires: udev > 115-3.20070920git
 
 * Fri Sep 21 2007 Matt Domsch <Matt_Domsch@dell.com> 0.2.4-1
 - coordinate udev rules usage with udev maintainer

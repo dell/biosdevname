@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Dec  2 2010 Matt Domsch <Matt_Domsch@dell.com> - 0.3.2-1
+- fix for multi-port cards with bridges
+- removal of code for seriously obsolete systems
+
 * Mon Nov 28 2010 Matt Domsch <Matt_Domsch@dell.com> 0.3.1-1
 - remove all policies except 'physical' and 'all_ethN'
 - handle SR-IOV devices properly

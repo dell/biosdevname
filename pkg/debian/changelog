@@ -1,3 +1,10 @@
+biosdevname (0.3.2) unstable; urgency=low
+
+  * fix for multi-port cards with bridges
+  * removal of code for seriously obsolete systems
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 02 Nov 2010 22:03:00 -0600
+
 biosdevname (0.3.1) unstable; urgency=low
 
   * remove all policies except 'physical' and 'all_ethN'
