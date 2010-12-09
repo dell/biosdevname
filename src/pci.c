@@ -236,7 +236,8 @@ static int pci_dev_to_slot(struct libbiosdevname_state *state, struct pci_device
 static int pirq_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
 	struct pci_device *d = dev;
-	int slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
+	int slot;
+	slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
 	while (d && slot == PHYSICAL_SLOT_UNKNOWN) {
 		d = find_parent(state, d);
 		if (d)
@@ -249,8 +250,9 @@ static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *d
 {
 	int slot;
 	slot = pci_dev_to_slot(state, dev);
-	if (slot == PHYSICAL_SLOT_UNKNOWN)
+	if (slot == PHYSICAL_SLOT_UNKNOWN) {
 		slot = pirq_dev_to_slot(state, dev);
+	}
 	dev->physical_slot = slot;
 }
 
@@ -362,9 +364,9 @@ static int set_pci_slot_index(struct libbiosdevname_state *state)
 	list_for_each_entry(pcidev, &state->pci_devices, node) {
 		if (pcidev->physical_slot == 0) /* skip embedded devices */
 			continue;
-		if (is_pci_bridge(pcidev))
+		if (!is_pci_network(pcidev)) /* only look at PCI network devices */
 			continue;
-		if (pcidev->is_sriov_virtual_function)
+		if (pcidev->is_sriov_virtual_function) /* skip sriov VFs, they're handled later */
 			continue;
 		if (pcidev->physical_slot != prevslot) {
 			index=0;
@@ -377,6 +379,25 @@ static int set_pci_slot_index(struct libbiosdevname_state *state)
 	return 0;
 }
 
+static int set_embedded_index(struct libbiosdevname_state *state)
+{
+	struct pci_device *pcidev;
+	int index=0;
+
+	list_for_each_entry(pcidev, &state->pci_devices, node) {
+		if (pcidev->physical_slot != 0) /* skip non-embedded devices */
+			continue;
+		if (!is_pci_network(pcidev)) /* only look at PCI network devices */
+			continue;
+		if (pcidev->is_sriov_virtual_function) /* skip sriov VFs, they're handled later */
+			continue;
+		pcidev->embedded_index = index;
+		pcidev->embedded_index_valid = 1;
+		index++;
+	}
+	return 0;
+}
+
 static void set_sriov_pf_vf(struct libbiosdevname_state *state)
 {
 	struct pci_device *vf;
@@ -385,6 +406,50 @@ static void set_sriov_pf_vf(struct libbiosdevname_state *state)
 			continue;
 		try_add_vf_to_pf(state, vf);
 	}
+}
+
+/*
+ * This sorts the PCI devices by breadth-first domain/bus/dev/fn.
+ */
+static int sort_pci(const struct pci_device *a, const struct pci_device *b)
+{
+
+	if      (a->pci_dev->domain < b->pci_dev->domain) return -1;
+	else if (a->pci_dev->domain > b->pci_dev->domain) return  1;
+
+	if      (a->pci_dev->bus < b->pci_dev->bus) return -1;
+	else if (a->pci_dev->bus > b->pci_dev->bus) return  1;
+
+	if      (a->pci_dev->dev < b->pci_dev->dev) return -1;
+	else if (a->pci_dev->dev > b->pci_dev->dev) return  1;
+
+	if      (a->pci_dev->func < b->pci_dev->func) return -1;
+	else if (a->pci_dev->func > b->pci_dev->func) return  1;
+
+	return 0;
+}
+
+static void insertion_sort_devices(struct pci_device *a, struct list_head *list,
+				   int (*cmp)(const struct pci_device *, const struct pci_device *))
+{
+	struct pci_device *b;
+	list_for_each_entry(b, list, node) {
+		if (cmp(a, b) <= 0) {
+			list_move_tail(&a->node, &b->node);
+			return;
+		}
+	}
+	list_move_tail(&a->node, list);
+}
+
+static void sort_device_list(struct libbiosdevname_state *state)
+{
+	LIST_HEAD(sorted_devices);
+	struct pci_device *dev, *tmp;
+	list_for_each_entry_safe(dev, tmp, &state->pci_devices, node) {
+		insertion_sort_devices(dev, &sorted_devices, sort_pci);
+	}
+	list_splice(&sorted_devices, &state->pci_devices);
 }
 
 int get_pci_devices(struct libbiosdevname_state *state)
@@ -410,7 +475,9 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	}
 	/* ordering here is important */
 	dmidecode_main(state);	/* this will fail on Xen guests, that's OK */
+	sort_device_list(state);
 	set_pci_slots(state);
+	set_embedded_index(state);
 	set_pci_slot_index(state);
 	set_sriov_pf_vf(state);
 
@@ -486,6 +553,8 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "sysfs Label: %s\n", p->sysfs_label);
 	if (p->physical_slot > 0 && !p->is_sriov_virtual_function)
 		s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
+	if (p->embedded_index_valid)
+		s += snprintf(s, size-(s-buf), "Embededed Index: %u\n", p->embedded_index);
 
 	if (!list_empty(&p->vfs)) {
 		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");

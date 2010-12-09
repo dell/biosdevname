@@ -18,6 +18,7 @@ struct pci_device {
 	struct pci_dev *pci_dev;
 	int physical_slot;
 	unsigned int index_in_slot; /* only valid if physical_slot > 0 and not a VF */
+	unsigned int embedded_index; /* only valid if embedded_index_valid */
 	unsigned short int class;
 	unsigned char uses_smbios;
 	unsigned char smbios_type;
@@ -33,6 +34,7 @@ struct pci_device {
 	struct list_head vfs;
 	unsigned int is_sriov_physical_function:1;
 	unsigned int is_sriov_virtual_function:1;
+	unsigned int embedded_index_valid:1;
 };
 
 #define HAS_SMBIOS_INSTANCE 1

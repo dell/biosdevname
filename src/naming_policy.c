@@ -56,6 +56,11 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
 					known=1;
 				}
+				else if (dev->pcidev->embedded_index_valid) {
+					portnum = dev->pcidev->embedded_index;
+					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
+					known=1;
+				}
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
 				snprintf(location, sizeof(location), "pci%u", dev->pcidev->physical_slot);
