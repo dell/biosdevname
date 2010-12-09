@@ -270,6 +270,7 @@ static struct libbiosdevname_state * alloc_state(void)
 	INIT_LIST_HEAD(&state->pci_devices);
 	INIT_LIST_HEAD(&state->network_devices);
 	state->pacc = NULL;
+	state->pirq_table = NULL;
 	return state;
 }
 
@@ -283,6 +284,8 @@ void cleanup_bios_devices(void *cookie)
 	free_pci_devices(state);
 	if (state->pacc)
 		pci_cleanup(state->pacc);
+	if (state->pirq_table)
+		pirq_free_table(state->pirq_table);
 }
 
 void * setup_bios_devices(int namingpolicy, const char *prefix)

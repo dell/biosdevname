@@ -18,6 +18,7 @@
 #include "pci.h"
 #include "sysfs.h"
 #include "dmidecode/dmidecode.h"
+#include "pirq.h"
 
 static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *pdev)
 {
@@ -220,16 +221,37 @@ find_parent(struct libbiosdevname_state *state, struct pci_device *dev)
  * our parent bridge on a card may not be included
  * in the SMBIOS table.  In that case, it falls back to "unknown".
  */
-static void pci_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
+static int pci_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
 	struct pci_device *d = dev;
-	while (d && d->physical_slot == PHYSICAL_SLOT_UNKNOWN) {
+	int slot = d->physical_slot;
+	while (d && slot == PHYSICAL_SLOT_UNKNOWN) {
 		d = find_parent(state, d);
-		if (d && d->physical_slot != PHYSICAL_SLOT_UNKNOWN) {
-			dev->physical_slot = d->physical_slot;
-			break;
-		}
+		if (d)
+			slot = d->physical_slot;
 	}
+	return slot;
+}
+
+static int pirq_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
+{
+	struct pci_device *d = dev;
+	int slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
+	while (d && slot == PHYSICAL_SLOT_UNKNOWN) {
+		d = find_parent(state, d);
+		if (d)
+			slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
+	}
+	return slot;
+}
+
+static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
+{
+	int slot;
+	slot = pci_dev_to_slot(state, dev);
+	if (slot == PHYSICAL_SLOT_UNKNOWN)
+		slot = pirq_dev_to_slot(state, dev);
+	dev->physical_slot = slot;
 }
 
 static char *read_pci_sysfs_label(const struct pci_dev *pdev)
@@ -325,7 +347,7 @@ static void set_pci_slots(struct libbiosdevname_state *state)
 	struct pci_device *dev;
 
 	list_for_each_entry(dev, &state->pci_devices, node) {
-		pci_dev_to_slot(state, dev);
+		dev_to_slot(state, dev);
 	}
 }
 
@@ -369,12 +391,16 @@ int get_pci_devices(struct libbiosdevname_state *state)
 {
 	struct pci_access *pacc;
 	struct pci_dev *p;
+	struct routing_table *table;
 	int rc=0;
+
+	table = pirq_alloc_read_table();
+	if (table)
+		state->pirq_table = table;
 
 	pacc = pci_alloc();
 	if (!pacc)
 		return rc;
-
 	state->pacc = pacc;
 	pci_init(pacc);
 	pci_scan_bus(pacc);

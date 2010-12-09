@@ -8,12 +8,14 @@
 
 #include <pci/pci.h>
 #include "list.h"
+#include "pirq.h"
 
 struct libbiosdevname_state {
 	struct list_head bios_devices;
 	struct list_head pci_devices;
 	struct list_head network_devices;
 	struct pci_access *pacc;
+	struct routing_table *pirq_table;
 };
 
 #endif /* LIBBIOSDEVICESTATE_H_INCLUDED */
