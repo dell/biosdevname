@@ -1,9 +1,14 @@
-biosdevname (0.3.2) unstable; urgency=low
+biosdevname (0.3.3) unstable; urgency=low
+
+  * add back in use of PCI IRQ Routing Table, if info is not provided by
+    sysfs or SMBIOS
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 09 Nov 2010 15:31:00 -0600
 
   * fix for multi-port cards with bridges
   * removal of code for seriously obsolete systems
 
- -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 02 Nov 2010 22:03:00 -0600
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 02 Dec 2010 22:03:00 -0600
 
 biosdevname (0.3.1) unstable; urgency=low
 

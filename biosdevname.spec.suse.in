@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Dec  9 2010 Matt Domsch <Matt_Domsch@dell.com> - 0.3.3-1
+- add back in use of PCI IRQ Routing Table, if info is not provided by
+  sysfs or SMBIOS
+
 * Thu Dec  2 2010 Matt Domsch <Matt_Domsch@dell.com> - 0.3.2-1
 - fix for multi-port cards with bridges
 - removal of code for seriously obsolete systems
