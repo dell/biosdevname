@@ -16,8 +16,7 @@ BuildRequires:	pciutils-devel, zlib-devel
 # to figure out how to name the rules file
 BuildRequires:	udev
 # for ownership of /etc/udev/rules.d
-# releases after 115-3.20070920.git have the proper write_net_rules and 75-persistent-net-names.rules files
-Requires: udev > 115-3.20070920git
+Requires: udev
 
 %description
 biosdevname in its simplest form takes a kernel device name as an
