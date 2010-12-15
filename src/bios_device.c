@@ -288,6 +288,37 @@ void cleanup_bios_devices(void *cookie)
 		pirq_free_table(state->pirq_table);
 }
 
+static int duplicates(struct bios_device *a, struct bios_device *b)
+{
+	int lenA = -1, lenB = -1, rc = -1;
+	if (a->bios_name)
+		lenA = strlen(a->bios_name);
+	if (b->bios_name)
+		lenB = strlen(b->bios_name);
+	if (lenA == lenB && lenA > 0)
+		rc = strncmp(a->bios_name, b->bios_name, lenA);
+	return !rc;
+}
+
+static int check_duplicates(struct libbiosdevname_state *state)
+{
+	int rc = 0;
+	struct bios_device *a = NULL, *b = NULL;
+	list_for_each_entry(a, &state->bios_devices, node) {
+		if (rc == 1)
+			break;
+		list_for_each_entry(b, &state->bios_devices, node) {
+			if (a == b)
+				continue;
+			if (duplicates(a, b)) {
+				rc = 1;
+				break;
+			}
+		}
+	}
+	return rc;
+}
+
 void * setup_bios_devices(int namingpolicy, const char *prefix)
 {
 	int rc=1;
@@ -304,6 +335,11 @@ void * setup_bios_devices(int namingpolicy, const char *prefix)
 	match_all(state);
 	sort_device_list(state);
 	rc = assign_bios_network_names(state, namingpolicy, prefix);
+	if (rc)
+		goto out;
+	rc = check_duplicates(state);
+	if (rc)
+		fprintf(stderr, "Error: duplicate names assigned.  Returning nothing.\n");
 	if (!rc)
 		return state;
 
