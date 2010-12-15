@@ -44,6 +44,7 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 	memset(interface, 0, sizeof(interface));
 
 	list_for_each_entry(dev, &state->bios_devices, node) {
+		known = 0;
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
 				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
