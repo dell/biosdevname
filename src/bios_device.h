@@ -18,6 +18,7 @@ struct bios_device {
 	struct network_device *netdev;
 	struct pci_device *pcidev;
 	char *bios_name;
+	int duplicate;
 };
 
 static inline int is_pci(const struct bios_device *dev)

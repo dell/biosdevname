@@ -42,8 +42,9 @@ static void unparse_bios_device(struct bios_device *dev)
 		unparse_pci_device(buf, sizeof(buf), dev->pcidev);
 		printf("%s", buf);
 	}
-
 	printf("\n");
+	if (dev->duplicate)
+		printf("Duplicate: True\n");
 }
 
 void unparse_bios_devices(void *cookie)
@@ -79,8 +80,11 @@ char * kern_to_bios(void *cookie,
 	if (!state)
 		return NULL;
 	list_for_each_entry(dev, &state->bios_devices, node) {
-		if (dev->netdev && !strcmp(dev->netdev->kernel_name, name))
+		if (dev->netdev && !strcmp(dev->netdev->kernel_name, name)) {
+			if (dev->duplicate)
+				return NULL;
 			return dev->bios_name;
+		}
 	}
 	return NULL;
 }
@@ -300,23 +304,19 @@ static int duplicates(struct bios_device *a, struct bios_device *b)
 	return !rc;
 }
 
-static int check_duplicates(struct libbiosdevname_state *state)
+static void find_duplicates(struct libbiosdevname_state *state)
 {
-	int rc = 0;
 	struct bios_device *a = NULL, *b = NULL;
 	list_for_each_entry(a, &state->bios_devices, node) {
-		if (rc == 1)
-			break;
 		list_for_each_entry(b, &state->bios_devices, node) {
 			if (a == b)
 				continue;
 			if (duplicates(a, b)) {
-				rc = 1;
-				break;
+				a->duplicate = 1;
+				b->duplicate = 1;
 			}
 		}
 	}
-	return rc;
 }
 
 void * setup_bios_devices(int namingpolicy, const char *prefix)
@@ -337,11 +337,8 @@ void * setup_bios_devices(int namingpolicy, const char *prefix)
 	rc = assign_bios_network_names(state, namingpolicy, prefix);
 	if (rc)
 		goto out;
-	rc = check_duplicates(state);
-	if (rc)
-		fprintf(stderr, "Error: duplicate names assigned.  Returning nothing.\n");
-	if (!rc)
-		return state;
+	find_duplicates(state);
+	return state;
 
 out:
 	cleanup_bios_devices(state);
