@@ -7,6 +7,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #include "libbiosdevname.h"
 #include "bios_dev_name.h"
@@ -89,6 +91,17 @@ parse_opts(int argc, char **argv)
 		opts.prefix = "em";
 }
 
+static int
+running_as_root(void)
+{
+	uid_t uid = geteuid();
+	if (uid != 0) {
+		fprintf(stderr, "This program must be run as root.\n");
+		return 0;
+	}
+	return 1;
+}
+
 int main(int argc, char *argv[])
 {
 	int i, rc=0;
@@ -96,6 +109,9 @@ int main(int argc, char *argv[])
 	void *cookie = NULL;
 
 	parse_opts(argc, argv);
+
+	if (!running_as_root())
+		exit(3);
 	cookie = setup_bios_devices(opts.namingpolicy, opts.prefix);
 	if (!cookie) {
 		rc = 1;
