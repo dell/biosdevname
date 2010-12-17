@@ -51,6 +51,12 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Dec 16 2010 Matt Domsch <mdomsch@fedoraproject.org> - 0.3.4-1
+- drop unnecessary explicit version requirement on udev
+- bugfix: start indices at 1 not 0, to match Dell and HP server port designations
+- bugfix: don't assign names to unknown devices
+- bugfix: don't assign duplicate names
+
 * Thu Dec  9 2010 Matt Domsch <Matt_Domsch@dell.com> - 0.3.3-1
 - add back in use of PCI IRQ Routing Table, if info is not provided by
   sysfs or SMBIOS

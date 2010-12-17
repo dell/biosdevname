@@ -1,3 +1,11 @@
+biosdevname (0.3.4) unstable; urgency=low
+  * drop unnecessary explicit version requirement on udev
+  * bugfix: start indices at 1 not 0, to match Dell and HP server port designations
+  * bugfix: don't assign names to unknown devices
+  * bugfix: don't assign duplicate names
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 16 Dec 2010 10:45:00 -0600
+
 biosdevname (0.3.3) unstable; urgency=low
 
   * add back in use of PCI IRQ Routing Table, if info is not provided by
