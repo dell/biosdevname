@@ -37,7 +37,6 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make install install-data DESTDIR=%{buildroot}
-rm %{buildroot}/sbin/%{name}S  || :
 
 %clean
 rm -rf %{buildroot}
@@ -53,6 +52,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.6-1
+- drop biosdevnameS, it's unused and fails to build on F15
+
 * Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.5-1
 - install dump_pirq into /usr/sbin
 - fix udev rule, skip running if NAME is already set

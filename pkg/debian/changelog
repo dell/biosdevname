@@ -1,4 +1,9 @@
 biosdevname (0.3.5) unstable; urgency=low
+  * drop biosdevnameS, it's unused and fails to build on F15
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Tue, 25 Jan 2011 14:48:00 -0600
+
+biosdevname (0.3.5) unstable; urgency=low
   * install dump_pirq into /usr/sbin
   * fix udev rule, skip running if NAME is already set
   * move udev rule to /lib/udev/rules.d
