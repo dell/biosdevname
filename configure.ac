@@ -68,18 +68,21 @@ AC_CHECK_FUNCS([dup2 gettimeofday memset munmap select socket strcasecmp strchr 
 
 # this is ugly, but accounts for SLES 10, Red Hat/Fedora, and Ubuntu
 # handles default udev rules as of udev 114 or thereabouts
-RULEDEST=71-biosdevname.rules
+RULEDEST=/lib/udev/rules.d/71-biosdevname.rules
+
 if [[ -e /etc/udev/rules.d/60-net.rules ]]; then
-     # RHEL / Fedora
-     RULEDEST=60-biosdevname.rules
+     # RHEL 5 / Fedora
+     RULEDEST=/etc/udev/rules.d/60-biosdevname.rules
 elif [[ -e /etc/udev/rules.d/31-network.rules ]]; then
      # SLES 10
-     RULEDEST=31-biosdevname.rules
+     RULEDEST=/etc/udev/rules.d/31-biosdevname.rules
 elif [[ -e /etc/udev/rules.d/25-iftab.rules ]]; then
-     # Ubuntu
-     RULEDEST=25-biosdevname.rules
+     # older Ubuntu
+     RULEDEST=/etc/udev/rules.d/25-biosdevname.rules
 fi
+RULEDIR=$(dirname $RULEDEST)
 AC_SUBST(RULEDEST, $RULEDEST)
+AC_SUBST(RULEDIR,  $RULEDIR)
 
 echo "PACKAGE_NAME='$PACKAGE_NAME'" > version
 echo "PACKAGE_VERSION='$PACKAGE_VERSION'" >> version
