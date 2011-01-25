@@ -1,6 +1,7 @@
 SUBSYSTEM!="net", GOTO="netdevicename_end"
 KERNEL!="eth*",   GOTO="netdevicename_end"
 ACTION!="add",    GOTO="netdevicename_end"
+NAME=="?*",       GOTO="netdevicename_end"
 
 # using NAME= instead of setting INTERFACE_NAME, so that persistent
 # names aren't generated for these devices, they are "named" on each boot.
