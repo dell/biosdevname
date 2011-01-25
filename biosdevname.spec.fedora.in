@@ -46,11 +46,15 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc COPYING README
 /sbin/%{name}
+%{_sbindir}/dump_pirq
 %config(noreplace) %{_sysconfdir}/udev/rules.d/*.rules
 %{_mandir}/man1/%{name}.1*
 
 
 %changelog
+* Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - @PACKAGE_VERSION@-1
+- install dump_pirq into /usr/sbin
+
 * Thu Dec 16 2010 Matt Domsch <mdomsch@fedoraproject.org> - 0.3.4-1
 - drop unnecessary explicit version requirement on udev
 - bugfix: start indices at 1 not 0, to match Dell and HP server port designations

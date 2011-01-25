@@ -12,8 +12,13 @@ install-data-local:
 	$(INSTALL_DATA) $(top_srcdir)/biosdevname.rules.in $(DESTDIR)@sysconfdir@/udev/rules.d/71-netdevice.rules
 	mkdir -p $(DESTDIR)/lib/udev
 
+install-exec-hook:
+	mkdir -p $(DESTDIR)/usr/sbin
+	mv $(DESTDIR)/sbin/dump_pirq $(DESTDIR)/usr/sbin/dump_pirq
+
 uninstall-local:
 	rm -f $(DESTDIR)@sysconfdir@/udev/rules.d/@RULEDEST@
+	rm -f $(DESTDIR)/usr/sbin/dump_pirq
 
 include src/Makefile.am
 
