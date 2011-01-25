@@ -24,9 +24,9 @@ AC_CHECK_FUNCS([realpath])
 # Checks for libraries.
 AC_CHECK_LIB([c], [snprintf])
 # libz has to come before libpci because libpci needs it now.
-AC_CHECK_LIB([z], [gzopen], [],
+AC_CHECK_LIB([z], [gzopen], [true],
 	    [AC_MSG_ERROR([You must install zlib-devel (Fedora/Red Hat/SuSE), libzip-dev (Debian/Ubuntu), or equivalent])])
-AC_CHECK_LIB([pci], [pci_alloc], [],
+AC_CHECK_LIB([pci], [pci_alloc], [true],
 	    [AC_MSG_ERROR([You must install pciutils-devel (Fedora/Red Hat/SuSE), pciutils-dev (Debian/Ubuntu), or equivalent])],
 	    -lz)
 
