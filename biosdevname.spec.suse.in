@@ -56,6 +56,7 @@ rm -rf %{buildroot}
 * Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.5-1
 - install dump_pirq into /usr/sbin
 - fix udev rule, skip running if NAME is already set
+- move udev rule to /lib/udev/rules.d
 
 * Thu Dec 16 2010 Matt Domsch <mdomsch@fedoraproject.org> - 0.3.4-1
 - drop unnecessary explicit version requirement on udev
