@@ -1,3 +1,9 @@
+biosdevname (0.3.5) unstable; urgency=low
+  * install dump_pirq into /usr/sbin
+  * fix udev rule, skip running if NAME is already set
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Tue, 25 Jan 2011 12:17:00 -0600
+
 biosdevname (0.3.4) unstable; urgency=low
   * drop unnecessary explicit version requirement on udev
   * bugfix: start indices at 1 not 0, to match Dell and HP server port designations
