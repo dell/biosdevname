@@ -47,7 +47,7 @@ rm -rf %{buildroot}
 %doc COPYING README
 /sbin/%{name}
 %{_sbindir}/dump_pirq
-%config(noreplace) %{_sysconfdir}/udev/rules.d/*.rules
+/lib/udev/rules.d/*.rules
 %{_mandir}/man1/%{name}.1*
 
 

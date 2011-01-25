@@ -1,4 +1,4 @@
 sbin
 usr/sbin
-etc/udev
+lib/udev
 usr/share/doc/biosdevname
