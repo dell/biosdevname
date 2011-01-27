@@ -3,7 +3,7 @@ AM_CFLAGS = -Wall -fno-strict-aliasing
 
 man_MANS = biosdevname.1
 
-sbin_PROGRAMS = src/biosdevname src/dump_pirq
+sbin_PROGRAMS = src/biosdevname
 src_biosdevname_SOURCES =  \
 	src/bios_dev_name.c \
 	src/bios_device.c \
@@ -17,9 +17,6 @@ src_biosdevname_SOURCES =  \
 	src/dmidecode/dmioem.c \
 	src/dmidecode/util.c
 src_biosdevname_LDADD = -lz -lpci
-
-src_dump_pirq_SOURCES = src/pirq.c
-src_dump_pirq_CFLAGS = -DUNIT_TEST_PIRQ
 
 EXTRA_DIST += \
 	src/bios_dev_name.h \

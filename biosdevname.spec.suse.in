@@ -46,13 +46,15 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc COPYING README
 /sbin/%{name}
-%{_sbindir}/dump_pirq
 # hack for either /etc or /lib rules location
 /*/udev/rules.d/*.rules
 %{_mandir}/man1/%{name}.1*
 
 
 %changelog
+* Thu Jan 27 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.7-1
+- drop dump_pirq, suggest use biosdecode instead
+
 * Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.6-1
 - drop biosdevnameS, it's unused and fails to build on F15
 

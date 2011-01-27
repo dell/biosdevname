@@ -82,7 +82,23 @@ Returns 3 if not run as root but requires root privileges.
 
 .SH SEE ALSO
 .br
+http://linux.dell.com/wiki/index.php/Oss/libnetdevname
+.br
 http://linux.dell.com/files/biosdevname/
+.br
+git://linux.dell.com/biosdevname.git
+
+.sh RELATED PROGRAMS
+.br
+The
+.B dmidecode
+package contains two tools useful for debugging BIOS features that
+biosdevname uses, specifically
+.B dmidecode
+to read the SMBIOS Type 9 and Type 41 tables, and
+.B biosdecode
+to read the PCI IRQ Routing Table.  Please include the output of each
+of these programs in any bug reports.
 .SH AUTHOR
 biosdevname was written by  Matt Domsch <Matt_Domsch@dell.com>
 .PP

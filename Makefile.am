@@ -11,13 +11,8 @@ install-data-local:
 	mkdir -p $(DESTDIR)@RULEDIR@
 	$(INSTALL_DATA) $(top_srcdir)/biosdevname.rules.in $(DESTDIR)@RULEDEST@
 
-install-exec-hook:
-	mkdir -p $(DESTDIR)/usr/sbin
-	mv $(DESTDIR)/sbin/dump_pirq $(DESTDIR)/usr/sbin/dump_pirq
-
 uninstall-local:
 	rm -f $(DESTDIR)@RULEDEST@
-	rm -f $(DESTDIR)/usr/sbin/dump_pirq
 
 include src/Makefile.am
 
