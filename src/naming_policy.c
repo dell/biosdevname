@@ -69,7 +69,7 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 					portnum = dev->pcidev->index_in_slot;
 				else
 					portnum = dev->pcidev->pf->index_in_slot;
-				snprintf(port, sizeof(port), "#%u", portnum);
+				snprintf(port, sizeof(port), "p%u", portnum);
 				known=1;
 			}
 
