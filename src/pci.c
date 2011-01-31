@@ -221,38 +221,28 @@ find_parent(struct libbiosdevname_state *state, struct pci_device *dev)
  * our parent bridge on a card may not be included
  * in the SMBIOS table.  In that case, it falls back to "unknown".
  */
-static int pci_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
+static inline int pci_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
-	struct pci_device *d = dev;
-	int slot = d->physical_slot;
-	while (d && slot == PHYSICAL_SLOT_UNKNOWN) {
-		d = find_parent(state, d);
-		if (d)
-			slot = d->physical_slot;
-	}
-	return slot;
+	return dev->physical_slot;
 }
 
-static int pirq_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
+static inline int pirq_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
-	struct pci_device *d = dev;
-	int slot;
-	slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
-	while (d && slot == PHYSICAL_SLOT_UNKNOWN) {
-		d = find_parent(state, d);
-		if (d)
-			slot = pirq_pci_dev_to_slot(state->pirq_table, d->pci_dev->bus, d->pci_dev->dev);
-	}
-	return slot;
+	return pirq_pci_dev_to_slot(state->pirq_table, dev->pci_dev->bus, dev->pci_dev->dev);
 }
 
 static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
+	struct pci_device *d = dev;
 	int slot;
-	slot = pci_dev_to_slot(state, dev);
-	if (slot == PHYSICAL_SLOT_UNKNOWN) {
-		slot = pirq_dev_to_slot(state, dev);
-	}
+	do {
+		slot = pci_dev_to_slot(state, d);
+		if (slot == PHYSICAL_SLOT_UNKNOWN)
+			slot = pirq_dev_to_slot(state, d);
+		if (slot == PHYSICAL_SLOT_UNKNOWN)
+			d = find_parent(state, d);
+	} while (d && slot == PHYSICAL_SLOT_UNKNOWN);
+
 	dev->physical_slot = slot;
 }
 
