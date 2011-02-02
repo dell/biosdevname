@@ -63,9 +63,16 @@ struct routing_table * pirq_alloc_read_table()
 			table = (struct routing_table *)(mem+offset);
 			size = table->size;
 			/* quick sanity checks */
+			if (size == 0) {
+				table = NULL;
+				break;
+			}
 			/* Version must be 1.0 */
-			if (! (table->version >> 8)==1 && 
-			      (table->version && 0xFF) == 0) break;
+			if (!((table->version >> 8) == 1 &&
+			      (table->version && 0xFF) == 0)) {
+				table = NULL;
+				break;
+			}
 
 			table = malloc(size);
 			if (!table) break;
