@@ -201,7 +201,9 @@ int is_ethernet(struct network_device *dev)
 		goto out;
 
 	const char *nonethernet_drivers[] = {
+		"bonding",
 		"bridge",
+		"openvswitch",
 		"tun",
 	};
 	for (i=0; i<sizeof(nonethernet_drivers)/sizeof(nonethernet_drivers[0]); i++) {
