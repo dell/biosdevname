@@ -165,7 +165,7 @@ int unparse_network_device(char *buf, const int size, struct network_device *dev
 	char *s = buf;
 	s += snprintf(s, size-(s-buf), "Kernel name: %s\n", dev->kernel_name);
 	if (!zero_mac(dev->perm_addr))
-		s += snprintf(s, size-(s-buf), "Permanant MAC: %s\n", pr_ether(buffer, sizeof(buffer), dev->perm_addr));
+		s += snprintf(s, size-(s-buf), "Permanent MAC: %s\n", pr_ether(buffer, sizeof(buffer), dev->perm_addr));
 	s += snprintf(s, size-(s-buf), "Assigned MAC : %s\n", pr_ether(buffer, sizeof(buffer), dev->dev_addr));
 	if (drvinfo_valid(dev)) {
 		s += snprintf(s, size-(s-buf), "Driver: %s\n", dev->drvinfo.driver);

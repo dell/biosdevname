@@ -544,7 +544,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	if (p->physical_slot > 0 && !p->is_sriov_virtual_function)
 		s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
 	if (p->embedded_index_valid)
-		s += snprintf(s, size-(s-buf), "Embededed Index: %u\n", p->embedded_index);
+		s += snprintf(s, size-(s-buf), "Embedded Index: %u\n", p->embedded_index);
 
 	if (!list_empty(&p->vfs)) {
 		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");

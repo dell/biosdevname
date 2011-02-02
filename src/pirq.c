@@ -130,7 +130,7 @@ pirq_unparse_routing_table(struct routing_table *table)
 	printf("Bus      : %x\n", table->router_bus);
 	printf("DevFn    : %x\n", table->router_devfn);
 	printf("Exclusive IRQs : %x\n", table->exclusive_irqs);
-	printf("Compatable Router: %x\n", table->compatable_router);
+	printf("Compatible Router: %x\n", table->compatable_router);
 
 	num_slots = (table->size - 32) / sizeof(*slot);
 	slot = &table->slot[0];
