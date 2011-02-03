@@ -52,8 +52,14 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Thu Jan 27 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.7-1
+* Thu Feb 3 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.7-1
 - drop dump_pirq, suggest use biosdecode instead
+- don't use '#' in names, use 'p' instead, by popular demand
+- properly look for SMBIOS, then $PIR, then recurse
+- Add kernel command line parameter "biosdevname={0|1}" to turn off/on biosdevname
+- Fix segfault when BIOS advertises zero sized PIRQ Routing Table
+- Add 'bonding' and 'openvswitch' to the virtual devices list
+- Typo fixes
 
 * Tue Jan 25 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.6-1
 - drop biosdevnameS, it's unused and fails to build on F15

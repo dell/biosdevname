@@ -1,7 +1,13 @@
 biosdevname (0.3.7) unstable; urgency=low
   * drop dump_pirq, suggest use biosdecode instead
+  * don't use '#' in names, use 'p' instead, by popular demand
+  * properly look for SMBIOS, then $PIR, then recurse
+  * Add kernel command line parameter "biosdevname={0|1}" to turn off/on biosdevname
+  * Fix segfault when BIOS advertises zero sized PIRQ Routing Table
+  * Add 'bonding' and 'openvswitch' to the virtual devices list
+  * Typo fixes
 
- -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 27 Jan 2011 09:22:00 -0600
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 3 Feb 2011 09:22:00 -0600
 
 biosdevname (0.3.6) unstable; urgency=low
   * drop biosdevnameS, it's unused and fails to build on F15
