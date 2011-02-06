@@ -69,7 +69,7 @@ struct routing_table * pirq_alloc_read_table()
 			}
 			/* Version must be 1.0 */
 			if (!((table->version >> 8) == 1 &&
-			      (table->version && 0xFF) == 0)) {
+			      (table->version & 0xFF) == 0)) {
 				table = NULL;
 				break;
 			}
