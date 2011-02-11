@@ -228,7 +228,7 @@ static inline int pci_dev_to_slot(struct libbiosdevname_state *state, struct pci
 
 static inline int pirq_dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
 {
-	return pirq_pci_dev_to_slot(state->pirq_table, dev->pci_dev->bus, dev->pci_dev->dev);
+	return pirq_pci_dev_to_slot(state->pirq_table, pci_domain_nr(dev->pci_dev), dev->pci_dev->bus, dev->pci_dev->dev);
 }
 
 static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *dev)
@@ -404,8 +404,8 @@ static void set_sriov_pf_vf(struct libbiosdevname_state *state)
 static int sort_pci(const struct pci_device *a, const struct pci_device *b)
 {
 
-	if      (a->pci_dev->domain < b->pci_dev->domain) return -1;
-	else if (a->pci_dev->domain > b->pci_dev->domain) return  1;
+	if      (pci_domain_nr(a->pci_dev) < pci_domain_nr(b->pci_dev)) return -1;
+	else if (pci_domain_nr(a->pci_dev) > pci_domain_nr(b->pci_dev)) return  1;
 
 	if      (a->pci_dev->bus < b->pci_dev->bus) return -1;
 	else if (a->pci_dev->bus > b->pci_dev->bus) return  1;

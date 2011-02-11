@@ -19,12 +19,14 @@
 #include "pirq.h"
 
 /* If unknown, use INT_MAX so they get sorted last */
-int pirq_pci_dev_to_slot(struct routing_table *table, int bus, int dev)
+int pirq_pci_dev_to_slot(struct routing_table *table, int domain, int bus, int dev)
 {
 	int i, num_slots;
 	struct slot_entry *slot;
 
 	if (!table)
+		return INT_MAX;
+	if (domain != 0) /* can't represent non-zero domains in PIRQ */
 		return INT_MAX;
 
 	num_slots = (table->size - 32) / sizeof(*slot);

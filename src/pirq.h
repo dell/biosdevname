@@ -53,6 +53,6 @@ struct routing_table {
 #define PCI_FUNC(devfn)         ((devfn) & 0x07)
 extern struct routing_table * pirq_alloc_read_table(void);
 extern void pirq_free_table(struct routing_table *table);
-extern int pirq_pci_dev_to_slot(struct routing_table *table, int bus, int dev);
+extern int pirq_pci_dev_to_slot(struct routing_table *table, int domain, int bus, int dev);
 
 #endif /* PIRQ_H_INCLUDED */
