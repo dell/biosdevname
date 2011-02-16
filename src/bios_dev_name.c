@@ -91,6 +91,33 @@ parse_opts(int argc, char **argv)
 		opts.prefix = "em";
 }
 
+static u_int32_t
+cpuid (u_int32_t eax, u_int32_t ecx)
+{
+    asm volatile (
+        "xor %%ebx, %%ebx; cpuid"
+        : "=a" (eax),  "=c" (ecx)
+        : "a" (eax)
+	: "%ebx", "%edx");
+    return ecx;
+}
+
+/*
+  Algorithm suggested by:
+  http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1009458
+*/
+
+static int
+running_in_virtual_machine (void)
+{
+    u_int32_t eax=1U, ecx=0U;
+
+    ecx = cpuid (eax, ecx);
+    if (ecx & 0x80000000U)
+       return 1;
+    return 0;
+}
+
 static int
 running_as_root(void)
 {
@@ -112,6 +139,8 @@ int main(int argc, char *argv[])
 
 	if (!running_as_root())
 		exit(3);
+	if (running_in_virtual_machine())
+		exit(4);
 	cookie = setup_bios_devices(opts.namingpolicy, opts.prefix);
 	if (!cookie) {
 		rc = 1;

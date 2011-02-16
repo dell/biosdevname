@@ -69,7 +69,7 @@ different PCI tree, and thus cannot provide consistent enumeration.
 Use of this policy should be limited to only scenarios where all PCI
 devices are present at boot (cold-plug).
 
-.SH RETURN CODES
+.SH EXIT CODES
 Returns 0 on success, with BIOS-suggested name printed to stdout.
 .br
 Returns 1 on provided device name lookup failure.
@@ -79,6 +79,8 @@ biosdevname requires system BIOS to provide naming information, either
 via SMBIOS or sysfs files.
 .br
 Returns 3 if not run as root but requires root privileges.
+.br
+Returns 4 if running in a virtual machine.
 
 .SH SEE ALSO
 .br
