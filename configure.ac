@@ -3,7 +3,7 @@
 # vim:tw=0:ts=8:sw=8:et
 
 AC_PREREQ(2.59)
-AC_INIT([biosdevname],[0.3.6],[Matt_Domsch@dell.com])
+AC_INIT([biosdevname],[0.3.7],[Matt_Domsch@dell.com])
 AC_LANG([C])
 AC_USE_SYSTEM_EXTENSIONS
 AC_CONFIG_SRCDIR([src/read_proc.c])

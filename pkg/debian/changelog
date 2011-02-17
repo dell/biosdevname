@@ -6,8 +6,11 @@ biosdevname (0.3.7) unstable; urgency=low
   * Fix segfault when BIOS advertises zero sized PIRQ Routing Table
   * Add 'bonding' and 'openvswitch' to the virtual devices list
   * Typo fixes
+  * fail PIRQ lookups if device domain is not 0
+  * Don't suggest names if running in a virtual machine (Xen, KVM,
+    VMware tested, but should work on others)
 
- -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 3 Feb 2011 09:22:00 -0600
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 17 Feb 2011 09:48:00 -0600
 
 biosdevname (0.3.6) unstable; urgency=low
   * drop biosdevnameS, it's unused and fails to build on F15
