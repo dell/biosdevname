@@ -145,7 +145,7 @@ static int read_pci_vpd(struct pci_device *pdev)
 
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/vpd", pci_name);
-	if ((fd = open("vpd" /*path*/, O_RDONLY)) >= 0) {
+	if ((fd = open(path, O_RDONLY)) >= 0) {
 		size = lseek(fd, 0, SEEK_END);
 		vpd  = malloc(size);
 		if (vpd != NULL) {
