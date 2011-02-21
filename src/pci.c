@@ -15,10 +15,157 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <pci/pci.h>
+#include <fcntl.h>
+#include <ctype.h>
+#include <errno.h>
 #include "pci.h"
 #include "sysfs.h"
 #include "dmidecode/dmidecode.h"
 #include "pirq.h"
+
+#define PCI_VPD_LRDT 			0x80
+#define PCI_VPD_SRDT_END 		0x78
+
+#define PCI_VPD_SRDT_LEN_MASK		0x7
+#define PCI_VPD_LRDT_TAG_SIZE		3
+#define PCI_VPD_SRDT_TAG_SIZE		1
+#define PCI_VPD_INFO_FLD_HDR_SIZE	3
+
+static inline u16 pci_vpd_lrdt_size(const u8 *lrdt)
+{
+	return (u16)lrdt[1] + ((u16)lrdt[2] << 8L);
+}
+
+static inline u8 pci_vpd_srdt_size(const u8* srdt)
+{
+	return (*srdt) & PCI_VPD_SRDT_LEN_MASK;
+}
+
+static inline u8 pci_vpd_info_field_size(const u8 *info_field)
+{
+	return info_field[2];
+}
+
+static int pci_vpd_find_tag(const u8 *buf, unsigned int off, unsigned int len, u8 rdt)
+{
+	int i;
+
+	for (i = off; i < len;) {
+		u8 val = buf[i];
+
+		if (val & PCI_VPD_LRDT) {
+			if (i + PCI_VPD_LRDT_TAG_SIZE > len)
+				break;
+			if (val == rdt)
+				return i;
+			i += PCI_VPD_LRDT_TAG_SIZE + pci_vpd_lrdt_size(&buf[i]);
+		} else {
+			u8 tag = val & ~PCI_VPD_SRDT_LEN_MASK;
+			
+			if (tag == rdt)
+				return i;
+			if (tag == PCI_VPD_SRDT_END)
+				break;
+			i += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(&buf[i]);
+		}
+	}
+	return -ENOENT;
+}
+
+static int pci_vpd_find_info_subkey(const u8 *buf, unsigned int off, unsigned int len, 
+	const char *kw, const char *skw)
+{
+	int i;
+
+	for (i = off; i + PCI_VPD_INFO_FLD_HDR_SIZE <= off+len;) {
+		/* Match key and subkey names, can use * for regex */
+		if ((kw[0] == '*' || buf[i+0] == kw[0]) &&
+		    (kw[1] == '*' || buf[i+1] == kw[1]) &&
+		    (skw[0] == '*' || !memcmp(&buf[i+3], skw, 3)))
+			return i;
+		i += PCI_VPD_INFO_FLD_HDR_SIZE + pci_vpd_info_field_size(&buf[i]);
+	}
+	return -ENOENT;
+}
+
+static int parse_vpd(struct pci_device *pdev, int len, unsigned char *vpd)
+{
+	int i, j, k, isz, jsz, port, func, pfi;
+
+	i = pci_vpd_find_tag(vpd, 0, len, 0x90);
+	if (i < 0)
+		return 1;
+	isz = pci_vpd_lrdt_size(&vpd[i]);
+	i += PCI_VPD_LRDT_TAG_SIZE;
+
+	/* Lookup Version */
+	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DSV");
+	if (j < 0)
+		return 1;
+	jsz = pci_vpd_info_field_size(&vpd[j]);
+	j += PCI_VPD_INFO_FLD_HDR_SIZE;
+	if (memcmp(vpd+j+3, "1028VPDR.VER1.0", 15))
+		return -ENODEV;
+	
+	/* Lookup NPY Num Ports */
+	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "NPY");
+	if (j < 0)
+		return 1;
+	jsz = pci_vpd_info_field_size(&vpd[j]);
+	j += PCI_VPD_INFO_FLD_HDR_SIZE;
+	sscanf((char *)vpd+j+3, "%1x", &port);	
+	pdev->vpd_nports = port;
+
+	/* Lookup Port Mappings */
+	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DCM");
+	if (j < 0)
+		return 1;
+	jsz = pci_vpd_info_field_size(&vpd[j]);
+	j += PCI_VPD_INFO_FLD_HDR_SIZE;
+
+	for (k=3; k<jsz; k+=10) {
+		/* Parse Port Info */
+		sscanf((char *)vpd+j+k, "%1x%1x%2x", &port, &func, &pfi);
+		if (func == pdev->pci_dev->func) {
+			pdev->vpd_port = port;
+			pdev->vpd_pfi = pfi;
+		}
+	}
+	return 0;
+}
+
+static int read_pci_vpd(struct pci_device *pdev)
+{
+	char path[PATH_MAX];
+	char pci_name[16];
+	int fd, rc=1;
+	unsigned char *vpd;
+	off_t size;
+	ssize_t nrd;
+
+	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/vpd", pci_name);
+	if ((fd = open("vpd" /*path*/, O_RDONLY)) >= 0) {
+		size = lseek(fd, 0, SEEK_END);
+		vpd  = malloc(size);
+		if (vpd != NULL) {
+			if ((nrd = pread(fd, vpd, size, 0)) > 0)
+				rc = parse_vpd(pdev, nrd, vpd);
+			free(vpd);
+		}
+		close(fd);
+	}
+	return rc;
+}
+
+static void set_pci_vpd_instance(struct libbiosdevname_state *state)
+{
+	struct pci_device *dev;
+
+	list_for_each_entry(dev, &state->pci_devices, node) {
+		read_pci_vpd(dev);
+	}
+}
 
 static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *pdev)
 {
@@ -317,6 +464,8 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);
 	dev->vf_index = INT_MAX;
+	dev->vpd_port = INT_MAX;
+	dev->vpd_pfi  = INT_MAX;
 	fill_pci_dev_sysfs(dev, p);
 	list_add(&dev->node, &state->pci_devices);
 }
@@ -470,6 +619,7 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	set_embedded_index(state);
 	set_pci_slot_index(state);
 	set_sriov_pf_vf(state);
+	set_pci_vpd_instance(state);
 
 	return rc;
 }
@@ -545,7 +695,10 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		s += snprintf(s, size-(s-buf), "Index in slot: %u\n", p->index_in_slot);
 	if (p->embedded_index_valid)
 		s += snprintf(s, size-(s-buf), "Embedded Index: %u\n", p->embedded_index);
-
+	if (p->vpd_port < INT_MAX) {
+		s += snprintf(s, size-(s-buf), "VPD Port: %u\n", p->vpd_port);
+		s += snprintf(s, size-(s-buf), "VPD Index: %u\n", p->vpd_pfi);
+	}
 	if (!list_empty(&p->vfs)) {
 		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");
 		list_for_each_entry(dev, &p->vfs, vfnode) {

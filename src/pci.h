@@ -29,6 +29,9 @@ struct pci_device {
 	char * sysfs_label;
 	unsigned char uses_sysfs;
 	unsigned int vf_index;
+	unsigned int vpd_pfi;
+	unsigned int vpd_nports;
+	unsigned int vpd_port;
 	struct pci_device *pf;
 	struct list_head vfnode;
 	struct list_head vfs;
