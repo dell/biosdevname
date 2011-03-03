@@ -16,13 +16,12 @@
 #include <dirent.h>
 #include <pci/pci.h>
 #include <fcntl.h>
-#include <ctype.h>
-#include <errno.h>
 #include "pci.h"
 #include "sysfs.h"
 #include "dmidecode/dmidecode.h"
 #include "pirq.h"
 
+/* Borrowed from kernel vpd code */
 #define PCI_VPD_LRDT 			0x80
 #define PCI_VPD_SRDT_END 		0x78
 
@@ -69,9 +68,10 @@ static int pci_vpd_find_tag(const u8 *buf, unsigned int off, unsigned int len, u
 			i += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(&buf[i]);
 		}
 	}
-	return -ENOENT;
+	return -1;
 }
 
+/* Search for matching key/subkey in the VPD data */
 static int pci_vpd_find_info_subkey(const u8 *buf, unsigned int off, unsigned int len, 
 	const char *kw, const char *skw)
 {
@@ -85,7 +85,7 @@ static int pci_vpd_find_info_subkey(const u8 *buf, unsigned int off, unsigned in
 			return i;
 		i += PCI_VPD_INFO_FLD_HDR_SIZE + pci_vpd_info_field_size(&buf[i]);
 	}
-	return -ENOENT;
+	return -1;
 }
 
 static int parse_vpd(struct pci_device *pdev, int len, unsigned char *vpd)
@@ -105,7 +105,7 @@ static int parse_vpd(struct pci_device *pdev, int len, unsigned char *vpd)
 	jsz = pci_vpd_info_field_size(&vpd[j]);
 	j += PCI_VPD_INFO_FLD_HDR_SIZE;
 	if (memcmp(vpd+j+3, "1028VPDR.VER1.0", 15))
-		return -ENODEV;
+		return 1;
 	
 	/* Lookup NPY Num Ports */
 	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "NPY");
@@ -134,6 +134,7 @@ static int parse_vpd(struct pci_device *pdev, int len, unsigned char *vpd)
 	return 0;
 }
 
+/* Read and parse PCI VPD section if it exists */
 static int read_pci_vpd(struct pci_device *pdev)
 {
 	char path[PATH_MAX];
@@ -698,6 +699,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	if (p->vpd_port < INT_MAX) {
 		s += snprintf(s, size-(s-buf), "VPD Port: %u\n", p->vpd_port);
 		s += snprintf(s, size-(s-buf), "VPD Index: %u\n", p->vpd_pfi);
+		s += snprintf(s, size-(s-buf), "VPD #Ports: %u\n", p->vpd_nports);
 	}
 	if (!list_empty(&p->vfs)) {
 		s += snprintf(s, size-(s-buf), "Virtual Functions:\n");
