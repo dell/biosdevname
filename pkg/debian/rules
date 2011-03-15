@@ -24,6 +24,9 @@ else
 	CFLAGS += -O2
 endif
 
+configure: configure.ac
+	autoreconf -i
+
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
