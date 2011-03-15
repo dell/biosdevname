@@ -11,7 +11,7 @@ umask 002
 [ -n "$RELEASE_TOPDIR" ] ||
     RELEASE_TOPDIR=/var/ftp/pub/linux.dell.com/srv/www/vhosts/linux.dell.com/html/files/biosdevname/
 [ -n "$SIGNING_KEY" ] ||
-    SIGNING_KEY=mdomsch
+    SIGNING_KEY=jordan_hargrave
 
 # if anything hiccups, halt:
 set -e
