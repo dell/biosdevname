@@ -14,6 +14,9 @@
 #include "bios_dev_name.h"
 
 static struct bios_dev_name_opts opts;
+int nopirq;
+int smver_mjr;
+int smver_mnr;
 
 static void usage(void)
 {
@@ -23,6 +26,8 @@ static void usage(void)
 	fprintf(stderr, "   -d        or --debug               enable debugging\n");
 	fprintf(stderr, "   --policy [physical | all_ethN ]\n");
 	fprintf(stderr, "   --prefix [string]                  string use for embedded NICs (default='em')\n");
+	fprintf(stderr, "   --smbios [x.y]		       Require SMBIOS x.y or greater\n");
+	fprintf(stderr, "   --nopirq			       Don't use $PIR table for slot numbers\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: em1\n");
 	fprintf(stderr, "  when eth0 is an embedded NIC with label '1' on the chassis.\n");
@@ -55,6 +60,8 @@ parse_opts(int argc, char **argv)
 			{"interface",         no_argument, 0, 'i'},
 			{"policy",      required_argument, 0, 'p'},
 			{"prefix",      required_argument, 0, 'P'},
+			{"nopirq",	      no_argument, 0, 'x'},
+			{"smbios",	required_argument, 0, 's'},
 			{0, 0, 0, 0}
 		};
 		c = getopt_long(argc, argv,
@@ -74,6 +81,12 @@ parse_opts(int argc, char **argv)
 			break;
 		case 'P':
 			opts.prefix = optarg;
+			break;
+		case 's':
+			sscanf(optarg, "%u.%u", &smver_mjr, &smver_mnr);
+			break;
+		case 'x':
+			nopirq = 1;
 			break;
 		default:
 			usage();

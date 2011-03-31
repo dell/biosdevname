@@ -18,6 +18,8 @@
 #include <sys/mman.h>
 #include "pirq.h"
 
+extern int nopirq;
+
 /* If unknown, use INT_MAX so they get sorted last */
 int pirq_pci_dev_to_slot(struct routing_table *table, int domain, int bus, int dev)
 {
@@ -49,8 +51,13 @@ struct routing_table * pirq_alloc_read_table()
 	int i;
 	void *mem;
 	off_t offset=0L;
-	int fd=open("/dev/mem", O_RDONLY);
+	int fd;
 
+	/* Skip PIRQ table parsing */
+	if (nopirq) {
+		return NULL;
+	}
+	fd = open("/dev/mem", O_RDONLY);
 	if(fd==-1)
 		return NULL;
 

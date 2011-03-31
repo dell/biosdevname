@@ -40,6 +40,8 @@
 #include "../pci.h"
 #include "../naming_policy.h"
 
+extern int smver_mjr, smver_mnr;
+
 static const char *bad_index = "<BAD INDEX>";
 
 /*
@@ -176,12 +178,27 @@ static void to_dmi_header(struct dmi_header *h, u8 *data)
 	h->data=data;
 }
 
+static int isvalidsmbios(int mjr, int mnr)
+{
+	if (!smver_mjr && !smver_mnr)
+		return 1;
+	if (mjr > smver_mjr)
+		return 1;
+	if ((mjr == smver_mjr) && (mnr >= smver_mnr))
+		return 1;
+	return 0;
+}
+
 static void dmi_table(u32 base, u16 len, u16 num, u16 ver, const char *devmem, const struct libbiosdevname_state *state)
 {
 	u8 *buf;
 	u8 *data;
 	int i=0;
 
+	/* Verify SMBIOS version */
+	if (!isvalidsmbios(ver >> 8, ver & 0xFF)) {
+		return;
+	}
 	if((buf=mem_chunk(base, len, devmem))==NULL)
 	{
 #ifndef USE_MMAP
