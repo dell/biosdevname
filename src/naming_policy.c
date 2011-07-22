@@ -38,13 +38,13 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 	unsigned int portnum=0;
 	int known=0;
 
-	memset(buffer, 0, sizeof(buffer));
-	memset(location, 0, sizeof(location));
-	memset(port, 0, sizeof(port));
-	memset(interface, 0, sizeof(interface));
-
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		known = 0;
+		memset(buffer, 0, sizeof(buffer));
+		memset(location, 0, sizeof(location));
+		memset(port, 0, sizeof(port));
+		memset(interface, 0, sizeof(interface));
+
 		if (is_pci(dev)) {
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
 				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
