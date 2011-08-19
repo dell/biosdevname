@@ -35,6 +35,13 @@ Enable debugging
 .TP
 .B \-\-prefix \fI[string]
 string use for embedded NICs in the physical policy (default=em)
+.TP
+.B \-\-nopirq
+Do not use $PIR table for mapping PCI device to slot. Some BIOS have
+incorrect values.
+.TP
+.B \-\-smbios \fI[x.y]
+Require minimum SMBIOS version x.y
 .SH POLICIES
 .br
 The
