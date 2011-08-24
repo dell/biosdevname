@@ -45,6 +45,32 @@ static inline u8 pci_vpd_info_field_size(const u8 *info_field)
 	return info_field[2];
 }
 
+static int pci_vpd_size(struct pci_device *pdev, int fd)
+{
+	uint8_t buf[3], tag;
+	int off;
+
+	if (!is_pci_network(pdev))
+		return 0;
+	off = 0;
+	for(;;) {
+		if (pread(fd, buf, 1, off) != 1)
+			break;
+		if (buf[0] & PCI_VPD_LRDT) {
+			tag = buf[0];
+			if (pread(fd, buf, 3, off) != 3)
+				break;
+			off += PCI_VPD_LRDT_TAG_SIZE + pci_vpd_lrdt_size(buf);
+		} else {
+			tag = buf[0] & ~PCI_VPD_SRDT_LEN_MASK;
+			off += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(buf);
+		}
+		if (tag == 0 || tag == 0xFF || tag == PCI_VPD_SRDT_END)
+			break;
+	}
+	return off;
+}
+
 static int pci_vpd_find_tag(const u8 *buf, unsigned int off, unsigned int len, u8 rdt)
 {
 	int i;
@@ -147,12 +173,14 @@ static int read_pci_vpd(struct pci_device *pdev)
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/vpd", pci_name);
 	if ((fd = open(path, O_RDONLY)) >= 0) {
-		size = lseek(fd, 0, SEEK_END);
-		vpd  = malloc(size);
-		if (vpd != NULL) {
-			if ((nrd = pread(fd, vpd, size, 0)) > 0)
-				rc = parse_vpd(pdev, nrd, vpd);
-			free(vpd);
+		size = pci_vpd_size(pdev, fd);
+		if (size > 0) {
+		        vpd = malloc(size);
+			if (vpd != NULL) {
+				if ((nrd = pread(fd, vpd, size, 0)) > 0)
+					rc = parse_vpd(pdev, nrd, vpd);
+				free(vpd);
+			}
 		}
 		close(fd);
 	}
