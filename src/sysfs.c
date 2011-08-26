@@ -50,8 +50,9 @@ int sysfs_read_file(const char * path, char **output)
 	}
 
 	length = read(fd, result, resultsize-1);
+	close(fd);
+
 	if (length < 0) {
-		close(fd);
 		ret = -1;
 		goto free_out;
 	}
