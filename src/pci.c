@@ -21,6 +21,10 @@
 #include "dmidecode/dmidecode.h"
 #include "pirq.h"
 
+#ifndef PCI_CB_CAPABILITY_LIST
+#define PCI_CB_CAPABILITY_LIST  0x14
+#endif
+
 /* Borrowed from kernel vpd code */
 #define PCI_VPD_LRDT 			0x80
 #define PCI_VPD_SRDT_END 		0x78
@@ -209,6 +213,57 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 	}
 }
 
+static int pci_find_capability(struct pci_dev *p, int cap)
+{
+        u16 status;
+        u8 hdr, id;
+        int pos, ttl = 48;
+
+        status = pci_read_word(p, PCI_STATUS);
+        if (!(status & PCI_STATUS_CAP_LIST))
+                return 0;
+	hdr = pci_read_byte(p, PCI_HEADER_TYPE);
+        switch(hdr & 0x7F) {
+        case PCI_HEADER_TYPE_NORMAL:
+        case PCI_HEADER_TYPE_BRIDGE:
+                pos = PCI_CAPABILITY_LIST;
+                break;
+        case PCI_HEADER_TYPE_CARDBUS:
+                pos = PCI_CB_CAPABILITY_LIST;
+                break;
+        default:
+                return 0;
+        }
+
+        while (ttl--) {
+                pos = pci_read_byte(p, pos);
+                if (pos < 0x40)
+                        break;
+                pos &= ~3;
+                id = pci_read_byte(p, pos+PCI_CAP_LIST_ID);
+                if (id == 0xFF)
+                        break;
+                if (id == cap)
+                        return pos;
+                pos += PCI_CAP_LIST_NEXT;
+        }
+        return 0;
+}
+
+static int pcie_get_slot(struct pci_dev *p)
+{
+  	int pos;
+	u32 slot;
+
+	/* Return PCIE physical slot number */
+	if ((pos = pci_find_capability(p, PCI_CAP_ID_EXP)) != 0) {
+		slot = (pci_read_long(p, pos + PCI_EXP_SLTCAP) >> 19);
+		printf("%.2x.%.2x.%x = %d\n", p->bus, p->dev, p->func, slot);
+		if (slot)
+			return slot;
+	}
+	return PHYSICAL_SLOT_UNKNOWN;
+}
 static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *pdev)
 {
 	char path[PATH_MAX];
@@ -488,6 +543,7 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 		dev->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
 }
+
 
 static void add_pci_dev(struct libbiosdevname_state *state,
 			struct pci_dev *p)
