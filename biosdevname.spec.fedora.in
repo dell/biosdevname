@@ -9,7 +9,7 @@ URL:		http://linux.dell.com/files/%{name}
 # SMBIOS only exists on these arches.  It's also likely that other
 # arches don't expect the PCI bus to be sorted breadth-first, or of
 # so, there haven't been any comments about that on LKML.
-ExclusiveArch:	%{ix86} x86_64 ia64
+ExclusiveArch:	%{ix86} x86_64
 Source0:	http://linux.dell.com/files/%{name}/permalink/%{name}-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires:	pciutils-devel, zlib-devel
