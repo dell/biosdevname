@@ -37,6 +37,7 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 	char interface[IFNAMSIZ];
 	unsigned int portnum=0;
 	int known=0;
+	struct pci_device *vf;
 
 	list_for_each_entry(dev, &state->bios_devices, node) {
 		known = 0;
@@ -46,19 +47,19 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 		memset(interface, 0, sizeof(interface));
 
 		if (is_pci(dev)) {
+			vf = dev->pcidev;
 			if (dev->pcidev->physical_slot == 0) { /* embedded devices only */
-				if (dev->pcidev->uses_sysfs & HAS_SYSFS_INDEX) {
-					portnum = dev->pcidev->sysfs_index;
-					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
-					known=1;
-				}
-				else if (dev->pcidev->uses_smbios & HAS_SMBIOS_INSTANCE && is_pci_smbios_type_ethernet(dev->pcidev)) {
-					portnum = dev->pcidev->smbios_instance;
-					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
-					known=1;
-				}
-				else if (dev->pcidev->embedded_index_valid) {
-					portnum = dev->pcidev->embedded_index;
+				portnum = INT_MAX;
+				/* Use master VPD device if available */
+				if (vf->vpd_pf)
+					vf = vf->vpd_pf;
+				if (vf->uses_sysfs & HAS_SYSFS_INDEX)
+					portnum = vf->sysfs_index;
+				else if (vf->uses_smbios & HAS_SMBIOS_INSTANCE && is_pci_smbios_type_ethernet(vf))
+					portnum = vf->smbios_instance;
+				else if (vf->embedded_index_valid)
+					portnum = vf->embedded_index;
+				if (portnum != INT_MAX) {	
 					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
 					known=1;
 				}
