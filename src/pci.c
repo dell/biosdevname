@@ -250,20 +250,26 @@ static int pci_find_capability(struct pci_dev *p, int cap)
         return 0;
 }
 
-static int pcie_get_slot(struct pci_dev *p)
+static struct pci_device *
+find_parent(struct libbiosdevname_state *state, struct pci_device *dev);
+
+static int pcie_get_slot(struct libbiosdevname_state *state, struct pci_device *p)
 {
   	int pos;
 	u32 slot;
 
-	/* Return PCIE physical slot number */
-	if ((pos = pci_find_capability(p, PCI_CAP_ID_EXP)) != 0) {
-		slot = (pci_read_long(p, pos + PCI_EXP_SLTCAP) >> 19);
-		printf("%.2x.%.2x.%x = %d\n", p->bus, p->dev, p->func, slot);
-		if (slot)
-			return slot;
+	while (p) {
+		/* Return PCIE physical slot number */
+		if ((pos = pci_find_capability(p->pci_dev, PCI_CAP_ID_EXP)) != 0) {
+			slot = (pci_read_long(p->pci_dev, pos + PCI_EXP_SLTCAP) >> 19);
+			if (slot)
+				return slot;
+		}
+		p = find_parent(state, p);
 	}
 	return PHYSICAL_SLOT_UNKNOWN;
 }
+
 static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *pdev)
 {
 	char path[PATH_MAX];
@@ -481,6 +487,8 @@ static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *d
 	int slot;
 	do {
 		slot = pci_dev_to_slot(state, d);
+		if (slot == PHYSICAL_SLOT_UNKNOWN)
+		  	slot = pcie_get_slot(state, d);
 		if (slot == PHYSICAL_SLOT_UNKNOWN)
 			slot = pirq_dev_to_slot(state, d);
 		if (slot == PHYSICAL_SLOT_UNKNOWN)
