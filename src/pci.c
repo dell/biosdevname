@@ -614,8 +614,6 @@ static int set_pci_slot_index(struct libbiosdevname_state *state)
 			continue;
 		if (pcidev->is_sriov_virtual_function) /* skip sriov VFs, they're handled later */
 			continue;
-		if (pcidev->vpd_port != INT_MAX)
-			continue;
 		if (pcidev->physical_slot != prevslot) {
 			index=1;
 			prevslot = pcidev->physical_slot;

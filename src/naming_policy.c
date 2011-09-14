@@ -66,10 +66,10 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 			}
 			else if (dev->pcidev->physical_slot < PHYSICAL_SLOT_UNKNOWN) {
 				snprintf(location, sizeof(location), "p%u", dev->pcidev->physical_slot);
-				if (!dev->pcidev->is_sriov_virtual_function)
-					portnum = dev->pcidev->index_in_slot;
-				else if (dev->pcidev->vpd_port < INT_MAX)
+				if (dev->pcidev->vpd_port < INT_MAX)
 					portnum = dev->pcidev->vpd_port;
+				else if (!dev->pcidev->is_sriov_virtual_function)
+				  	portnum = dev->pcidev->index_in_slot;
 				else
 					portnum = dev->pcidev->pf->index_in_slot;
 				snprintf(port, sizeof(port), "p%u", portnum);
