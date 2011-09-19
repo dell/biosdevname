@@ -206,9 +206,19 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 			    dev2->pci_dev->bus == dev->pci_dev->bus &&
 			    dev2->pci_dev->dev == dev->pci_dev->dev &&
 			    dev2->vpd_port == dev->vpd_port) {
+			  	dev2->vpd_count++;
 				dev->vpd_pf = dev2;
 				break;
 			}
+		}
+	}
+
+	/* Delete all VPD devices with single function */
+	list_for_each_entry(dev, &state->pci_devices, node) {
+		if (dev->vpd_count == 1) {
+			dev->vpd_port = INT_MAX;
+			dev->vpd_pfi = INT_MAX;
+			dev->vpd_pf = NULL;
 		}
 	}
 }
@@ -810,7 +820,7 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 		if (p->vpd_pf) {
 			s += snprintf(s, size-(s-buf), "VPD PCI master: ");
 			s += unparse_pci_name(s, size-(s-buf), p->vpd_pf->pci_dev);
-			s += snprintf(s, size-(s-buf), "\n");
+			s += snprintf(s, size-(s-buf), " count %d\n", p->vpd_pf->vpd_count);
 		}
 	}
 	if (!list_empty(&p->vfs)) {
