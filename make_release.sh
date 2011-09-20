@@ -39,4 +39,7 @@ for i in *.tar.{gz,bz2} *.zip dist/SRPMS/*.src.rpm; do
     cp $i $DEST
 done
 
+# Generate GPG signature
+gpg --output $DEST/$PACKAGE_NAME-$PACKAGE_VERSION.tar.gz.sign --detach-sig $DEST/$PACKAGE_NAME-$PACKAGE_VERSION.tar.gz -u $SIGNING_KEY
+
 git push --tags origin master:master
