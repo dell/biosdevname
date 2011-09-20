@@ -35,8 +35,11 @@ int pirq_pci_dev_to_slot(struct routing_table *table, int domain, int bus, int d
 	for (i=0; i<num_slots; i++) {
 		slot = &table->slot[i];
 		if (slot->bus == bus &&
-		    PCI_DEVICE(slot->device) == dev)
+		    PCI_DEVICE(slot->device) == dev) {
+		  	if (slot->slot >= '1' && slot->slot <= '9')
+				return slot->slot - '0';
 			return slot->slot;
+		}
 	}
 	return INT_MAX;
 }

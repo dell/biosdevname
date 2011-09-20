@@ -266,13 +266,14 @@ find_parent(struct libbiosdevname_state *state, struct pci_device *dev);
 static int pcie_get_slot(struct libbiosdevname_state *state, struct pci_device *p)
 {
   	int pos;
-	u32 slot;
+	u32 slot, flag;
 
 	while (p) {
 		/* Return PCIE physical slot number */
 		if ((pos = pci_find_capability(p->pci_dev, PCI_CAP_ID_EXP)) != 0) {
+		  	flag = pci_read_word(p->pci_dev, pos + PCI_EXP_FLAGS);
 			slot = (pci_read_long(p->pci_dev, pos + PCI_EXP_SLTCAP) >> 19);
-			if (slot)
+			if ((flag & PCI_EXP_FLAGS_SLOT) && slot)
 				return slot;
 		}
 		p = find_parent(state, p);
