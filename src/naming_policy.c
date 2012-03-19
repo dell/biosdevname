@@ -53,6 +53,8 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 				/* Use master VPD device if available */
 				if (vf->vpd_pf)
 					vf = vf->vpd_pf;
+				if (vf->pf)
+				  	vf = vf->pf;
 				if (vf->uses_sysfs & HAS_SYSFS_INDEX)
 					portnum = vf->sysfs_index;
 				else if (vf->uses_smbios & HAS_SMBIOS_INSTANCE && is_pci_smbios_type_ethernet(vf))
