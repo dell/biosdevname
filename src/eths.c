@@ -34,6 +34,29 @@ char *pr_ether(char *buf, const int size, const unsigned char *s)
 	return (buf);
 }
 
+static int eths_get_ifindex(const char *devname, int *ifindex)
+{
+	int fd, err;
+	struct ifreq ifr;
+
+	memset(&ifr, 0, sizeof(ifr));
+	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name));
+
+	/* Open control socket. */
+	fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd < 0) {
+		perror("Cannot get control socket");
+		return 1;
+	}
+
+	err = ioctl(fd, SIOCGIFINDEX, &ifr);
+	if (!err) {
+	   	*ifindex = ifr.ifr_ifindex;
+	}
+	close(fd);
+	return err;
+}
+
 static int eths_get_hwaddr(const char *devname, unsigned char *buf, int size, int *type)
 {
 	int fd, err;
@@ -123,6 +146,7 @@ static int eths_get_permaddr(const char *devname, unsigned char *buf, int size)
 static void fill_eth_dev(struct network_device *dev)
 {
 	int rc;
+	eths_get_ifindex(dev->kernel_name, &dev->ifindex);
 	eths_get_hwaddr(dev->kernel_name, dev->dev_addr, sizeof(dev->dev_addr), &dev->arphrd_type);
 	eths_get_permaddr(dev->kernel_name, dev->perm_addr, sizeof(dev->perm_addr));
 	rc = eths_get_info(dev->kernel_name, &dev->drvinfo);
@@ -167,6 +191,7 @@ int unparse_network_device(char *buf, const int size, struct network_device *dev
 	if (!zero_mac(dev->perm_addr))
 		s += snprintf(s, size-(s-buf), "Permanent MAC: %s\n", pr_ether(buffer, sizeof(buffer), dev->perm_addr));
 	s += snprintf(s, size-(s-buf), "Assigned MAC : %s\n", pr_ether(buffer, sizeof(buffer), dev->dev_addr));
+	s += snprintf(s, size-(s-buf), "ifIndex: %d\n", dev->ifindex);
 	if (drvinfo_valid(dev)) {
 		s += snprintf(s, size-(s-buf), "Driver: %s\n", dev->drvinfo.driver);
 		s += snprintf(s, size-(s-buf), "Driver version: %s\n", dev->drvinfo.version);
