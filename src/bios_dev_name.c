@@ -17,6 +17,7 @@ static struct bios_dev_name_opts opts;
 int nopirq;
 int smver_mjr;
 int smver_mnr;
+int is_valid_smbios = 0;
 
 static void usage(void)
 {

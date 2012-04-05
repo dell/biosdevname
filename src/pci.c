@@ -21,6 +21,8 @@
 #include "dmidecode/dmidecode.h"
 #include "pirq.h"
 
+extern int is_valid_smbios;
+
 #ifndef PCI_CB_CAPABILITY_LIST
 #define PCI_CB_CAPABILITY_LIST  0x14
 #endif
@@ -498,7 +500,7 @@ static void dev_to_slot(struct libbiosdevname_state *state, struct pci_device *d
 	int slot;
 	do {
 		slot = pci_dev_to_slot(state, d);
-		if (slot == PHYSICAL_SLOT_UNKNOWN)
+		if (slot == PHYSICAL_SLOT_UNKNOWN && is_valid_smbios)
 		  	slot = pcie_get_slot(state, d);
 		if (slot == PHYSICAL_SLOT_UNKNOWN)
 			slot = pirq_dev_to_slot(state, d);

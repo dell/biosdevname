@@ -40,7 +40,7 @@
 #include "../pci.h"
 #include "../naming_policy.h"
 
-extern int smver_mjr, smver_mnr;
+extern int smver_mjr, smver_mnr, is_valid_smbios;
 
 static const char *bad_index = "<BAD INDEX>";
 
@@ -180,12 +180,18 @@ static void to_dmi_header(struct dmi_header *h, u8 *data)
 
 static int isvalidsmbios(int mjr, int mnr)
 {
-	if (!smver_mjr && !smver_mnr)
+	if (!smver_mjr && !smver_mnr) {
+		is_valid_smbios = 1;
 		return 1;
-	if (mjr > smver_mjr)
+	}
+	if (mjr > smver_mjr) {
+		is_valid_smbios = 1;
 		return 1;
-	if ((mjr == smver_mjr) && (mnr >= smver_mnr))
+	}
+	if ((mjr == smver_mjr) && (mnr >= smver_mnr)) {
+		is_valid_smbios = 1;
 		return 1;
+	}
 	return 0;
 }
 
