@@ -15,6 +15,9 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires:	pciutils-devel, zlib-devel
 # to figure out how to name the rules file
 BuildRequires:	udev
+#To generate the configure script
+BuildRequires:  autoconf
+BuildRequires:  automake
 # for ownership of /etc/udev/rules.d
 Requires: udev
 
@@ -29,6 +32,10 @@ name (e.g. eth0).
 %setup -q
 
 %build
+#If configure script doesn't exist generate it with autogen script
+[ -e ./configure ] || ./autogen.sh --no-configure
+
+
 # this is a udev rule, so it needs to live in / rather than /usr
 %configure --disable-rpath --prefix=/ --sbindir=/sbin
 make %{?_smp_mflags}
@@ -51,6 +58,21 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Oct  4 2011 Praveen K Paladugu <praveen_paladugu@dell.com> - 0.3.11-1
+- Fix man page for PCI slot naming
+- Fix clearing of buffer for NPAR/SRIOV naming
+- Add --nopirq and --smbios options to manpage.
+- Verify length of VPD on network device
+- Close file handle on sysfs read
+- Fix naming policy for NPAR devices.
+  Match each PCI device to its VPD 'physical' device to get correct index
+- Exclude  building on ia64 arch
+- Add support functions for determining PCIE slot
+- Scan full path to parent when getting PCIE slot
+- Fix NPAR naming for add-in cards
+- Don't display _vf suffix on NPAR devices with single function
+- Fix PCIe/PIRQ slot mapping
+
 * Thu Feb 17 2011 Matt Domsch <Matt_Domsch@dell.com> - 0.3.7-1
 - drop dump_pirq, suggest use biosdecode instead
 - don't use '#' in names, use 'p' instead, by popular demand
