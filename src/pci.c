@@ -193,9 +193,24 @@ static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *p
 static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 {
 	struct pci_device *dev, *dev2;
+	int fd;
+	char sys_vendor[10] = {0};
+
+	/* Read VPD-R on Dell systems only */
+	if ((fd = open("/sys/devices/virtual/dmi/id/sys_vendor", O_RDONLY)) >= 0) {
+		if (read(fd, sys_vendor, 9) != 9)
+			return;
+		if (strncmp(sys_vendor, "Dell Inc.", 9)) 
+			return;
+	} else
+		return;
 
 	/* Read VPD information for each device */
 	list_for_each_entry(dev, &state->pci_devices, node) {
+		/* RedHat bugzilla 801885, 789635, 781572 */
+		if (dev->pci_dev->vendor_id == 0x1969 ||
+		    dev->pci_dev->vendor_id == 0x168c)
+			continue;
 		read_pci_vpd(state, dev);
 	}
 
