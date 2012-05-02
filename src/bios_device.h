@@ -18,6 +18,7 @@ struct bios_device {
 	struct network_device *netdev;
 	struct pci_device *pcidev;
 	char *bios_name;
+  	int nport;
 	int duplicate;
 };
 

@@ -153,6 +153,11 @@ static int sort_smbios(const struct bios_device *x, const struct bios_device *y)
 		else if (a->physical_slot > b->physical_slot) return 1;
 	}
 
+	/* Check if PCI devices are same, sort by ifindex */
+	if (a == b) {
+		if (x->netdev->ifindex < y->netdev->ifindex) return -1;
+		if (x->netdev->ifindex > y->netdev->ifindex) return 1;
+	}
 	return sort_pci(x, y);
 }
 
@@ -207,6 +212,30 @@ static void sort_device_list(struct libbiosdevname_state *state)
 	list_splice(&sorted_devices, &state->bios_devices);
 }
 
+static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
+{
+	struct pci_device *p;
+	struct bios_device *b;
+	struct network_device *n;
+
+	list_for_each_entry(n, &state->network_devices, node) {
+		p = find_dev_by_pci_name(state, n->drvinfo.bus_info);
+		if (!p)
+			continue;
+
+		b = malloc(sizeof(*b));
+		if (!b)
+			continue;
+		memset(b, 0, sizeof(*b));
+		INIT_LIST_HEAD(&b->node);
+		b->pcidev = p;
+		b->netdev = n;
+		claim_netdev(b->netdev);
+		list_add(&b->node, &state->bios_devices);
+	}
+}
+
+
 static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 {
 	struct pci_device *p;
@@ -260,7 +289,7 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 
 static void match_all(struct libbiosdevname_state *state)
 {
-	match_eth_and_pci_devs(state);
+	match_pci_and_eth_devs(state);
 	match_unknown_eths(state);
 }
 
@@ -319,6 +348,26 @@ static void find_duplicates(struct libbiosdevname_state *state)
 	}
 }
 
+/* Fix for RHBZ 816536/757743/756164/: Cards with same PCI but multiple ports
+ * chelsio, mellanox */
+static void check_ports(struct libbiosdevname_state *state)
+{
+	struct bios_device *a, *b;
+	int nports;
+
+	list_for_each_entry(a, &state->bios_devices, node) {
+		nports = 1;
+		list_for_each_entry(b, &state->bios_devices, node) {
+		  	if (a != b && a->pcidev == b->pcidev && 
+			    a->netdev->ifindex < b->netdev->ifindex && 
+			    !b->nport) 
+			  {
+				b->nport = ++nports;
+			  }
+		}
+	}
+}
+
 void * setup_bios_devices(int namingpolicy, const char *prefix)
 {
 	int rc=1;
@@ -334,6 +383,7 @@ void * setup_bios_devices(int namingpolicy, const char *prefix)
 	get_eths(state);
 	match_all(state);
 	sort_device_list(state);
+	check_ports(state);
 	rc = assign_bios_network_names(state, namingpolicy, prefix);
 	if (rc)
 		goto out;
