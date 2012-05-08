@@ -28,6 +28,8 @@ struct pci_device {
 	unsigned int sysfs_index;
 	char * sysfs_label;
 	unsigned char uses_sysfs;
+	unsigned int pcie_slot;
+	unsigned int pirq_slot;
 	unsigned int vf_index;
   	unsigned int vpd_count;
 	unsigned int vpd_pfi;
@@ -62,7 +64,8 @@ extern int unparse_pci_name(char *buf, int size, const struct pci_dev *pdev);
 
 static inline int is_pci_network(struct pci_device *dev)
 {
-	return (dev->class & 0xFF00) == 0x0200;
+	return (dev->class & 0xFF00) == 0x0200 ||
+	  (dev->class & 0xFF00) == 0x0c06;
 }
 
 static inline int is_pci_smbios_type_ethernet(struct pci_device *dev)

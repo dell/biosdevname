@@ -124,6 +124,7 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 	u8 *data=h->data;
 	int domain, bus, device, function;
 	struct pci_device *pdev;
+
 	switch(h->type)
 	{
 		case 9: /* 3.3.10 System Slots */

@@ -28,28 +28,6 @@ struct dmi_header
 
 const char *dmi_string(struct dmi_header *dm, u8 s);
 
-struct dmi_embedded_device
-{
-	u8 type;
-	u8 instance;
-	u16 domain;
-	u8 bus;
-	u8 device;
-	u8 function;
-	const char *reference_designation;
-};
-
-struct dmi_addon_device
-{
-	u8 type;
-	u8 instance;
-	u16 domain;
-	u8 bus;
-	u8 device;
-	u8 function;
-	const char *reference_designation;
-};
-
 enum dmi_onboard_device_type {
 	DMI_OTHER=1,
 	DMI_UNKNOWN,
@@ -65,4 +43,73 @@ enum dmi_onboard_device_type {
 
 struct libbiosdevname_state;
 int dmidecode_main(const struct libbiosdevname_state *state);
+
+struct dmi_ep
+{
+	u8               	anchor[5];
+	u8               	checksum;
+	u16              	table_len;
+	u32              	table_addr;
+	u16              	count;
+	u8               	rev;
+} __attribute__((packed));
+
+struct smbios_ep
+{
+	u8               	anchor[4];
+	u8               	checksum;
+	u8               	ep_length;
+	u8               	mjr_rev;
+	u8               	mnr_rev;
+	u16              	max_size;
+	u8             		ep_rev;
+	u8             	  	fmtarea[5];
+	struct dmi_ep         	dmi;
+} __attribute__((packed));
+
+struct smbios_hdr
+{
+	u8               	type;
+	u8               	length;
+	u16              	handle;
+} __attribute__((packed));
+
+struct smbios_type9
+{
+	struct smbios_hdr     	hdr;
+	u8               	ref;
+	u8              	type;
+	u8               	buswidth;
+	u8               	usage;
+	u8               	length;
+	u16              	id;
+	u8               	flags1;
+	/* 2.1+ */
+	u8               	flags2;
+	/* 2.6+ */
+	u16              	segment;
+	u8               	bus;
+	u8               	devfn;
+} __attribute__((packed));
+
+struct smbios_type10
+{
+	struct smbios_hdr     	hdr;
+	struct {
+		u8              type;
+		u8              desc;
+	} dev[1];
+};
+
+/* 2.6+ */
+struct smbios_type41
+{
+	struct smbios_hdr     	hdr;
+	u8               	ref;
+	u8              	type;
+	u8               	instance;
+	u16              	segment;
+	u8              	bus;
+	u8               	devfn;
+} __attribute__((packed));
 
