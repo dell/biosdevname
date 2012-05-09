@@ -161,13 +161,11 @@ static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *p
 
 		printf("found tag: %x\n", tag);
 		vpd = malloc(len);
-		if (!pci_read_vpd(pdev->pci_dev, off, vpd, len)) {
-			free(vpd);
+		if (vpd == NULL)
 			break;
-		}
-		parse_vpd(state, pdev, len, vpd);
+		if (pci_read_vpd(pdev->pci_dev, off, vpd, len))
+			parse_vpd(state, pdev, len, vpd);
 		free(vpd);
-	
 		off += len;
 	}
 	return 0;
@@ -369,11 +367,33 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 	}
 }
 
+static int cmppci(const void *a, const void *b)
+{
+	const struct pci_dev *pa = a;
+	const struct pci_dev *pb = b;
+	
+	if (pa->domain < pb->domain) return -1;
+	if (pa->domain > pb->domain) return 1;
+
+	if (pa->bus < pb->bus) return -1;
+	if (pa->bus > pb->bus) return 1;
+
+	if (pa->dev < pb->dev) return -1;
+	if (pa->dev > pb->dev) return 1;
+
+	if (pa->func < pb->func) return -1;
+	if (pa->func > pb->func) return 1;
+
+	return 0;
+}
+
 
 static void add_pci_dev(struct libbiosdevname_state *state,
 			struct pci_dev *p)
 {
-	struct pci_device *dev;
+	struct pci_device *dev, *ld;
+	uint8_t hdr;
+
 	dev = malloc(sizeof(*dev));
 	if (!dev) {
 		fprintf(stderr, "out of memory\n");
@@ -393,7 +413,20 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	dev->pirq_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->pcie_slot = pcie_get_slot(p);
 	fill_pci_dev_sysfs(dev, p);
-	list_add(&dev->node, &state->pci_devices);
+
+	/* Get subordinate bus if this is a bridge */
+	hdr = pci_read_byte(p, PCI_HEADER_TYPE);
+	dev->sbus = ((hdr & 0x7f) == PCI_HEADER_TYPE_BRIDGE) ? 
+		pci_read_byte(p, PCI_SECONDARY_BUS) : -1;
+
+	/* This code will maintain sorted pci device list */
+	list_for_each_entry(ld, &state->pci_devices, node) {
+		if (cmppci(p, ld->pci_dev) < 0) {
+			list_add_tail(&dev->node, &ld->node);
+			return;
+		}
+	}
+	list_add_tail(&dev->node, &state->pci_devices);
 }
 
 void free_pci_devices(struct libbiosdevname_state *state)
@@ -624,3 +657,4 @@ struct pci_device * find_dev_by_pci_name(const struct libbiosdevname_state *stat
 
 	return find_pci_dev_by_pci_addr(state, domain, bus, device, func);
 }
+

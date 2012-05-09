@@ -20,6 +20,7 @@ struct pci_device {
 	unsigned int index_in_slot; /* only valid if physical_slot > 0 and not a VF */
 	unsigned int embedded_index; /* only valid if embedded_index_valid */
 	unsigned short int class;
+  	unsigned int sbus;
 	unsigned char uses_smbios;
 	unsigned char smbios_type;
 	unsigned char smbios_instance;
