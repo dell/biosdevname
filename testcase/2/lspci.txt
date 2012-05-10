@@ -1,0 +1,849 @@
+00:00.0 Host bridge: Intel Corporation Mobile 4 Series Chipset Memory Controller Hub (rev 07)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR-
+	Latency: 0
+	Capabilities: [e0] Vendor Specific Information
+00: 86 80 40 2a 06 00 90 20 07 00 00 06 00 00 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 e0 00 00 00 00 00 00 00 00 00 00 00
+40: 01 50 da fe 00 00 00 00 01 00 da fe 00 00 00 00
+50: 00 00 02 00 43 03 00 00 00 00 00 00 00 00 00 00
+60: 05 00 00 f8 00 00 00 00 01 40 da fe 00 00 00 00
+70: 00 00 00 00 00 00 00 00 01 10 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 10 11 11 00 00 00 00 00 40 00 47 00 00 1a 39 00
+a0: 20 00 00 12 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 30 02 00 00
+e0: 09 00 0a 11 86 7c 40 1e 01 90 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 a0 0f 07 00 00 00 00 00
+
+00:01.0 PCI bridge: Intel Corporation Mobile 4 Series Chipset PCI Express Graphics Port (rev 07) (prog-if 00 [Normal decode])
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Bus: primary=00, secondary=01, subordinate=01, sec-latency=0
+	I/O behind bridge: 0000d000-0000dfff
+	Memory behind bridge: f2000000-f6efffff
+	Prefetchable memory behind bridge: 00000000e0000000-00000000eff00000
+	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
+	BridgeCtl: Parity- SERR+ NoISA- VGA+ MAbort- >Reset- FastB2B-
+	Capabilities: [88] #0d [0000]
+	Capabilities: [80] Power Management version 3
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [90] Message Signalled Interrupts: 64bit- Queue=0/0 Enable+
+		Address: fee00000  Data: 40d1
+	Capabilities: [a0] Express Root Port (Slot+) IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag-
+		Device: Latency L0s <64ns, L1 <1us
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed 2.5Gb/s, Width x16, ASPM L0s L1, Port 2
+		Link: Latency L0s <256ns, L1 <4us
+		Link: ASPM L0s Enabled RCB 64 bytes CommClk+ ExtSynch-
+		Link: Speed 2.5Gb/s, Width x1
+		Slot: AtnBtn- PwrCtrl- MRL- AtnInd- PwrInd- HotPlug+ Surpise-
+		Slot: Number 1, PowerLimit 75.000000
+		Slot: Enabled AtnBtn- PwrFlt- MRL- PresDet- CmdCplt- HPIrq-
+		Slot: AttnInd Off, PwrInd On, Power-
+		Root: Correctable- Non-Fatal- Fatal- PME-
+	Capabilities: [100] Virtual Channel
+	Capabilities: [140] Unknown (5)
+00: 86 80 41 2a 07 05 10 00 07 00 04 06 10 00 01 00
+10: 00 00 00 00 00 00 00 00 00 01 01 00 d0 d0 00 20
+20: 00 f2 e0 f6 01 e0 f1 ef 00 00 00 00 00 00 00 00
+30: 00 00 00 00 88 00 00 00 00 00 00 00 00 01 1a 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02
+80: 01 90 03 c8 00 00 00 00 0d 80 00 00 28 10 33 02
+90: 05 a0 01 00 00 00 e0 fe d1 40 00 00 00 00 00 00
+a0: 10 00 41 01 00 80 00 00 00 00 01 00 01 2d 01 02
+b0: 41 00 11 10 c0 25 0c 00 c0 01 48 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 01 03 04 00 00 a0 a0 0f 07 00 13 c0 00 00
+
+00:19.0 Ethernet controller: Intel Corporation 82567LM Gigabit Network Connection (rev 03)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 234
+	Region 0: Memory at f6fe0000 (32-bit, non-prefetchable) [size=128K]
+	Region 1: Memory at f6fdb000 (32-bit, non-prefetchable) [size=4K]
+	Region 2: I/O ports at efe0 [size=32]
+	Capabilities: [c8] Power Management version 2
+		Flags: PMEClk- DSI+ D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=1 PME-
+	Capabilities: [d0] Message Signalled Interrupts: 64bit+ Queue=0/0 Enable+
+		Address: 00000000fee00000  Data: 40ea
+	Capabilities: [e0] #13 [0306]
+00: 86 80 f5 10 07 01 10 00 03 00 00 02 00 00 00 00
+10: 00 00 fe f6 00 b0 fd f6 e1 ef 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 c8 00 00 00 00 00 00 00 0b 01 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 01 d0 22 c8 00 20 00 0d
+d0: 05 e0 81 00 00 00 e0 fe 00 00 00 00 ea 40 00 00
+e0: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+00:1a.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #4 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 58
+	Region 4: I/O ports at 6f60 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 37 29 05 00 90 02 03 00 03 0c 00 00 80 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 61 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0a 01 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1a.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #5 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin B routed to IRQ 66
+	Region 4: I/O ports at 6f80 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 38 29 05 00 90 02 03 00 03 0c 00 00 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 81 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 03 02 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1a.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #6 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin C routed to IRQ 50
+	Region 4: I/O ports at 6fa0 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 39 29 05 00 90 02 03 00 03 0c 00 00 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: a1 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0b 03 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1a.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI Controller #2 (rev 03) (prog-if 20 [EHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin C routed to IRQ 50
+	Region 0: Memory at fed1c400 (32-bit, non-prefetchable) [size=1K]
+	Capabilities: [50] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [58] Debug port
+	Capabilities: [98] #13 [0306]
+00: 86 80 3c 29 06 01 90 02 03 20 03 0c 00 00 00 00
+10: 00 c4 d1 fe 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0b 03 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 01 58 c2 c9 00 00 00 00 0a 98 a0 20 00 00 00 00
+60: 20 20 ff 01 00 00 00 00 01 00 00 00 00 00 08 00
+70: 00 00 e7 0f 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 11 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 13 00 06 03 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 aa ff 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 88 85 40 00 86 0f 03 00 0a 17 02 20
+
+00:1b.0 Audio device: Intel Corporation 82801I (ICH9 Family) HD Audio Controller (rev 03)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Interrupt: pin A routed to IRQ 66
+	Region 0: Memory at f6fdc000 (64-bit, non-prefetchable) [size=16K]
+	Capabilities: [50] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [60] Message Signalled Interrupts: 64bit+ Queue=0/0 Enable-
+		Address: 0000000000000000  Data: 0000
+	Capabilities: [70] Express Unknown type IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag-
+		Device: Latency L0s <64ns, L1 <1us
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed unknown, Width x0, ASPM unknown, Port 0
+		Link: Latency L0s <64ns, L1 <1us
+		Link: ASPM Disabled CommClk- ExtSynch-
+		Link: Speed unknown, Width x0
+	Capabilities: [100] Virtual Channel
+	Capabilities: [130] Unknown (5)
+00: 86 80 3e 29 06 01 10 00 03 00 03 04 10 00 00 00
+10: 04 c0 fd f6 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 03 01 00 00
+40: 01 00 00 07 00 00 00 00 00 00 00 00 00 00 00 00
+50: 01 60 42 c8 00 00 00 00 00 00 00 00 00 00 00 00
+60: 05 70 80 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 10 00 91 00 00 00 00 10 00 08 10 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 04 00 01 00 00 00 00 31 00 a3 02 00 00 00 00
+d0: 61 00 a3 02 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1c.0 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express Port 1 (rev 03) (prog-if 00 [Normal decode])
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Bus: primary=00, secondary=0b, subordinate=0b, sec-latency=0
+	I/O behind bridge: 0000f000-00000fff
+	Memory behind bridge: fff00000-000fffff
+	Prefetchable memory behind bridge: 00000000fff00000-0000000000000000
+	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
+	BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+	Capabilities: [40] Express Root Port (Slot+) IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag-
+		Device: Latency L0s <64ns, L1 <1us
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed 2.5Gb/s, Width x1, ASPM L0s L1, Port 1
+		Link: Latency L0s <1us, L1 <4us
+		Link: ASPM Disabled RCB 64 bytes CommClk- ExtSynch-
+		Link: Speed 2.5Gb/s, Width x0
+		Slot: AtnBtn- PwrCtrl- MRL- AtnInd- PwrInd- HotPlug+ Surpise+
+		Slot: Number 0, PowerLimit 6.500000
+		Slot: Enabled AtnBtn- PwrFlt- MRL- PresDet+ CmdCplt- HPIrq-
+		Slot: AttnInd Unknown, PwrInd Unknown, Power-
+		Root: Correctable- Non-Fatal- Fatal- PME-
+	Capabilities: [80] Message Signalled Interrupts: 64bit- Queue=0/0 Enable+
+		Address: fee00000  Data: 40d9
+	Capabilities: [90] #0d [0000]
+	Capabilities: [a0] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [100] Virtual Channel
+	Capabilities: [180] Unknown (5)
+00: 86 80 40 29 07 05 10 00 03 00 04 06 10 00 81 00
+10: 00 00 00 00 00 00 00 00 00 0b 0b 00 f0 00 00 20
+20: f0 ff 00 00 f1 ff 01 00 00 00 00 00 00 00 00 00
+30: 00 00 00 00 40 00 00 00 00 00 00 00 00 01 02 00
+40: 10 80 41 01 00 80 00 00 00 00 10 00 11 4c 11 01
+50: 00 00 01 10 e0 a0 00 00 08 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 05 90 01 00 00 00 e0 fe d9 40 00 00 00 00 00 00
+90: 0d a0 00 00 28 10 33 02 00 00 00 00 00 00 00 00
+a0: 01 00 02 c8 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 11 c8 00 00 00 00
+e0: 00 0f c7 00 06 07 08 00 33 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1c.1 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express Port 2 (rev 03) (prog-if 00 [Normal decode])
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Bus: primary=00, secondary=0c, subordinate=0c, sec-latency=0
+	I/O behind bridge: 0000f000-00000fff
+	Memory behind bridge: f1f00000-f1ffffff
+	Prefetchable memory behind bridge: 00000000fff00000-0000000000000000
+	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
+	BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+	Capabilities: [40] Express Root Port (Slot+) IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag-
+		Device: Latency L0s <64ns, L1 <1us
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed 2.5Gb/s, Width x1, ASPM L0s L1, Port 2
+		Link: Latency L0s <256ns, L1 <4us
+		Link: ASPM L0s L1 Enabled RCB 64 bytes CommClk+ ExtSynch-
+		Link: Speed 2.5Gb/s, Width x1
+		Slot: AtnBtn- PwrCtrl- MRL- AtnInd- PwrInd- HotPlug+ Surpise+
+		Slot: Number 1, PowerLimit 6.500000
+		Slot: Enabled AtnBtn- PwrFlt- MRL- PresDet+ CmdCplt- HPIrq-
+		Slot: AttnInd Unknown, PwrInd Unknown, Power-
+		Root: Correctable- Non-Fatal- Fatal- PME-
+	Capabilities: [80] Message Signalled Interrupts: 64bit- Queue=0/0 Enable+
+		Address: fee00000  Data: 40e1
+	Capabilities: [90] #0d [0000]
+	Capabilities: [a0] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [100] Virtual Channel
+	Capabilities: [180] Unknown (5)
+00: 86 80 42 29 07 05 10 00 03 00 04 06 10 00 81 00
+10: 00 00 00 00 00 00 00 00 00 0c 0c 00 f0 00 00 20
+20: f0 f1 f0 f1 f1 ff 01 00 00 00 00 00 00 00 00 00
+30: 00 00 00 00 40 00 00 00 00 00 00 00 00 02 02 00
+40: 10 80 41 01 00 80 00 00 00 00 11 00 11 2c 11 02
+50: 43 00 11 30 e0 a0 08 00 08 00 40 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 05 90 01 00 00 00 e0 fe e1 40 00 00 00 00 00 00
+90: 0d a0 00 00 28 10 33 02 00 00 00 00 00 00 00 00
+a0: 01 00 02 c8 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 11 c8 00 00 00 00
+e0: 00 0f c7 00 06 07 08 00 33 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1c.2 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express Port 3 (rev 03) (prog-if 00 [Normal decode])
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Bus: primary=00, secondary=0d, subordinate=0d, sec-latency=0
+	I/O behind bridge: 0000f000-00000fff
+	Memory behind bridge: fff00000-000fffff
+	Prefetchable memory behind bridge: 00000000fff00000-0000000000000000
+	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
+	BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+	Capabilities: [40] Express Root Port (Slot+) IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag-
+		Device: Latency L0s <64ns, L1 <1us
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed 2.5Gb/s, Width x1, ASPM L0s L1, Port 3
+		Link: Latency L0s <1us, L1 <4us
+		Link: ASPM Disabled RCB 64 bytes CommClk- ExtSynch-
+		Link: Speed 2.5Gb/s, Width x0
+		Slot: AtnBtn- PwrCtrl- MRL- AtnInd- PwrInd- HotPlug+ Surpise+
+		Slot: Number 2, PowerLimit 6.500000
+		Slot: Enabled AtnBtn- PwrFlt- MRL- PresDet+ CmdCplt- HPIrq-
+		Slot: AttnInd Unknown, PwrInd Unknown, Power-
+		Root: Correctable- Non-Fatal- Fatal- PME-
+	Capabilities: [80] Message Signalled Interrupts: 64bit- Queue=0/0 Enable+
+		Address: fee00000  Data: 40e9
+	Capabilities: [90] #0d [0000]
+	Capabilities: [a0] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [100] Virtual Channel
+	Capabilities: [180] Unknown (5)
+00: 86 80 44 29 07 05 10 00 03 00 04 06 10 00 81 00
+10: 00 00 00 00 00 00 00 00 00 0d 0d 00 f0 00 00 20
+20: f0 ff 00 00 f1 ff 01 00 00 00 00 00 00 00 00 00
+30: 00 00 00 00 40 00 00 00 00 00 00 00 00 03 02 00
+40: 10 80 41 01 00 80 00 00 00 00 10 00 11 4c 11 03
+50: 00 00 01 10 e0 a0 10 00 08 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 05 90 01 00 00 00 e0 fe e9 40 00 00 00 00 00 00
+90: 0d a0 00 00 28 10 33 02 00 00 00 00 00 00 00 00
+a0: 01 00 02 c8 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 11 c8 00 00 00 00
+e0: 00 0f c7 00 06 07 08 00 33 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1d.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #1 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 58
+	Region 4: I/O ports at 6f00 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 34 29 05 00 90 02 03 00 03 0c 00 00 80 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 01 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0a 01 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1d.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #2 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin B routed to IRQ 66
+	Region 4: I/O ports at 6f20 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 35 29 05 00 90 02 03 00 03 0c 00 00 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 21 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 03 02 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1d.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI Controller #3 (rev 03) (prog-if 00 [UHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin C routed to IRQ 50
+	Region 4: I/O ports at 6f40 [size=32]
+	Capabilities: [50] #13 [0306]
+00: 86 80 36 29 05 00 90 02 03 00 03 0c 00 00 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 41 6f 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0b 03 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+60: 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 2f 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1d.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI Controller #1 (rev 03) (prog-if 20 [EHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 58
+	Region 0: Memory at fed1c000 (32-bit, non-prefetchable) [size=1K]
+	Capabilities: [50] Power Management version 2
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [58] Debug port
+	Capabilities: [98] #13 [0306]
+00: 86 80 3a 29 06 01 90 02 03 20 03 0c 00 00 00 00
+10: 00 c0 d1 fe 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 50 00 00 00 00 00 00 00 0a 01 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 01 58 c2 c9 00 00 00 00 0a 98 a0 20 00 00 00 00
+60: 20 20 ff 01 00 00 00 00 01 00 00 00 00 00 08 00
+70: 00 00 e7 0f 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 11 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 13 00 06 03 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 aa ff 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 88 85 40 00 86 0f 03 00 0a 17 02 20
+
+00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev 93) (prog-if 01 [Subtractive decode])
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Bus: primary=00, secondary=03, subordinate=07, sec-latency=32
+	I/O behind bridge: 00002000-00002fff
+	Memory behind bridge: f1e00000-f1efffff
+	Prefetchable memory behind bridge: 00000000fc000000-00000000fdf00000
+	Secondary status: 66MHz- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
+	BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+	Capabilities: [50] #0d [0000]
+00: 86 80 48 24 07 01 10 00 93 01 04 06 00 00 01 00
+10: 00 00 00 00 00 00 00 00 00 03 07 20 20 20 80 22
+20: e0 f1 e0 f1 01 fc f1 fd 00 00 00 00 00 00 00 00
+30: 00 00 00 00 50 00 00 00 00 00 00 00 ff 00 02 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 0d 00 00 00 28 10 33 02 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1f.0 ISA bridge: Intel Corporation ICH9M-E LPC Interface Controller (rev 03)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Capabilities: [e0] Vendor Specific Information
+00: 86 80 17 29 07 01 10 02 03 00 01 06 00 00 80 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 e0 00 00 00 00 00 00 00 00 00 00 00
+40: 01 10 00 00 80 00 00 00 81 10 00 00 10 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 80 80 80 80 d1 00 00 00 80 80 80 80 f8 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 10 00 02 3c 01 09 7c 00 00 00 00 00 81 0c 3c 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 20 0e 00 00 39 00 80 00 2b 1c 4a 00 00 03 00 40
+b0: 00 00 f0 00 00 00 00 00 08 00 01 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 80 f0 00 00 08 00 00 00
+e0: 09 00 0c 10 00 02 c4 03 04 00 00 00 00 00 00 00
+f0: 01 80 d1 fe 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1f.2 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE Controller (rev 03) (prog-if 8f [Master SecP SecO PriP PriO])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz+ UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin D routed to IRQ 193
+	Region 0: I/O ports at 6e70 [size=8]
+	Region 1: I/O ports at 6e78 [size=4]
+	Region 2: I/O ports at 6e80 [size=8]
+	Region 3: I/O ports at 6e88 [size=4]
+	Region 4: I/O ports at 6ea0 [size=16]
+	Region 5: I/O ports at 6e90 [size=16]
+	Capabilities: [70] Power Management version 3
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [b0] #13 [0306]
+00: 86 80 28 29 07 00 b0 02 03 8f 01 01 00 00 00 00
+10: 71 6e 00 00 79 6e 00 00 81 6e 00 00 89 6e 00 00
+20: a1 6e 00 00 91 6e 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 70 00 00 00 00 00 00 00 0a 04 00 00
+40: 0f e3 0f e3 00 00 00 00 01 00 00 00 00 00 00 00
+50: 00 00 00 00 f0 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 01 b0 03 00 08 00 00 00 00 00 00 00 00 00 00 00
+80: 05 70 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 30 03 83 93 01 00 0c 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller (rev 03)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Interrupt: pin B routed to IRQ 193
+	Region 0: Memory at f6fdaf00 (64-bit, non-prefetchable) [size=256]
+	Region 4: I/O ports at 1100 [size=32]
+00: 86 80 30 29 03 01 80 02 03 00 05 0c 00 00 00 00
+10: 04 af fd f6 00 00 00 00 00 00 00 00 00 00 00 00
+20: 01 11 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 00 00 00 00 00 00 00 00 0a 02 00 00
+40: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 03 04 04 00 00 00 08 08 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+00:1f.5 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE Controller (rev 03) (prog-if 85 [Master SecO PriO])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz+ UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin D routed to IRQ 193
+	Region 0: I/O ports at 6eb0 [size=8]
+	Region 1: I/O ports at 6eb8 [size=4]
+	Region 2: I/O ports at 6ec0 [size=8]
+	Region 3: I/O ports at 6ec8 [size=4]
+	Region 4: I/O ports at 6ee0 [size=16]
+	Region 5: I/O ports at efa0 [size=16]
+	Capabilities: [70] Power Management version 3
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [b0] #13 [0306]
+00: 86 80 2d 29 07 00 b0 02 03 85 01 01 00 00 00 00
+10: b1 6e 00 00 b9 6e 00 00 c1 6e 00 00 c9 6e 00 00
+20: e1 6e 00 00 a1 ef 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 70 00 00 00 00 00 00 00 0a 04 00 00
+40: 0f e3 0f e3 00 00 00 00 01 00 00 00 00 00 00 00
+50: 00 00 00 00 f0 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 01 b0 03 00 08 00 00 00 00 00 00 00 00 00 00 00
+80: 05 70 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 13 00 06 03 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 86 0f 03 00 00 00 00 00
+
+01:00.0 VGA compatible controller: nVidia Corporation Unknown device 06eb (rev a1) (prog-if 00 [VGA controller])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 169
+	Region 0: Memory at f5000000 (32-bit, non-prefetchable) [size=16M]
+	Region 1: Memory at e0000000 (64-bit, prefetchable) [size=256M]
+	Region 3: Memory at f2000000 (64-bit, non-prefetchable) [size=32M]
+	Region 5: I/O ports at df00 [size=128]
+	[virtual] Expansion ROM at f4000000 [disabled] [size=128K]
+	Capabilities: [60] Power Management version 3
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+		Status: D0 PME-Enable- DSel=0 DScale=0 PME-
+	Capabilities: [68] Message Signalled Interrupts: 64bit+ Queue=0/0 Enable-
+		Address: 0000000000000000  Data: 0000
+	Capabilities: [78] Express Endpoint IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag+
+		Device: Latency L0s <256ns, L1 <4us
+		Device: AtnBtn- AtnInd- PwrInd-
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
+		Device: MaxPayload 128 bytes, MaxReadReq 512 bytes
+		Link: Supported Speed unknown, Width x16, ASPM L0s L1, Port 0
+		Link: Latency L0s <256ns, L1 <1us
+		Link: ASPM L0s Enabled RCB 128 bytes CommClk+ ExtSynch-
+		Link: Speed 2.5Gb/s, Width x1
+	Capabilities: [100] Virtual Channel
+	Capabilities: [128] Power Budgeting
+	Capabilities: [600] Unknown (11)
+00: de 10 eb 06 07 00 10 00 a1 00 00 03 00 00 00 00
+10: 00 00 00 f5 0c 00 00 e0 00 00 00 00 04 00 00 f2
+20: 00 00 00 00 01 df 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 60 00 00 00 00 00 00 00 03 01 00 00
+40: 28 10 33 02 00 00 00 00 00 00 00 00 00 00 00 00
+50: 01 00 00 00 01 00 00 00 ce d6 23 00 00 00 00 00
+60: 01 68 03 00 08 00 00 00 05 78 80 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 10 00 02 00 a0 84 2c 01
+80: 10 29 00 00 02 2d 00 00 49 00 11 10 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00
+a0: 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+03:01.0 CardBus bridge: Ricoh Co Ltd RL5c476 II (rev ba)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 168
+	Interrupt: pin A routed to IRQ 193
+	Region 0: Memory at f1e00000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=03, secondary=04, subordinate=07, sec-latency=176
+	Memory window 0: fc000000-fdfff000 (prefetchable)
+	Memory window 1: 20000000-21fff000
+	I/O window 0: 00002000-000020ff
+	I/O window 1: 00002400-000024ff
+	BridgeCtl: Parity- SERR- ISA- VGA- MAbort- >Reset- 16bInt+ PostWrite+
+	16-bit legacy interface ports at 0001
+00: 80 11 76 04 07 00 10 02 ba 00 07 06 00 a8 82 00
+10: 00 00 e0 f1 dc 00 00 02 03 04 07 b0 00 00 00 fc
+20: 00 f0 ff fd 00 00 00 20 00 f0 ff 21 00 20 00 00
+30: fc 20 00 00 00 24 00 00 fc 24 00 00 0a 01 80 05
+40: 28 10 33 02 01 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 01 00 a0 30 00 03 00 00 63 04 63 04 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 b0 00 30 00 00 00 00 00 00
+c0: 28 10 33 02 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 01 00 0a fe
+e0: 00 40 c0 24 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+03:01.1 FireWire (IEEE 1394): Ricoh Co Ltd R5C832 IEEE 1394 Controller (rev 04) (prog-if 10 [OHCI])
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 64 (500ns min, 1000ns max), Cache Line Size: 64 bytes
+	Interrupt: pin B routed to IRQ 10
+	Region 0: Memory at f1eff800 (32-bit, non-prefetchable) [size=2K]
+	Capabilities: [dc] Power Management version 2
+		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=0mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=2 PME-
+00: 80 11 32 08 06 01 10 02 04 10 00 0c 10 40 80 00
+10: 00 f8 ef f1 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 dc 00 00 00 00 00 00 00 0a 02 02 04
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 80 16 00 00 00 00 00 20 00 00 66 66 32 12
+90: 48 60 66 10 00 00 02 00 50 00 00 00 01 01 18 00
+a0: 00 00 00 00 00 00 00 00 20 00 00 00 28 10 33 02
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 04
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 01 00 02 fe
+e0: 00 40 00 48 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+03:01.2 SD Host controller: Ricoh Co Ltd R5C822 SD/SDIO/MMC/MS/MSPro Host Adapter (rev 21) (prog-if 01)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 64, Cache Line Size: 64 bytes
+	Interrupt: pin C routed to IRQ 185
+	Region 0: Memory at f1eff600 (32-bit, non-prefetchable) [size=256]
+	Capabilities: [80] Power Management version 2
+		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=0mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=2 PME-
+00: 80 11 22 08 06 01 10 02 21 01 05 08 10 40 80 00
+10: 00 f6 ef f1 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 80 00 00 00 00 00 00 00 0b 03 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 01 00 02 fe 00 40 00 48 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+b0: 04 00 02 00 00 00 00 00 00 00 00 00 a0 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: a1 21 e0 01 00 00 00 00 40 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 c1 00 20 02 00 00 00 00
+
+03:01.3 System peripheral: Ricoh Co Ltd R5C843 MMC Host Controller (rev 11)
+	Subsystem: Dell Unknown device 0233
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 64, Cache Line Size: 64 bytes
+	Interrupt: pin C routed to IRQ 11
+	Region 0: Memory at f1eff700 (32-bit, non-prefetchable) [size=256]
+	Capabilities: [80] Power Management version 2
+		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=0mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=2 PME-
+00: 80 11 43 08 06 01 10 02 11 00 80 08 10 40 80 00
+10: 00 f7 ef f1 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+30: 00 00 00 00 80 00 00 00 00 00 00 00 0b 03 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 01 00 02 fe 00 40 00 48 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 33 02
+b0: 00 00 02 00 00 00 00 00 00 00 00 00 a0 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 80 02 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 c0 00 20 02 00 00 00 00
+
+0c:00.0 Network controller: Broadcom Corporation BCM4312 802.11b/g (rev 01)
+	Subsystem: Dell Wireless 1397 WLAN Mini-Card
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR-
+	Latency: 0, Cache Line Size: 64 bytes
+	Interrupt: pin A routed to IRQ 177
+	Region 0: Memory at f1ffc000 (64-bit, non-prefetchable) [size=16K]
+	Capabilities: [40] Power Management version 3
+		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 PME-Enable- DSel=0 DScale=2 PME-
+	Capabilities: [58] Vendor Specific Information
+	Capabilities: [e8] Message Signalled Interrupts: 64bit+ Queue=0/0 Enable-
+		Address: 0000000000000000  Data: 0000
+	Capabilities: [d0] Express Endpoint IRQ 0
+		Device: Supported: MaxPayload 128 bytes, PhantFunc 0, ExtTag+
+		Device: Latency L0s <4us, L1 unlimited
+		Device: AtnBtn- AtnInd- PwrInd-
+		Device: Errors: Correctable- Non-Fatal- Fatal- Unsupported-
+		Device: RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+		Device: MaxPayload 128 bytes, MaxReadReq 128 bytes
+		Link: Supported Speed 2.5Gb/s, Width x1, ASPM L0s L1, Port 0
+		Link: Latency L0s <4us, L1 <64us
+		Link: ASPM L0s L1 Enabled RCB 64 bytes CommClk+ ExtSynch-
+		Link: Speed 2.5Gb/s, Width x1
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [13c] Virtual Channel
+	Capabilities: [160] Device Serial Number 22-00-63-ff-ff-5f-85-29
+	Capabilities: [16c] Power Budgeting
+00: e4 14 15 43 06 01 10 00 01 00 80 02 10 00 00 00
+10: 04 c0 ff f1 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 28 10 0c 00
+30: 00 00 00 00 40 00 00 00 00 00 00 00 0a 01 00 00
+40: 01 58 03 ce 08 40 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 09 e8 78 00 09 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 10 00 18 00 00 00 00 01 00 00 00 03 00 00 00
+90: 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 10 00 01 00 a0 8f 04 05 00 00 09 00 11 6c 07 00
+e0: 43 01 11 10 00 00 00 00 05 d0 80 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+

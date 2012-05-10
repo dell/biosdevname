@@ -460,7 +460,7 @@ static void scan_sriov(struct libbiosdevname_state *state)
 			continue;
 		while ((de = readdir(dir)) != NULL) {
 			if (sscanf(de->d_name, "virtfn%u", &vf_index) != 1)
-				continue;
+			  continue;
 
 			/* find virtual function from virtfnX link */
 			snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/%s", pci_name, de->d_name);

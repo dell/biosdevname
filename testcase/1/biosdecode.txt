@@ -1,0 +1,33 @@
+# biosdecode 2.11
+BIOS32 Service Directory present.
+        Revision: 0
+        Calling Interface Address: 0x000F0010
+PCI Interrupt Routing 1.0 present.
+        Router ID: 00:1f.0
+        Exclusive IRQs: None
+        Compatible Router: 8086:27b0
+        Slot Entry 1: ID 00:01, on-board
+        Slot Entry 2: ID 00:02, on-board
+        Slot Entry 3: ID 00:1e, on-board
+        Slot Entry 4: ID 00:1f, on-board
+        Slot Entry 5: ID 00:1d, on-board
+        Slot Entry 6: ID 00:1b, on-board
+        Slot Entry 7: ID 00:1c, on-board
+        Slot Entry 8: ID 02:00, slot number 18
+        Slot Entry 9: ID 03:01, slot number 2
+        Slot Entry 10: ID 03:02, slot number 1
+        Slot Entry 11: ID 01:00, on-board
+PNP BIOS 1.0 present.
+        Event Notification: Not Supported
+        Real Mode 16-bit Code Address: F000:6692
+        Real Mode 16-bit Data Address: F000:0000
+        16-bit Protected Mode Code Address: 0x000F66BA
+        16-bit Protected Mode Data Address: 0x000F0000
+ACPI 1.0 present.
+        OEM Identifier: ACPIAM
+        RSD Table 32-bit Address: 0xCFEB0000
+SMBIOS 2.4 present.
+        Structure Table Length: 1402 bytes
+        Structure Table Address: 0x000FCCA0
+        Number Of Structures: 28
+        Maximum Structure Size: 186 bytes

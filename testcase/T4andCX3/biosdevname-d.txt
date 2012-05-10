@@ -1,0 +1,146 @@
+BIOS device: em1
+Kernel name: eth0
+Permanent MAC: 00:21:9B:99:6C:C8
+Assigned MAC : 00:21:9B:99:6C:C8
+ifIndex: 2
+Driver: bnx2
+Driver version: 2.1.11
+Firmware version: 6.0.1 bc 5.2.3 NCSI 2.0.10
+Bus Info: 0000:01:00.0
+PCI name      : 0000:01:00.0
+PCI Slot      : embedded
+SMBIOS Device Type: Ethernet
+SMBIOS Instance: 1
+SMBIOS Label: Embedded NIC 1
+sysfs Index: 1
+sysfs Label: Embedded NIC 1                          
+Embedded Index: 1
+
+BIOS device: em2
+Kernel name: eth1
+Permanent MAC: 00:21:9B:99:6C:CA
+Assigned MAC : 00:21:9B:99:6C:CA
+ifIndex: 3
+Driver: bnx2
+Driver version: 2.1.11
+Firmware version: 6.0.1 bc 5.2.3 NCSI 2.0.10
+Bus Info: 0000:01:00.1
+PCI name      : 0000:01:00.1
+PCI Slot      : embedded
+SMBIOS Device Type: Ethernet
+SMBIOS Instance: 2
+SMBIOS Label: Embedded NIC 2
+sysfs Index: 2
+sysfs Label: Embedded NIC 2                          
+Embedded Index: 2
+
+BIOS device: em3
+Kernel name: eth2
+Permanent MAC: 00:21:9B:99:6C:CC
+Assigned MAC : 00:21:9B:99:6C:CC
+ifIndex: 4
+Driver: bnx2
+Driver version: 2.1.11
+Firmware version: 6.0.1 bc 5.2.3 NCSI 2.0.10
+Bus Info: 0000:02:00.0
+PCI name      : 0000:02:00.0
+PCI Slot      : embedded
+SMBIOS Device Type: Ethernet
+SMBIOS Instance: 3
+SMBIOS Label: Embedded NIC 3
+sysfs Index: 3
+sysfs Label: Embedded NIC 3                          
+Embedded Index: 3
+
+BIOS device: em4
+Kernel name: eth3
+Permanent MAC: 00:21:9B:99:6C:CE
+Assigned MAC : 00:21:9B:99:6C:CE
+ifIndex: 5
+Driver: bnx2
+Driver version: 2.1.11
+Firmware version: 6.0.1 bc 5.2.3 NCSI 2.0.10
+Bus Info: 0000:02:00.1
+PCI name      : 0000:02:00.1
+PCI Slot      : embedded
+SMBIOS Device Type: Ethernet
+SMBIOS Instance: 4
+SMBIOS Label: Embedded NIC 4
+sysfs Index: 4
+sysfs Label: Embedded NIC 4                          
+Embedded Index: 4
+
+BIOS device: p1p5
+Kernel name: eth6
+Permanent MAC: 00:07:43:10:52:B0
+Assigned MAC : 00:07:43:10:52:B0
+ifIndex: 6
+Driver: cxgb4
+Driver version: 1.3.0-ko
+Firmware version: 1.3.10.0, TP 0.1.7.0
+Bus Info: 0000:04:00.4
+PCI name      : 0000:04:00.4
+PCI Slot      : 1
+SMBIOS Label: PCI1
+Index in slot: 5
+
+BIOS device: p1p2
+Kernel name: eth8
+Permanent MAC: 00:07:43:10:52:B8
+Assigned MAC : 00:07:43:10:52:B8
+ifIndex: 7
+Driver: cxgb4
+Driver version: 1.3.0-ko
+Firmware version: 1.3.10.0, TP 0.1.7.0
+Bus Info: 0000:04:00.4
+PCI name      : 0000:04:00.4
+PCI Slot      : 1
+SMBIOS Label: PCI1
+Index in slot: 5
+
+BIOS device: p2p1
+Kernel name: eth4
+Permanent MAC: 00:02:C9:31:8A:30
+Assigned MAC : 00:02:C9:31:8A:30
+ifIndex: 8
+Driver: mlx4_en
+Driver version: 1.5.4.1 (March 2011)
+Firmware version: 2.10.600
+Bus Info: 0000:05:00.0
+PCI name      : 0000:05:00.0
+PCI Slot      : 2
+SMBIOS Label: PCI2
+Index in slot: 1
+
+BIOS device: p2p2
+Kernel name: eth5
+Permanent MAC: 00:02:C9:31:8A:31
+Assigned MAC : 00:02:C9:31:8A:31
+ifIndex: 9
+Driver: mlx4_en
+Driver version: 1.5.4.1 (March 2011)
+Firmware version: 2.10.600
+Bus Info: 0000:05:00.0
+PCI name      : 0000:05:00.0
+PCI Slot      : 2
+SMBIOS Label: PCI2
+Index in slot: 1
+
+BIOS device: 
+Kernel name: vlan816
+Assigned MAC : 00:02:C9:31:8A:30
+ifIndex: 10
+Driver: 802.1Q VLAN Support
+Driver version: 1.8
+Firmware version: N/A
+Bus Info: 
+
+BIOS device: 
+Kernel name: vlan824
+Assigned MAC : 00:07:43:10:52:B0
+ifIndex: 11
+Driver: 802.1Q VLAN Support
+Driver version: 1.8
+Firmware version: N/A
+Bus Info: 
+

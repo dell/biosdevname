@@ -1,0 +1,42 @@
+# biosdecode 2.7
+SYSID present.
+	Revision: 0
+	Structure Table Address: 0x000F6551
+	Number Of Structures: 1
+SMBIOS 2.4 present.
+	Structure Table Length: 2803 bytes
+	Structure Table Address: 0x000F6590
+	Number Of Structures: 57
+	Maximum Structure Size: 253 bytes
+PCI Interrupt Routing 1.0 present.
+	Router ID: 00:1f.0
+	Exclusive IRQs: None
+	Compatible Router: 8086:1234
+	Slot Entry 1: ID 00:03, on-board
+	Slot Entry 2: ID 00:1d, on-board
+	Slot Entry 3: ID 00:1a, on-board
+	Slot Entry 4: ID 00:1b, on-board
+	Slot Entry 5: ID 00:1f, on-board
+	Slot Entry 6: ID 00:02, on-board
+	Slot Entry 7: ID 01:00, on-board
+	Slot Entry 8: ID 00:19, on-board
+	Slot Entry 9: ID 03:01, on-board
+	Slot Entry 10: ID 00:03, on-board
+	Slot Entry 11: ID 0b:00, on-board
+	Slot Entry 12: ID 0c:00, on-board
+	Slot Entry 13: ID 0d:00, on-board
+	Slot Entry 14: ID ff:00, on-board
+ACPI 2.0 present.
+	OEM Identifier: DELL  
+	RSD Table 32-bit Address: 0xDF4502E5
+	XSD Table 64-bit Address: 0x00000000DF451E00
+PNP BIOS 1.0 present.
+	Event Notification: Polling
+	Event Notification Flag Address: 0x000004B4
+	Real Mode 16-bit Code Address: F000:E2F1
+	Real Mode 16-bit Data Address: 0040:0000
+	16-bit Protected Mode Code Address: 0x000FE2F4
+	16-bit Protected Mode Data Address: 0x00000040
+BIOS32 Service Directory present.
+	Revision: 0
+	Calling Interface Address: 0x000FFA10

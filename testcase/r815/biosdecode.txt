@@ -1,0 +1,55 @@
+# biosdecode 2.11
+ACPI 2.0 present.
+	OEM Identifier: DELL  
+	RSD Table 32-bit Address: 0x000F1244
+	XSD Table 64-bit Address: 0x00000000000F12A8
+PCI Interrupt Routing 1.0 present.
+	Router ID: 00:14.3
+	Exclusive IRQs: None
+	Compatible Router: 1002:439d
+	Slot Entry 1: ID 00:00, on-board
+	Slot Entry 2: ID 00:02, on-board
+	Slot Entry 3: ID 00:03, on-board
+	Slot Entry 4: ID 00:04, on-board
+	Slot Entry 5: ID 00:09, on-board
+	Slot Entry 6: ID 00:11, on-board
+	Slot Entry 7: ID 00:12, on-board
+	Slot Entry 8: ID 00:13, on-board
+	Slot Entry 9: ID 00:14, on-board
+	Slot Entry 10: ID 20:00, on-board
+	Slot Entry 11: ID 20:02, on-board
+	Slot Entry 12: ID 20:03, on-board
+	Slot Entry 13: ID 20:0b, on-board
+	Slot Entry 14: ID 01:00, on-board
+	Slot Entry 15: ID 02:00, on-board
+	Slot Entry 16: ID 03:00, on-board
+	Slot Entry 17: ID 04:00, on-board
+	Slot Entry 18: ID 04:01, on-board
+	Slot Entry 19: ID 04:04, on-board
+	Slot Entry 20: ID 04:05, on-board
+	Slot Entry 21: ID 05:00, on-board
+	Slot Entry 22: ID 06:00, slot number 2
+	Slot Entry 23: ID 08:00, slot number 1
+	Slot Entry 24: ID 09:00, slot number 4
+	Slot Entry 25: ID 0a:03, on-board
+	Slot Entry 26: ID 21:00, slot number 3
+	Slot Entry 27: ID 22:00, slot number 6
+	Slot Entry 28: ID 23:00, slot number 5
+BIOS32 Service Directory present.
+	Revision: 0
+	Calling Interface Address: 0x000FA140
+SYSID present.
+	Revision: 0
+	Structure Table Address: 0x000FC9F1
+	Number Of Structures: 1
+SMBIOS 2.6 present.
+	Structure Table Length: 6729 bytes
+	Structure Table Address: 0xDF79C000
+	Number Of Structures: 103
+	Maximum Structure Size: 682 bytes
+PNP BIOS 1.0 present.
+	Event Notification: Not Supported
+	Real Mode 16-bit Code Address: F000:E2F1
+	Real Mode 16-bit Data Address: 0040:0000
+	16-bit Protected Mode Code Address: 0x000FE2F4
+	16-bit Protected Mode Data Address: 0x00000040
