@@ -287,14 +287,29 @@ static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *f
 	return 0;
 }
 
+static int cmppci(const void *a, const void *b)
+{
+	const struct pci_dev *pa = a;
+	const struct pci_dev *pb = b;
+	
+	if (pa->domain < pb->domain) return -1;
+	if (pa->domain > pb->domain) return 1;
+
+	if (pa->bus < pb->bus) return -1;
+	if (pa->bus > pb->bus) return 1;
+
+	if (pa->dev < pb->dev) return -1;
+	if (pa->dev > pb->dev) return 1;
+
+	if (pa->func < pb->func) return -1;
+	if (pa->func > pb->func) return 1;
+
+	return 0;
+}
+
 static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
 {
-	if (pci_domain_nr(a) == pci_domain_nr(b) &&
-	    a->bus == b->bus &&
-	    a->dev == b->dev &&
-	    a->func == b->func)
-		return 1;
-	return 0;
+	return cmppci(a, b) == 0;
 }
 
 /*
@@ -366,27 +381,6 @@ static void fill_pci_dev_sysfs(struct pci_device *dev, struct pci_dev *p)
 		dev->uses_sysfs |= HAS_SYSFS_LABEL;
 	}
 }
-
-static int cmppci(const void *a, const void *b)
-{
-	const struct pci_dev *pa = a;
-	const struct pci_dev *pb = b;
-	
-	if (pa->domain < pb->domain) return -1;
-	if (pa->domain > pb->domain) return 1;
-
-	if (pa->bus < pb->bus) return -1;
-	if (pa->bus > pb->bus) return 1;
-
-	if (pa->dev < pb->dev) return -1;
-	if (pa->dev > pb->dev) return 1;
-
-	if (pa->func < pb->func) return -1;
-	if (pa->func > pb->func) return 1;
-
-	return 0;
-}
-
 
 static void add_pci_dev(struct libbiosdevname_state *state,
 			struct pci_dev *p)
@@ -493,6 +487,49 @@ static void scan_npar(struct libbiosdevname_state *state)
 	}
 }
 
+static void set_slot_index(struct libbiosdevname_state *state, int sbus, int slot, int *index)
+{
+	struct pci_device *a;
+
+	list_for_each_entry(a, &state->pci_devices, node) {
+		if (a->pci_dev->bus != sbus)
+			continue;
+		if (a->sbus != -1) {
+			set_slot_index(state, a->sbus, slot, index);
+		} else if (is_pci_network(a)) {
+			if (slot == 0)
+				a->embedded_index = (*index)++;
+			else
+				a->index_in_slot = (*index)++;
+			a->physical_slot = slot;
+		}
+	}
+}
+
+static void scan_slots(struct libbiosdevname_state *state)
+{
+	struct pci_device *a, *pf;
+	int pirq, pcie, smbios, sysfs;
+	
+	list_for_each_entry(a, &state->pci_devices, node) {
+		pf = a;
+		if (!is_pci_network(a))
+			continue;
+		printf("%.4x:%.2x:%.2x.%x\n", pf->pci_dev->domain, pf->pci_dev->bus, pf->pci_dev->dev, pf->pci_dev->func);
+		if (a->pf != NULL)
+			pf = a->pf;
+		pirq = pirq_pci_dev_to_slot(state->pirq_table, pf->pci_dev->domain, pf->pci_dev->bus, pf->pci_dev->dev);
+		if (pf->physical_slot != PHYSICAL_SLOT_UNKNOWN)
+			printf("  phys: %d\n", pf->physical_slot);
+		if (pf->smbios_type)
+			printf("  smbios: %d.%d\n", pf->smbios_type, pf->smbios_instance);
+		if (pf->pcie_slot != PHYSICAL_SLOT_UNKNOWN)
+			printf("  pcie: %d\n", pf->pcie_slot);
+		if (pirq != INT_MAX)
+			printf("  pirq: %d\n", pirq);
+	}
+}
+
 int get_pci_devices(struct libbiosdevname_state *state)
 {
 	struct pci_access *pacc;
@@ -521,6 +558,8 @@ int get_pci_devices(struct libbiosdevname_state *state)
 
 	/* ordering here is important */
 	dmidecode_main(state);	/* this will fail on Xen guests, that's OK */
+
+	scan_slots(state);
 
 	return rc;
 }
@@ -614,17 +653,6 @@ int unparse_pci_device(char *buf, const int size, const struct pci_device *p)
 	}
 
 	return (s-buf);
-}
-
-struct pci_device * find_dev_by_pci(const struct libbiosdevname_state *state,
-				    const struct pci_dev *p)
-{
-	struct pci_device *dev;
-	list_for_each_entry(dev, &state->pci_devices, node) {
-		if (is_same_pci(p, dev->pci_dev))
-			return dev;
-	}
-	return NULL;
 }
 
 struct pci_device * find_pci_dev_by_pci_addr(const struct libbiosdevname_state *state,
