@@ -230,6 +230,8 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 		INIT_LIST_HEAD(&b->node);
 		b->pcidev = p;
 		b->netdev = n;
+		b->slot_num = -1;
+		b->port_num = -1;
 		claim_netdev(b->netdev);
 		list_add(&b->node, &state->bios_devices);
 	}
@@ -259,6 +261,8 @@ static void match_eth_and_pci_devs(struct libbiosdevname_state *state)
 		INIT_LIST_HEAD(&b->node);
 		b->pcidev = p;
 		b->netdev = n;
+		b->slot_num = -1;
+		b->port_num = -1;
 		claim_netdev(b->netdev);
 		list_add(&b->node, &state->bios_devices);
 	}
@@ -282,6 +286,8 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 		memset(b, 0, sizeof(*b));
 		INIT_LIST_HEAD(&b->node);
 		b->netdev = n;
+		b->slot_num = -1;
+		b->port_num = -1;
 		list_add(&b->node, &state->bios_devices);
 	}
 }
@@ -302,6 +308,7 @@ static struct libbiosdevname_state * alloc_state(void)
 	INIT_LIST_HEAD(&state->bios_devices);
 	INIT_LIST_HEAD(&state->pci_devices);
 	INIT_LIST_HEAD(&state->network_devices);
+	INIT_LIST_HEAD(&state->slots);
 	state->pacc = NULL;
 	state->pirq_table = NULL;
 	return state;
@@ -348,22 +355,22 @@ static void find_duplicates(struct libbiosdevname_state *state)
 	}
 }
 
+extern int addslot(struct libbiosdevname_state *state, int slot);
+
 /* Fix for RHBZ 816536/757743/756164/: Cards with same PCI but multiple ports
  * chelsio, mellanox */
 static void check_ports(struct libbiosdevname_state *state)
 {
-	struct bios_device *a, *b;
-	int nports;
+	struct pci_device *dev;
+	struct bios_device *a;
 
 	list_for_each_entry(a, &state->bios_devices, node) {
-		nports = 1;
-		list_for_each_entry(b, &state->bios_devices, node) {
-		  	if (a != b && a->pcidev == b->pcidev && 
-			    a->netdev->ifindex < b->netdev->ifindex && 
-			    !b->nport) 
-			  {
-				b->nport = ++nports;
-			  }
+		dev = a->pcidev;
+		if (dev == NULL || dev->is_sriov_virtual_function || dev->vpd_port != INT_MAX)
+			continue;
+		if (dev->physical_slot != PHYSICAL_SLOT_UNKNOWN) {
+			a->slot_num = dev->physical_slot;
+			a->port_num = addslot(state, 0x1000 + dev->physical_slot);
 		}
 	}
 }

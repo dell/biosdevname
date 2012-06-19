@@ -13,6 +13,13 @@
 #include "state.h"
 #include "config.h"
 
+struct slotlist
+{
+	struct list_head node;
+	int slot;
+	int count;
+};
+
 struct pci_device {
 	struct list_head node;
 	struct pci_dev *pci_dev;
