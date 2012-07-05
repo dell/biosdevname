@@ -1,3 +1,7 @@
+* Mon Jul 1 2012
+- Use addslot() to track both embedded and physical index per slot
+- Add fixes to ignore NPAR parsing on some cards
+
 * Mon Jul 27 2009
 - add SMBIOS naming policy
 - fix return error check for mmap
