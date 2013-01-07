@@ -1,0 +1,50 @@
+# biosdecode 2.11
+ACPI 2.0 present.
+	OEM Identifier: ALASKA
+	RSD Table 32-bit Address: 0x7F1E3028
+	XSD Table 64-bit Address: 0x000000007F1E3090
+SMBIOS 2.7 present.
+	Structure Table Length: 5909 bytes
+	Structure Table Address: 0x000EB2F0
+	Number Of Structures: 135
+	Maximum Structure Size: 184 bytes
+PNP BIOS 1.0 present.
+	Event Notification: Not Supported
+	Real Mode 16-bit Code Address: F000:BC16
+	Real Mode 16-bit Data Address: F000:0000
+	16-bit Protected Mode Code Address: 0x000FBC3E
+	16-bit Protected Mode Data Address: 0x000F0000
+PCI Interrupt Routing 1.0 present.
+	Router ID: 00:1f.0
+	Exclusive IRQs: None
+	Compatible Router: 8086:27b8
+	Slot Entry 1: ID 00:1f, on-board
+	Slot Entry 2: ID 00:1d, on-board
+	Slot Entry 3: ID 00:1a, on-board
+	Slot Entry 4: ID 00:1b, on-board
+	Slot Entry 5: ID 00:1c, on-board
+	Slot Entry 6: ID 00:11, on-board
+	Slot Entry 7: ID 01:00, on-board
+	Slot Entry 8: ID 02:08, on-board
+	Slot Entry 9: ID 03:00, on-board
+	Slot Entry 10: ID 00:19, on-board
+	Slot Entry 11: ID 00:00, on-board
+	Slot Entry 12: ID 00:01, on-board
+	Slot Entry 13: ID 00:02, on-board
+	Slot Entry 14: ID 00:03, on-board
+	Slot Entry 15: ID 80:00, on-board
+	Slot Entry 16: ID 80:01, on-board
+	Slot Entry 17: ID 80:02, on-board
+	Slot Entry 18: ID 80:03, on-board
+	Slot Entry 19: ID 00:04, on-board
+	Slot Entry 20: ID 80:04, on-board
+	Slot Entry 21: ID 00:16, on-board
+	Slot Entry 22: ID 16:01, slot number 34
+	Slot Entry 23: ID 16:03, on-board
+	Slot Entry 24: ID 04:00, slot number 7
+	Slot Entry 25: ID 05:00, slot number 2
+	Slot Entry 26: ID 0d:00, slot number 1
+	Slot Entry 27: ID 0e:00, slot number 3
+	Slot Entry 28: ID 81:00, slot number 5
+	Slot Entry 29: ID 89:00, slot number 4
+	Slot Entry 30: ID 91:00, slot number 6

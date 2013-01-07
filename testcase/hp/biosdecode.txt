@@ -1,0 +1,23 @@
+# biosdecode 2.11
+ACPI 2.0 present.
+	OEM Identifier: HP    
+	RSD Table 32-bit Address: 0xBDE1C000
+	XSD Table 64-bit Address: 0x00000000BDE1F7C0
+SMBIOS 2.7 present.
+	Structure Table Length: 5049 bytes
+	Structure Table Address: 0xBFFFE000
+	Number Of Structures: 162
+	Maximum Structure Size: 128 bytes
+SYSID present.
+	Revision: 0
+	Structure Table Address: 0x000F9C00
+	Number Of Structures: 1
+PNP BIOS 1.0 present.
+	Event Notification: Not Supported
+	Real Mode 16-bit Code Address: F000:6FCE
+	Real Mode 16-bit Data Address: 0000:0000
+	16-bit Protected Mode Code Address: 0x000F6FCE
+	16-bit Protected Mode Data Address: 0x00000000
+BIOS32 Service Directory present.
+	Revision: 0
+	Calling Interface Address: 0x000F0000

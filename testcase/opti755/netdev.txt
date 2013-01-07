@@ -1,0 +1,361 @@
+/sys/class/net/:
+total 0
+drwxr-xr-x  8 root root 0 Nov 30 15:09 .
+drwxr-xr-x 39 root root 0 Nov 30 15:09 ..
+drwxr-xr-x  3 root root 0 Jan  7 11:56 eth0
+drwxr-xr-x  3 root root 0 Jan  7 11:56 eth1
+drwxr-xr-x  3 root root 0 Jan  7 11:56 eth2
+drwxr-xr-x  3 root root 0 Jan  7 11:56 lo
+drwxr-xr-x  3 root root 0 Jan  7 11:56 sit0
+drwxr-xr-x  5 root root 0 Jan  7 11:56 virbr0
+
+/sys/class/net/eth0:
+total 0
+drwxr-xr-x 3 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 device -> ../../../devices/pci0000:00/0000:00:19.0
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/eth0/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 3 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors
+
+/sys/class/net/eth1:
+total 0
+drwxr-xr-x 3 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 device -> ../../../devices/pci0000:00/0000:00:01.0/0000:01:00.0
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/eth1/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 3 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors
+
+/sys/class/net/eth2:
+total 0
+drwxr-xr-x 3 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 device -> ../../../devices/pci0000:00/0000:00:01.0/0000:01:00.1
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/eth2/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 3 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors
+
+/sys/class/net/lo:
+total 0
+drwxr-xr-x 3 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/lo/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 3 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors
+
+/sys/class/net/sit0:
+total 0
+drwxr-xr-x 3 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/sit0/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 3 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors
+
+/sys/class/net/virbr0:
+total 0
+drwxr-xr-x 5 root root    0 Jan  7 11:56 .
+drwxr-xr-x 8 root root    0 Nov 30 15:09 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 address
+-r--r--r-- 1 root root 4096 Jan  7 11:56 addr_len
+-r--r--r-- 1 root root    0 Jan  7 11:56 brforward
+drwxr-xr-x 2 root root    0 Jan  7 11:56 bridge
+drwxr-xr-x 2 root root    0 Nov 30 15:09 brif
+-r--r--r-- 1 root root 4096 Jan  7 11:56 broadcast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 carrier
+-r--r--r-- 1 root root 4096 Jan  7 11:56 dormant
+-r--r--r-- 1 root root 4096 Jan  7 11:56 features
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 flags
+-r--r--r-- 1 root root 4096 Jan  7 11:56 ifindex
+-r--r--r-- 1 root root 4096 Jan  7 11:56 iflink
+-r--r--r-- 1 root root 4096 Jan  7 11:56 link_mode
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 mtu
+-r--r--r-- 1 root root 4096 Jan  7 11:56 operstate
+drwxr-xr-x 2 root root    0 Jan  7 11:56 statistics
+lrwxrwxrwx 1 root root    0 Jan  7 11:56 subsystem -> ../../../class/net
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 tx_queue_len
+-r--r--r-- 1 root root 4096 Jan  7 11:56 type
+--w------- 1 root root 4096 Jan  7 11:56 uevent
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 weight
+
+/sys/class/net/virbr0/bridge:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 5 root root    0 Jan  7 11:56 ..
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 ageing_time
+-r--r--r-- 1 root root 4096 Jan  7 11:56 bridge_id
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 forward_delay
+-r--r--r-- 1 root root 4096 Jan  7 11:56 gc_timer
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 group_addr
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 hash_elasticity
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 hash_max
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 hello_time
+-r--r--r-- 1 root root 4096 Jan  7 11:56 hello_timer
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 max_age
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_last_member_count
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_last_member_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_membership_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_querier_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_query_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_query_response_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_router
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_snooping
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_startup_query_count
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 multicast_startup_query_interval
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 priority
+-r--r--r-- 1 root root 4096 Jan  7 11:56 root_id
+-r--r--r-- 1 root root 4096 Jan  7 11:56 root_path_cost
+-r--r--r-- 1 root root 4096 Jan  7 11:56 root_port
+-rw-r--r-- 1 root root 4096 Jan  7 11:56 stp_state
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tcn_timer
+-r--r--r-- 1 root root 4096 Jan  7 11:56 topology_change
+-r--r--r-- 1 root root 4096 Jan  7 11:56 topology_change_detected
+-r--r--r-- 1 root root 4096 Jan  7 11:56 topology_change_timer
+
+/sys/class/net/virbr0/brif:
+total 0
+drwxr-xr-x 2 root root 0 Nov 30 15:09 .
+drwxr-xr-x 5 root root 0 Jan  7 11:56 ..
+
+/sys/class/net/virbr0/statistics:
+total 0
+drwxr-xr-x 2 root root    0 Jan  7 11:56 .
+drwxr-xr-x 5 root root    0 Jan  7 11:56 ..
+-r--r--r-- 1 root root 4096 Jan  7 11:56 collisions
+-r--r--r-- 1 root root 4096 Jan  7 11:56 multicast
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_crc_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_frame_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_length_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_missed_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_over_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 rx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_aborted_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_bytes
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_carrier_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_compressed
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_dropped
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_fifo_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_heartbeat_errors
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_packets
+-r--r--r-- 1 root root 4096 Jan  7 11:56 tx_window_errors

@@ -1,0 +1,208 @@
+BIOS device: p116p1
+Kernel name: eth172
+Permanent MAC: 00:12:C0:80:1E:CA
+Assigned MAC : 00:12:C0:80:1E:CA
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:07:00.0
+PCI name      : 0000:07:00.0
+PCI Slot      : 116
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p116p2
+Kernel name: eth177
+Permanent MAC: 00:12:C0:80:1E:CB
+Assigned MAC : 00:12:C0:80:1E:CB
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:07:00.1
+PCI name      : 0000:07:00.1
+PCI Slot      : 116
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p116p1
+Kernel name: eth192
+Permanent MAC: 00:12:C0:80:1E:DA
+Assigned MAC : 00:12:C0:80:1E:DA
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:10:00.0
+PCI name      : 0000:10:00.0
+PCI Slot      : 116
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p116p2
+Kernel name: eth194
+Permanent MAC: 00:12:C0:80:1E:DB
+Assigned MAC : 00:12:C0:80:1E:DB
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:10:00.1
+PCI name      : 0000:10:00.1
+PCI Slot      : 116
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p116p1
+Kernel name: eth170
+Permanent MAC: 00:12:C0:80:1E:CC
+Assigned MAC : 00:12:C0:80:1E:CC
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:83:00.0
+PCI name      : 0000:83:00.0
+PCI Slot      : 116
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p116p2
+Kernel name: eth175
+Permanent MAC: 00:12:C0:80:1E:CD
+Assigned MAC : 00:12:C0:80:1E:CD
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:83:00.1
+PCI name      : 0000:83:00.1
+PCI Slot      : 116
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p116p1
+Kernel name: eth184
+Permanent MAC: 00:12:C0:80:1F:78
+Assigned MAC : 00:12:C0:80:1F:78
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:8b:00.0
+PCI name      : 0000:8b:00.0
+PCI Slot      : 116
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p116p2
+Kernel name: eth171
+Permanent MAC: 00:12:C0:80:1F:79
+Assigned MAC : 00:12:C0:80:1F:79
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:8b:00.1
+PCI name      : 0000:8b:00.1
+PCI Slot      : 116
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p117p1
+Kernel name: eth173
+Permanent MAC: 00:12:C0:80:1E:CE
+Assigned MAC : 00:12:C0:80:1E:CE
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:09:00.0
+PCI name      : 0000:09:00.0
+PCI Slot      : 117
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p117p2
+Kernel name: eth178
+Permanent MAC: 00:12:C0:80:1E:CF
+Assigned MAC : 00:12:C0:80:1E:CF
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:09:00.1
+PCI name      : 0000:09:00.1
+PCI Slot      : 117
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p117p1
+Kernel name: eth196
+Permanent MAC: 00:12:C0:80:1E:DE
+Assigned MAC : 00:12:C0:80:1E:DE
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:12:00.0
+PCI name      : 0000:12:00.0
+PCI Slot      : 117
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p117p2
+Kernel name: eth198
+Permanent MAC: 00:12:C0:80:1E:DF
+Assigned MAC : 00:12:C0:80:1E:DF
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:12:00.1
+PCI name      : 0000:12:00.1
+PCI Slot      : 117
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p117p1
+Kernel name: eth180
+Permanent MAC: 00:12:C0:80:1E:D0
+Assigned MAC : 00:12:C0:80:1E:D0
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:85:00.0
+PCI name      : 0000:85:00.0
+PCI Slot      : 117
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p117p2
+Kernel name: eth183
+Permanent MAC: 00:12:C0:80:1E:D1
+Assigned MAC : 00:12:C0:80:1E:D1
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:85:00.1
+PCI name      : 0000:85:00.1
+PCI Slot      : 117
+Index in slot: 2
+
+Duplicate: True
+BIOS device: p117p1
+Kernel name: eth176
+Permanent MAC: 00:12:C0:80:1F:76
+Assigned MAC : 00:12:C0:80:1F:76
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:8d:00.0
+PCI name      : 0000:8d:00.0
+PCI Slot      : 117
+Index in slot: 1
+
+Duplicate: True
+BIOS device: p117p2
+Kernel name: eth181
+Permanent MAC: 00:12:C0:80:1F:77
+Assigned MAC : 00:12:C0:80:1F:77
+Driver: ixgbe
+Driver version: 3.4.8-k
+Firmware version: 1.8-0
+Bus Info: 0000:8d:00.1
+PCI name      : 0000:8d:00.1
+PCI Slot      : 117
+Index in slot: 2
+
+Duplicate: True
