@@ -1302,13 +1302,22 @@ IPMI Device Information
 
 Handle 0x2900, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Embedded NIC 1
+	Type: Ethernet
+	Status: Enabled
+	Type Instance: 1
+	Bus Address: 0000:01:00.0
 	Header and Data:
 		29 0B 00 29 01 85 01 00 00 01 00
 	Strings:
-		Embedded NIC 1                          
 
 Handle 0x2901, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Embedded NIC 2
+	Type: Ethernet
+	Status: Enabled
+	Type Instance: 2
+	Bus Address: 0000:01:00.1
 	Header and Data:
 		29 0B 01 29 01 85 02 00 00 01 01
 	Strings:
@@ -1316,6 +1325,11 @@ Unknown Type
 
 Handle 0x2902, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Embedded NIC 3
+	Type: Ethernet
+	Status: Enabled
+	Type Instance: 3
+	Bus Address: 0000:02:00.0
 	Header and Data:
 		29 0B 02 29 01 85 03 00 00 02 00
 	Strings:
@@ -1323,6 +1337,11 @@ Unknown Type
 
 Handle 0x2903, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Embedded NIC 4
+	Type: Ethernet
+	Status: Enabled
+	Type Instance: 4
+	Bus Address: 0000:02:00.1
 	Header and Data:
 		29 0B 03 29 01 85 04 00 00 02 01
 	Strings:
@@ -1333,6 +1352,11 @@ Inactive
 
 Handle 0x2905, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Integrated RAID
+	Type: SAS Controller
+	Status: Enabled
+	Type Instance: 4
+	Bus Address: 0000:05:00.0
 	Header and Data:
 		29 0B 05 29 01 8A 04 00 00 05 00
 	Strings:
@@ -1340,6 +1364,11 @@ Unknown Type
 
 Handle 0x2906, DMI type 41, 11 bytes
 Unknown Type
+	Reference Designation: Embedded Video
+	Type: Video
+	Status: Enabled
+	Type Instance: 4
+	Bus Address: 0000:10:03.0
 	Header and Data:
 		29 0B 06 29 01 83 04 00 00 10 18
 	Strings:
