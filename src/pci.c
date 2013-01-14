@@ -585,6 +585,7 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 			struct pci_dev *p)
 {
 	struct pci_device *dev;
+	uint8_t hdr;
 	dev = malloc(sizeof(*dev));
 	if (!dev) {
 		fprintf(stderr, "out of memory\n");
@@ -603,6 +604,18 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	dev->vpd_pf = NULL;
 	fill_pci_dev_sysfs(dev, p);
 	list_add(&dev->node, &state->pci_devices);
+
+	/* Get subordinate bus if this is a bridge */
+	hdr = pci_read_byte(p, PCI_HEADER_TYPE);
+	switch (hdr & 0x7F) {
+	case PCI_HEADER_TYPE_BRIDGE:
+	case PCI_HEADER_TYPE_CARDBUS:
+		dev->sbus = pci_read_byte(p, PCI_SECONDARY_BUS);
+		break;
+	default:
+		dev->sbus = -1;
+		break;
+	}
 }
 
 void free_pci_devices(struct libbiosdevname_state *state)
@@ -726,6 +739,10 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	pacc = pci_alloc();
 	if (!pacc)
 		return rc;
+#if 0
+	pci_set_param(pacc, "dump.name", "lspci.txt");
+	pacc->method = PCI_ACCESS_DUMP;
+#endif
 	state->pacc = pacc;
 	pci_init(pacc);
 	pci_scan_bus(pacc);
