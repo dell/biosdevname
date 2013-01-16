@@ -58,22 +58,17 @@ static int dmi_decode_hp(struct dmi_header *h, const struct libbiosdevname_state
 	int nic, ptr;
 	u8 smbios_type = 0;
 	u8 bus, device, func;
-	struct pci_device *pdev;
 
 	switch(h->type)
 	{
 		case 209:
-		case 221:
 			/*
 			 * Vendor Specific: HP ProLiant NIC MAC Information
 			 *
 			 * This prints the BIOS NIC number,
 			 * PCI bus/device/function, and MAC address
 			 */
-			if (h->type == 221)
-				smbios_type=0;
-			else
-				smbios_type=0x05;
+			smbios_type=0x05;
 
 			nic=1;
 			ptr=4;
@@ -82,20 +77,11 @@ static int dmi_decode_hp(struct dmi_header *h, const struct libbiosdevname_state
 				bus = data[ptr+1];
 				device = data[ptr]>>3;
 				func = data[ptr]&7;
-				pdev = find_pci_dev_by_pci_addr(state, 0, bus, device, func);
-				if (pdev) {
-					if((data[ptr]==0x00 && data[ptr+1]==0x00) ||
-					   (data[ptr]==0xFF && data[ptr+1]==0xFF))
-						pdev->smbios_enabled = 0;
-					else {
-						pdev->smbios_enabled = 1;
-						pdev->smbios_type = smbios_type;
-						pdev->smbios_instance = nic;
-						pdev->physical_slot = 0;
-					}
-				}
+
+				smbios_setslot(state, 0, bus, device, func, smbios_type, 0, nic, NULL);
+
 				nic++;
-				ptr+=8;
+				ptr += 8;
 			}
 			break;
 

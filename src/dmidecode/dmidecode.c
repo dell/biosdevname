@@ -42,6 +42,12 @@
 
 extern int smver_mjr, smver_mnr, is_valid_smbios;
 
+#ifdef DEBUG
+#define dprintf printf
+#else
+#define dprintf(a...)
+#endif
+
 static const char *bad_index = "<BAD INDEX>";
 
 /*
@@ -93,80 +99,114 @@ static void strip_right(char *s)
 	}
 }
 
-static void fill_one_slot_function(struct pci_device *pdev, struct dmi_header *h)
+static int matchpci(struct pci_device *pdev, int domain, int bus, int device, int func)
 {
-	u8 *data = h->data;
-	pdev->physical_slot = WORD(data+0x09);
-	pdev->smbios_type = 0;
-	pdev->smbios_instance = 0;
-	pdev->uses_smbios |= HAS_SMBIOS_SLOT;
-	if (dmi_string(h, data[0x04])) {
-		pdev->smbios_label=strdup(dmi_string(h, data[0x04]));
-		pdev->uses_smbios |= HAS_SMBIOS_LABEL;
-	}
-	strip_right(pdev->smbios_label);
+	if (domain != -1 && pdev->pci_dev->domain != domain)
+		return 0;
+	if (bus != -1 && pdev->pci_dev->bus != bus)
+		return 0;
+	if (device != -1 && pdev->pci_dev->dev != device)
+		return 0;
+	if (func != -1 && pdev->pci_dev->func != func)
+		return 0;
+	return 1;
 }
 
-static void fill_all_slot_functions(const struct libbiosdevname_state *state, int domain, int bus, int device, struct dmi_header *h)
+int smbios_setslot(const struct libbiosdevname_state *state, 
+		   int domain, int bus, int device, int func,
+		   int type, int slot, int index, const char *label)
 {
-	struct pci_device *pdev;
+	struct pci_device *pdev, *n;
+	int i;
+
+	dprintf("setslot: %.4x:%.2x:%.2x.%x = slot(%2d %2d) %s\n",
+		domain, bus, device, func, slot, index, label);
+
+	/* Don't bother with disabled devices */
+	if ((bus == 0 && device == 0 && func == 0) ||    /* bug on HP systems */
+	    (bus == 0xFF && device == 0x1F && func == 0x7)) 
+	{
+		dprintf("disabled\n");
+		return;
+	}
+
 	list_for_each_entry(pdev, &state->pci_devices, node) {
-		if (pdev->pci_dev->domain == domain &&
-		    pdev->pci_dev->bus    == bus &&
-		    pdev->pci_dev->dev    == device &&
-		    ! (pdev->uses_smbios & HAS_SMBIOS_EXACT_MATCH))
-			fill_one_slot_function(pdev, h);
+		if (!matchpci(pdev, domain, bus, device, func))
+			continue;
+
+		dprintf("  found device: %.4x:%.2x:%.2x.%x = %lx\n",
+			pdev->pci_dev->domain, pdev->pci_dev->bus, pdev->pci_dev->dev, 
+			pdev->pci_dev->func, pdev->class);
+    
+		pdev->uses_smbios |= HAS_SMBIOS_SLOT;
+		if (index != 0)
+			pdev->uses_smbios |= HAS_SMBIOS_INSTANCE;
+		pdev->smbios_type = type;
+		pdev->smbios_enabled = 1;
+		pdev->smbios_instance = index;
+
+		pdev->physical_slot = slot;
+		if (label) {
+			pdev->smbios_label = strdup(label);
+			pdev->uses_smbios |= HAS_SMBIOS_LABEL;
+			strip_right(pdev->smbios_label);
+		}
+    
+		/* Found a PDEV, now is it a bridge? */
+		if (pdev->sbus == -1)
+		  continue;
+		dprintf("scan subbus: %d\n", pdev->sbus);
+		list_for_each_entry(n, &state->pci_devices, node) {
+			if (matchpci(n, domain, pdev->sbus, -1, -1)) {
+				smbios_setslot(state, n->pci_dev->domain, n->pci_dev->bus, 
+					       n->pci_dev->dev, n->pci_dev->func,
+					       type, slot, index, label);
+			}
+		}
+		dprintf("done subbus: %d\n", pdev->sbus);
 	}
 }
 
 static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevname_state *state)
 {
 	u8 *data=h->data;
-	int domain, bus, device, function;
-	struct pci_device *pdev;
+	int domain, bus, device, function, i;
 	switch(h->type)
 	{
-		case 9: /* 3.3.10 System Slots */
-			if (h->length >= 0x0E && h->length >=0x11) {
-				domain = WORD(data+0x0D);
-				bus = data[0x0F];
-				device = (data[0x10]>>3)&0x1F;
-				function = data[0x10] & 7;
-				if (! (domain == 0xFFFF && bus == 0xFF && data[0x10] == 0xFF)) {
-					device = (data[0x10]>>3)&0x1F;
-					function = data[0x10] & 7;
-					pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
-					if (pdev) {
-						fill_one_slot_function(pdev, h);
-						pdev->uses_smbios |= HAS_SMBIOS_EXACT_MATCH;
-					}
-					fill_all_slot_functions(state, domain, bus, device, h);
-				}
+	case 9: /* 3.3.10 System Slots */
+		if (h->length >= 0x0E && h->length >=0x11) {
+			domain = WORD(data+0x0D);
+			bus = data[0x0F];
+			device = (data[0x10]>>3)&0x1F;
+			function = data[0x10] & 7;
+			if (domain != 0xFFFF) {
+				for (i=0; i<8; i++) 
+					smbios_setslot(state, domain, bus, device, i, 
+						       0x00, WORD(data+0x09), 0x00,
+						       dmi_string(h, data[0x04]));
 			}
-			break;
-		case 41: /* 3.3.xx Onboard Device Information */
-			domain = WORD(data+0x07);
-			bus    = data[0x09];
-			device = (data[0xa]>>3) & 0x1F;
-			function = data[0xa] & 0x7;
-			pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, function);
-			if (pdev) {
-				pdev->physical_slot = 0;
-				pdev->smbios_enabled = !!(data[0x05] & 0x80);
-				pdev->smbios_type = data[0x05] & 0x7F;
-				pdev->smbios_instance = data[0x06];
-				pdev->uses_smbios |= HAS_SMBIOS_INSTANCE | HAS_SMBIOS_SLOT;
-				if (dmi_string(h, data[0x04])) {
-					pdev->smbios_label=strdup(dmi_string(h, data[0x04]));
-					pdev->uses_smbios |= HAS_SMBIOS_LABEL;
-				}
-				strip_right(pdev->smbios_label);
-			}
-			break;
+		}
+		else {
+			dprintf("Old Slot: id:%3d, type:%.2x, label:%-7s\n", WORD(data+0x09), data[0x05], dmi_string(h, data[0x04]));
+		}
+		break;
+	case 41: /* 3.3.xx Onboard Device Information */
+		domain = WORD(data+0x07);
+		bus    = data[0x09];
+		device = (data[0xa]>>3) & 0x1F;
+		function = data[0xa] & 0x7;
 
-		default:
-			if(dmi_decode_oem(h, state))
-				break;
+		if (data[5] == (0x80 | 0x05)) {
+			// enabled and type == ethernet
+			smbios_setslot(state, domain, bus, device, function,
+				       data[5] & 0x7F, 0x00, data[0x06],
+				       dmi_string(h, data[0x04]));
+		}
+		break;
+
+	default:
+		if(dmi_decode_oem(h, state))
+			break;
 	}
 }
 
@@ -252,8 +292,8 @@ static void dmi_table(u32 base, u16 len, u16 num, u16 ver, const char *devmem, c
 static int smbios_decode(u8 *buf, const char *devmem, const struct libbiosdevname_state *state)
 {
 	if(checksum(buf, buf[0x05])
-	 && memcmp(buf+0x10, "_DMI_", 5)==0
-	 && checksum(buf+0x10, 0x0F))
+	   && memcmp(buf+0x10, "_DMI_", 5)==0
+	   && checksum(buf+0x10, 0x0F))
 	{
 		dmi_table(DWORD(buf+0x18), WORD(buf+0x16), WORD(buf+0x1C),
 			  (buf[0x06]<<8)+buf[0x07], devmem, state);
@@ -294,7 +334,7 @@ static int address_from_efi(size_t *address)
 	 * Linux 2.6.7 and up: /sys/firmware/efi/systab
 	 */
 	if((efi_systab=fopen(filename="/sys/firmware/efi/systab", "r"))==NULL
-	&& (efi_systab=fopen(filename="/proc/efi/systab", "r"))==NULL)
+	   && (efi_systab=fopen(filename="/proc/efi/systab", "r"))==NULL)
 	{
 		/* No EFI interface, fallback to memory scan */
 		return EFI_NOT_FOUND;
@@ -333,11 +373,11 @@ int dmidecode_main(const struct libbiosdevname_state *state)
 	efi=address_from_efi(&fp);
 	switch(efi)
 	{
-		case EFI_NOT_FOUND:
-			goto memory_scan;
-		case EFI_NO_SMBIOS:
-			ret=1;
-			goto exit_free;
+	case EFI_NOT_FOUND:
+		goto memory_scan;
+	case EFI_NO_SMBIOS:
+		ret=1;
+		goto exit_free;
 	}
 
 	if((buf=mem_chunk(fp, 0x20, devmem))==NULL)
