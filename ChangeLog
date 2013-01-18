@@ -1,3 +1,8 @@
+* Fri Jan 18 2013
+- Add version number to biosdevname
+- Save off Secondary PCI bus for PCI tree traversal
+- Change scan of SMBIOS slot <-> PCI mapping
+
 * Mon Jul 1 2012
 - Use addslot() to track both embedded and physical index per slot
 - Add fixes to ignore NPAR parsing on some cards
