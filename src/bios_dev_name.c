@@ -10,8 +10,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include "version.h"
-
 #include "libbiosdevname.h"
 #include "bios_dev_name.h"
 

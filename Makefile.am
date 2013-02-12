@@ -6,7 +6,7 @@ dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec
 
 
 
-CLEANFILES = version src/version.h
+CLEANFILES = version src/bios_dev_name.h
 install-data-local:
 	mkdir -p $(DESTDIR)@RULEDIR@
 	$(INSTALL_DATA) $(top_srcdir)/biosdevname.rules.in $(DESTDIR)@RULEDEST@

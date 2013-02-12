@@ -88,5 +88,5 @@ echo "PACKAGE_NAME='$PACKAGE_NAME'" > version
 echo "PACKAGE_VERSION='$PACKAGE_VERSION'" >> version
 echo "PACKAGE_STRING='$PACKAGE_STRING'" >> version
 
-AC_CONFIG_FILES([Makefile biosdevname.spec.fedora biosdevname.spec.suse src/version.h])
+AC_CONFIG_FILES([Makefile biosdevname.spec.fedora biosdevname.spec.suse src/bios_dev_name.h])
 AC_OUTPUT
