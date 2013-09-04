@@ -59,8 +59,8 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 					portnum = vf->sysfs_index;
 				else if (vf->uses_smbios & HAS_SMBIOS_INSTANCE && is_pci_smbios_type_ethernet(vf))
 					portnum = vf->smbios_instance;
-				else if (dev->port_num != -1)
-					portnum = dev->port_num;
+				else if (vf->embedded_index_valid)
+					portnum = vf->embedded_index;
 				if (portnum != INT_MAX) {	
 					snprintf(location, sizeof(location), "%s%u", prefix, portnum);
 					known=1;
@@ -70,8 +70,6 @@ static void use_physical(const struct libbiosdevname_state *state, const char *p
 				snprintf(location, sizeof(location), "p%u", dev->pcidev->physical_slot);
 				if (dev->pcidev->vpd_port < INT_MAX)
 					portnum = dev->pcidev->vpd_port;
-				else if (dev->port_num != -1)
-					portnum = dev->port_num;
 				else if (!dev->pcidev->is_sriov_virtual_function)
 				  	portnum = dev->pcidev->index_in_slot;
 				else

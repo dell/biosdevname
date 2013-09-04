@@ -631,24 +631,6 @@ void free_pci_devices(struct libbiosdevname_state *state)
 	}
 }
 
-int addslot(struct libbiosdevname_state *state, int slot)
-{
-	struct slotlist *s;
-
-	list_for_each_entry(s, &state->slots, node) {
-		if (s->slot == slot) {
-			return ++s->count;
-		}
-	}
-	s = malloc(sizeof(*s));
-	INIT_LIST_HEAD(&s->node);
-	s->slot = slot;
-	s->count = 0;
-	list_add(&s->node, &state->slots);
-
-	return ++s->count;
-}
-
 static void set_pci_slots(struct libbiosdevname_state *state)
 {
 	struct pci_device *dev;
@@ -656,20 +638,54 @@ static void set_pci_slots(struct libbiosdevname_state *state)
 	list_for_each_entry(dev, &state->pci_devices, node) {
 		dev_to_slot(state, dev);
 	}
-
-	/* Get mapping for each slot */
-	list_for_each_entry(dev, &state->pci_devices, node) {
-		if (dev->is_sriov_virtual_function || !is_pci_network(dev) || dev->vpd_port != INT_MAX) {
-			continue;
-		}
-		if (dev->physical_slot == 0) {
-			dev->embedded_index_valid = 1;
-			dev->embedded_index = addslot(state, 0);
-		} else if (dev->physical_slot != PHYSICAL_SLOT_UNKNOWN) {
-			dev->index_in_slot = addslot(state, dev->physical_slot);
-		}
-	}
 }
+
+static int set_pci_slot_index(struct libbiosdevname_state *state)
+{
+	struct pci_device *pcidev;
+	int prevslot=-1;
+	int index=1;
+
+	/* only iterate over the PCI devices, because the bios_device list may be incomplete due to renames happening in parallel */
+	list_for_each_entry(pcidev, &state->pci_devices, node) {
+		if (pcidev->physical_slot == 0) /* skip embedded devices */
+			continue;
+		if (!is_pci_network(pcidev)) /* only look at PCI network devices */
+			continue;
+		if (pcidev->is_sriov_virtual_function) /* skip sriov VFs, they're handled later */
+			continue;
+		if (pcidev->physical_slot != prevslot) {
+			index=1;
+			prevslot = pcidev->physical_slot;
+		}
+		else
+			index++;
+		pcidev->index_in_slot = index;
+	}
+	return 0;
+}
+
+static int set_embedded_index(struct libbiosdevname_state *state)
+{
+	struct pci_device *pcidev;
+	int index=1;
+
+	list_for_each_entry(pcidev, &state->pci_devices, node) {
+		if (pcidev->physical_slot != 0) /* skip non-embedded devices */
+			continue;
+		if (!is_pci_network(pcidev)) /* only look at PCI network devices */
+			continue;
+		if (pcidev->is_sriov_virtual_function) /* skip sriov VFs, they're handled later */
+			continue;
+		if (pcidev->vpd_port != INT_MAX)
+			continue;
+		pcidev->embedded_index = index;
+		pcidev->embedded_index_valid = 1;
+		index++;
+	}
+	return 0;
+}
+
 
 static void set_sriov_pf_vf(struct libbiosdevname_state *state)
 {
@@ -755,6 +771,8 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	sort_device_list(state);
 	set_pci_vpd_instance(state);
 	set_pci_slots(state);
+	set_embedded_index(state);
+	set_pci_slot_index(state);
 	set_sriov_pf_vf(state);
 
 	return rc;
