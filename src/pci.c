@@ -30,6 +30,7 @@ extern int is_valid_smbios;
 /* Borrowed from kernel vpd code */
 #define PCI_VPD_LRDT 			0x80
 #define PCI_VPD_SRDT_END 		0x78
+#define PCI_VPDR_TAG                    0x90
 
 #define PCI_VPD_SRDT_LEN_MASK		0x7
 #define PCI_VPD_LRDT_TAG_SIZE		3
@@ -71,7 +72,7 @@ static int pci_vpd_size(struct pci_device *pdev, int fd)
 			tag = buf[0] & ~PCI_VPD_SRDT_LEN_MASK;
 			off += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(buf);
 		}
-		if (tag == 0 || tag == 0xFF || tag == PCI_VPD_SRDT_END)
+		if (tag == 0 || tag == 0xFF || tag == PCI_VPD_SRDT_END || tag == PCI_VPDR_TAG)
 			break;
 	}
 	return off;
@@ -125,7 +126,7 @@ static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev
 	int i, j, k, isz, jsz, port, func, pfi;
 	struct pci_device *vf;
 
-	i = pci_vpd_find_tag(vpd, 0, len, 0x90);
+	i = pci_vpd_find_tag(vpd, 0, len, PCI_VPDR_TAG);
 	if (i < 0)
 		return 1;
 	isz = pci_vpd_lrdt_size(&vpd[i]);
