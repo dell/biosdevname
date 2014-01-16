@@ -44,7 +44,53 @@ int pirq_pci_dev_to_slot(struct routing_table *table, int domain, int bus, int d
 	return INT_MAX;
 }
 
+struct routing_table *pirq_read_file()
+{
+#ifdef _JPH
+	FILE *fp;
+	char  line[128];
+	struct routing_table *table;
+	char *r;
+	int count, bus, dev, slot;
+	const char *pirq_file = "biosdecode.txt";
 
+	/* Get count of entries */
+	if ((fp = fopen(pirq_file, "r")) == NULL)
+		return NULL;
+	count = 0;
+	while (fgets(line, sizeof(line), fp) != NULL) {
+		if (strstr(line, "Slot Entry") != NULL)
+			count++;
+	}
+	fclose(fp);
+
+	/* Read table */
+	table = malloc(sizeof(*table) + count * sizeof(struct slot_entry));
+	table->size = 32 + (sizeof(struct slot_entry) * count);
+	if ((fp = fopen(pirq_file, "r")) == NULL)
+		return NULL;
+	count = 0;
+	while (fgets(line, sizeof(line), fp) != NULL) {
+		if ((r = strstr(line, "Slot Entry")) == NULL)
+			continue;
+		if (sscanf(r, "Slot Entry %*d: ID %x:%x", &bus, &dev) == 2) {
+			table->slot[count].bus = bus;
+			table->slot[count].device = dev << 3;
+			if ((r = strstr(line, "on-board")) != NULL)
+				table->slot[count].slot = 0;
+			else if ((r = strstr(line, "slot number ")) != NULL) {
+				sscanf(r, "slot number %d", &slot);
+				table->slot[count].slot = slot;
+			}
+			printf("%d = %.2x:%.2x = %d\n", count, bus, dev, table->slot[count].slot);
+			count++;
+		}
+	}
+	fclose(fp);
+	return table;
+#endif
+	return NULL;
+}
 
 struct routing_table * pirq_alloc_read_table()
 {
@@ -60,6 +106,9 @@ struct routing_table * pirq_alloc_read_table()
 	if (nopirq) {
 		return NULL;
 	}
+	if ((table = pirq_read_file()) != NULL)
+		return table;
+
 	fd = open("/dev/mem", O_RDONLY);
 	if(fd==-1)
 		return NULL;

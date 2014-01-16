@@ -361,6 +361,57 @@ static int address_from_efi(size_t *address)
 
 static const char *devmem = "/dev/mem";
 
+int dmidecode_read_file(const struct libbiosdevname_state *state)
+{
+#ifdef _JPH
+	FILE *fp;
+	const char *dmidecode_file = "dmidecode.txt";
+	char line[128], *r;
+	int type = -1, eth=0,s,b,d,f,slot,i;
+
+	if ((fp = fopen(dmidecode_file, "r")) == NULL)
+		return 0;
+	while ((fgets(line, sizeof(line), fp)) != NULL) {
+		if (strstr(line, " DMI type 41,") != NULL) {
+			type = 41;
+			eth = 0;
+			slot = -1;
+		} else if (strstr(line, " DMI type 9,") != NULL) {
+			type = 9;
+		} else if (strstr(line, " DMI type ") != NULL) {
+			type = -1;
+		}
+		if (type == 41) {
+			if ((r = strstr(line, "Type: Ethernet")) != NULL) {
+				eth = 1;
+			}
+			if ((r = strstr(line, "Type Instance: ")) != NULL) {
+				sscanf(r, "Type Instance: %d", &slot);
+			}
+			if ((r = strstr(line, "Bus Address: ")) != NULL && eth) {
+				sscanf(r, "Bus Address: %x:%x:%x.%x", &s,&b,&d,&f);
+				printf("bus: %.4x:%.2x:%.2x.%x\n", s, b, d, f);
+				smbios_setslot(state, s, b, d, f, 0x5, 0x00, slot, "");
+			}
+		}
+		if (type == 9) {
+			/* System Slots */
+			if ((r = strstr(line, "ID: ")) != NULL) {
+				sscanf(r, "ID: %d", &slot);
+			}
+			if ((r = strstr(line, "Bus Address: ")) != NULL) {
+				sscanf(r, "Bus Address: %x:%x:%x.%x", &s,&b,&d,&f);
+				printf("bus: %.4x:%.2x:%.2x.%x = %d\n", s, b, d, f, slot);
+				for (i=0; i<8; i++)
+					smbios_setslot(state, s, b, d, i, 0x00, slot, 0x00, "");
+			}
+		}
+	}
+	return 1;
+#endif
+	return 0;
+}
+
 int dmidecode_main(const struct libbiosdevname_state *state)
 {
 	int ret=0;                  /* Returned value */
@@ -368,6 +419,9 @@ int dmidecode_main(const struct libbiosdevname_state *state)
 	size_t fp;
 	int efi;
 	u8 *buf;
+
+	if (dmidecode_read_file(state))
+		return 0;
 
 	/* First try EFI (ia64, Intel-based Mac) */
 	efi=address_from_efi(&fp);
