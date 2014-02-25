@@ -27,6 +27,7 @@ struct network_device {
 	int arphrd_type; /* e.g. ARPHDR_ETHER */
 	int hardware_claimed; /* true when recognized as PCI or PCMCIA and added to list of bios_devices */
   	int ifindex;
+	int devid;
 };
 
 extern void get_eths(struct libbiosdevname_state *state);

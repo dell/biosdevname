@@ -34,6 +34,20 @@ char *pr_ether(char *buf, const int size, const unsigned char *s)
 	return (buf);
 }
 
+static int eths_get_devid(const char *devname, int *devid)
+{
+	char path[PATH_MAX];
+	char *devidstr = NULL;
+
+	*devid = -1;
+	snprintf(path, sizeof(path), "/sys/class/net/%s/dev_id", devname);
+	if (sysfs_read_file(path, &devidstr) == 0) {
+		sscanf(devidstr, "%i", devid);
+		free(devidstr);
+	}
+	return NULL;
+}
+
 static int eths_get_ifindex(const char *devname, int *ifindex)
 {
 	int fd, err;
@@ -149,6 +163,7 @@ static void fill_eth_dev(struct network_device *dev)
 	eths_get_ifindex(dev->kernel_name, &dev->ifindex);
 	eths_get_hwaddr(dev->kernel_name, dev->dev_addr, sizeof(dev->dev_addr), &dev->arphrd_type);
 	eths_get_permaddr(dev->kernel_name, dev->perm_addr, sizeof(dev->perm_addr));
+	eths_get_devid(dev->kernel_name, &dev->devid);
 	rc = eths_get_info(dev->kernel_name, &dev->drvinfo);
 	if (rc == 0)
 		dev->drvinfo_valid = 1;
