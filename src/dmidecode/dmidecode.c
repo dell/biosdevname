@@ -119,14 +119,15 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 	struct pci_device *pdev, *n;
 	int i;
 
-	dprintf("setslot: %.4x:%.2x:%.2x.%x = slot(%2d %2d) %s\n",
-		domain, bus, device, func, slot, index, label);
+	dprintf("setslot: %.4x:%.2x:%.2x.%x = type:%x slot(%2d %2d) %s\n",
+		domain, bus, device, func, type, slot, index, label);
 
 	/* Don't bother with disabled devices */
-	if ((bus == 0 && device == 0 && func == 0) ||    /* bug on HP systems */
+	if ((domain == 0xFFFF) ||
+	    (bus == 0 && device == 0 && func == 0) ||    /* bug on HP systems */
 	    (bus == 0xFF && device == 0x1F && func == 0x7)) 
 	{
-		dprintf("disabled\n");
+		dprintf("  disabled\n");
 		return;
 	}
 
@@ -153,18 +154,11 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 		}
     
 		/* Found a PDEV, now is it a bridge? */
-		if (pdev->sbus == -1)
-		  continue;
-		dprintf("scan subbus: %d\n", pdev->sbus);
-		list_for_each_entry(n, &state->pci_devices, node) {
-			if (matchpci(n, domain, pdev->sbus, -1, -1)) {
-				smbios_setslot(state, n->pci_dev->domain, n->pci_dev->bus, 
-					       n->pci_dev->dev, n->pci_dev->func,
-					       type, slot, index, label);
-			}
+		if (pdev->sbus != -1) {
+			smbios_setslot(state, domain, pdev->sbus, -1, -1, type, slot, index, label);
 		}
-		dprintf("done subbus: %d\n", pdev->sbus);
 	}
+	return 0;
 }
 
 static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevname_state *state)
@@ -179,12 +173,9 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 			bus = data[0x0F];
 			device = (data[0x10]>>3)&0x1F;
 			function = data[0x10] & 7;
-			if (domain != 0xFFFF) {
-				for (i=0; i<8; i++) 
-					smbios_setslot(state, domain, bus, device, i, 
-						       0x00, WORD(data+0x09), 0x00,
-						       dmi_string(h, data[0x04]));
-			}
+			smbios_setslot(state, domain, bus, device, -1, 
+				       0x00, WORD(data+0x09), 0x00,
+				       dmi_string(h, data[0x04]));
 		}
 		else {
 			dprintf("Old Slot: id:%3d, type:%.2x, label:%-7s\n", WORD(data+0x09), data[0x05], dmi_string(h, data[0x04]));
