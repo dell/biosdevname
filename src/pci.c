@@ -121,6 +121,25 @@ static int pci_vpd_find_info_subkey(const u8 *buf, unsigned int off, unsigned in
 	return -1;
 }
 
+/* Add port identifier(s) to PCI device */
+static void add_port(struct pci_device *pdev, int port, int pfi)
+{
+	struct pci_port *p;
+
+	list_for_each_entry(p, &pdev->ports, node) {
+		if (p->port == port && p->pfi == pfi)
+			return;
+	}
+	p = malloc(sizeof(*p));
+	if (p == NULL)
+		return;
+	memset(p, 0, sizeof(*p));
+	INIT_LIST_HEAD(&p->node);
+	p->port = port;
+	p->pfi = pfi;
+	list_add_tail(&p->node, &pdev->ports);
+}
+
 static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev, int len, unsigned char *vpd)
 {
 	int i, j, k, isz, jsz, port, func, pfi;
@@ -155,6 +174,7 @@ static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev
 						   pdev->pci_dev->bus,
 						   pdev->pci_dev->dev,
 						   func)) != NULL) {
+			add_port(vf, port, pfi);
 			if (vf->vpd_port == INT_MAX) {
 				vf->vpd_port = port;
 				vf->vpd_pfi = pfi;
@@ -597,6 +617,7 @@ static void add_pci_dev(struct libbiosdevname_state *state,
 	INIT_LIST_HEAD(&dev->node);
 	INIT_LIST_HEAD(&dev->vfnode);
 	INIT_LIST_HEAD(&dev->vfs);
+	INIT_LIST_HEAD(&dev->ports);
 	dev->pci_dev = p;
 	dev->physical_slot = PHYSICAL_SLOT_UNKNOWN;
 	dev->class         = pci_read_word(p, PCI_CLASS_DEVICE);

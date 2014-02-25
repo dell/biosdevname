@@ -20,6 +20,12 @@ struct slotlist
 	int count;
 };
 
+struct pci_port {
+	struct list_head node;
+	int port;
+	int pfi;
+};
+
 struct pci_device {
 	struct list_head node;
 	struct pci_dev *pci_dev;
@@ -44,6 +50,7 @@ struct pci_device {
 	struct pci_device *pf;
 	struct list_head vfnode;
 	struct list_head vfs;
+	struct list_head ports;
 	unsigned int is_sriov_physical_function:1;
 	unsigned int is_sriov_virtual_function:1;
 	unsigned int embedded_index_valid:1;
