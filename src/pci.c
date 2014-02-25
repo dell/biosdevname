@@ -554,6 +554,7 @@ static int read_pci_sysfs_index(unsigned int *index, const struct pci_dev *pdev)
 	rc = sysfs_read_file(path, &indexstr);
 	if (rc == 0) {
 		rc = sscanf(indexstr, "%u", &i);
+		free(indexstr);
 		if (rc == 1)  {
 			*index = i;
 			return 0;

@@ -32,7 +32,7 @@ int sysfs_path_is_file(const char * path)
 int sysfs_read_file(const char * path, char **output)
 {
 	int ret;
-	char *result = NULL;
+	char *result = NULL, *n;
 	int fd;
 	unsigned long resultsize = 0;
 	ssize_t length = 0;
@@ -57,8 +57,8 @@ int sysfs_read_file(const char * path, char **output)
 		goto free_out;
 	}
 	result[length] = '\0';
-	if (result[length-1] == '\n')
-		result[length-1] = '\0';
+	if ((n = strchr(result, '\n')) != NULL)
+		*n = '\0';
 	*output = result;
 	ret = 0;
 	goto out;
