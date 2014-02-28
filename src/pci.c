@@ -345,67 +345,15 @@ static int read_pci_sysfs_physfn(char *buf, size_t bufsize, const struct pci_dev
 	return 0;
 }
 
-static int virtfn_filter(const struct dirent *dent)
-{
-        return (!strncmp(dent->d_name,"virtfn",6));
-}
-
-static int _read_virtfn_index(unsigned int *index, const char *path, const char *basename, const char *pci_name)
-{
-	char buf[PATH_MAX], *b;
-	char fullpath[PATH_MAX];
-	ssize_t size;
-	unsigned int u=INT_MAX;
-	int scanned, rc=1;
-
-	snprintf(fullpath, sizeof(fullpath), "%s/%s", path, basename);
-	size = readlink(fullpath, buf, sizeof(buf));
-	if (size > 0) {
-		/* form is ../0000:05:10.0 */
-		b=buf+3; /* skip ../ */
-		if (strlen(b) == strlen(pci_name) &&
-		    !strncmp(b, pci_name, strlen(pci_name))) {
-			scanned = sscanf(basename, "virtfn%u", &u);
-			if (scanned == 1) {
-				rc = 0;
-				*index = u;
-			}
-		}
-	}
-	return rc;
-}
-
-static int read_virtfn_index(unsigned int *index, const struct pci_dev *pdev)
-{
-	char pci_name[16];
-	char path[PATH_MAX];
-	char cpath[PATH_MAX];
-	struct dirent **namelist;
-	int n, rc=1;
-
-	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
-	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn", pci_name);
-	if (realpath(path, cpath) == NULL)
-		return rc;
-
-	n = scandir(cpath, &namelist, virtfn_filter, versionsort);
-	if (n < 0)
-		return rc;
-	else {
-		while (n--) {
-			if (rc)
-				rc = _read_virtfn_index(index, cpath, namelist[n]->d_name, pci_name);
-			free(namelist[n]);
-		}
-		free(namelist);
-	}
-
-	return rc;
-}
-
 static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *func)
 {
 	int err;
+	const char *r;
+
+	/* Allow parsing pathnames */
+	if ((r = strrchr(s, '/')) != NULL)
+		s = r+1;
+
 /* The domain part was added in 2.6 kernels.  Test for that first. */
 	err = sscanf(s, "%x:%2x:%2x.%x", domain, bus, dev, func);
 	if (err != 4) {
@@ -425,29 +373,6 @@ static struct pci_dev * find_pdev_by_pci_name(struct pci_access *pacc, const cha
 	return pci_get_dev(pacc, domain, bus, device, func);
 }
 
-static struct pci_device *
-find_physfn(struct libbiosdevname_state *state, struct pci_device *dev)
-{
-	int rc;
-	char path[PATH_MAX];
-	char *c;
-	struct pci_dev *pdev;
-	memset(path, 0, sizeof(path));
-	rc = read_pci_sysfs_physfn(path, sizeof(path), dev->pci_dev);
-	if (rc != 0)
-		return NULL;
-	/* we get back a string like
-	   ../0000:05:0.0
-	   where the last component is the parent device
-	*/
-	/* find the last backslash */
-	c = rindex(path, '/');
-	c++;
-	pdev = find_pdev_by_pci_name(state->pacc, c);
-	dev = find_dev_by_pci(state, pdev);
-	return dev;
-}
-
 static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
 {
 	if (pci_domain_nr(a) == pci_domain_nr(b) &&
@@ -456,25 +381,6 @@ static int is_same_pci(const struct pci_dev *a, const struct pci_dev *b)
 	    a->func == b->func)
 		return 1;
 	return 0;
-}
-
-static void try_add_vf_to_pf(struct libbiosdevname_state *state, struct pci_device *vf)
-{
-	struct pci_device *pf;
-	unsigned int index=0;
-	int rc;
-	pf = find_physfn(state, vf);
-
-	if (!pf)
-		return;
-	list_add_tail(&vf->vfnode, &pf->vfs);
-	rc = read_virtfn_index(&index, vf->pci_dev);
-	if (!rc) {
-		vf->vf_index = index;
-		pf->is_sriov_physical_function = 1;
-	}
-	vf->pf = pf;
-	vf->physical_slot = pf->physical_slot;
 }
 
 static struct pci_device *
@@ -486,12 +392,6 @@ find_parent(struct libbiosdevname_state *state, struct pci_device *dev)
 	struct pci_device *physfn;
 	struct pci_dev *pdev;
 	memset(path, 0, sizeof(path));
-	/* if this device has a physfn pointer, then treat _that_ as the parent */
-	physfn = find_physfn(state, dev);
-	if (physfn) {
-		dev->is_sriov_virtual_function=1;
-		return physfn;
-	}
 
 	rc = read_pci_sysfs_path(path, sizeof(path), dev->pci_dev);
 	if (rc != 0)
@@ -709,14 +609,57 @@ static int set_embedded_index(struct libbiosdevname_state *state)
 	return 0;
 }
 
+static int virtfn_filter(const struct dirent *dent)
+{
+        return (!strncmp(dent->d_name,"virtfn",6));
+}
 
-static void set_sriov_pf_vf(struct libbiosdevname_state *state)
+/* Assign Virtual Function to Physical Function */
+static void set_sriov(struct libbiosdevname_state *state, struct pci_device *pf, const char *virtpath)
 {
 	struct pci_device *vf;
-	list_for_each_entry(vf, &state->pci_devices, node) {
-		if (!vf->is_sriov_virtual_function)
+	char pci_name[32];
+	char path[PATH_MAX], cpath[PATH_MAX];
+	int vf_index;
+
+	if (sscanf(virtpath, "virtfn%u", &vf_index) != 1)
+		return;
+	unparse_pci_name(pci_name, sizeof(pci_name), pf->pci_dev);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/%s", pci_name, virtpath);
+
+	memset(cpath, 0, sizeof(cpath));
+	if (readlink(path, cpath, sizeof(cpath)) < 0)
+		return;
+	if ((vf = find_dev_by_pci_name(state, cpath)) != NULL) {
+		vf->is_sriov_virtual_function = 1;
+		vf->vf_index = vf_index;
+		vf->pf = pf;
+		pf->is_sriov_physical_function = 1;
+		list_add_tail(&vf->vfnode, &pf->vfs);
+	}
+}
+
+static void scan_sriov(struct libbiosdevname_state *state)
+{
+	struct pci_device *pf;
+	char path[PATH_MAX];
+	char pci_name[32];
+	struct dirent **namelist;
+	int n;
+
+	list_for_each_entry(pf, &state->pci_devices, node) {
+		unparse_pci_name(pci_name, sizeof(pci_name), pf->pci_dev);
+		snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s", pci_name);
+
+		namelist = NULL;
+		n = scandir(path, &namelist, virtfn_filter, versionsort);
+		if (n <= 0)
 			continue;
-		try_add_vf_to_pf(state, vf);
+		while (n--) {
+			set_sriov(state, pf, namelist[n]->d_name);
+			free(namelist[n]);
+		}
+		free(namelist);
 	}
 }
 
@@ -792,11 +735,11 @@ int get_pci_devices(struct libbiosdevname_state *state)
 	/* ordering here is important */
 	dmidecode_main(state);	/* this will fail on Xen guests, that's OK */
 	sort_device_list(state);
+	scan_sriov(state);
 	set_pci_vpd_instance(state);
 	set_pci_slots(state);
 	set_embedded_index(state);
 	set_pci_slot_index(state);
-	set_sriov_pf_vf(state);
 
 	return rc;
 }
