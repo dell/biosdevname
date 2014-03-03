@@ -212,6 +212,16 @@ static void sort_device_list(struct libbiosdevname_state *state)
 	list_splice(&sorted_devices, &state->bios_devices);
 }
 
+/* Check for Mellanox/Chelsio drivers */
+int ismultiport(const char *driver)
+{
+	if (!strncmp(driver, "mlx", 3))
+		return 1;
+	if (!strncmp(driver, "cxgb", 4))
+		return 1;
+	return 0;
+}
+
 static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 {
 	struct pci_device *p;
@@ -223,20 +233,30 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 		if (!is_pci_network(p))
 			continue;
 
+		/* Loop through all ether devices to find match */
 		unparse_pci_name(pci_name, sizeof(pci_name), p->pci_dev);
-		n = find_net_device_by_bus_info(state, pci_name);
-		if (!n)
-			continue;
-
-		b = malloc(sizeof(*b));
-		if (!b)
-			continue;
-		memset(b, 0, sizeof(*b));
-		INIT_LIST_HEAD(&b->node);
-		b->pcidev = p;
-		b->netdev = n;
-		claim_netdev(b->netdev);
-		list_add(&b->node, &state->bios_devices);
+		list_for_each_entry(n, &state->network_devices, node) {
+			if (strncmp(n->drvinfo.bus_info, pci_name, sizeof(n->drvinfo.bus_info)))
+				continue;
+			b = malloc(sizeof(*b));
+			if (!b)
+				continue;
+			memset(b, 0, sizeof(*b));
+			INIT_LIST_HEAD(&b->node);
+			b->pcidev = p;
+			b->netdev = n;
+			b->port = NULL;
+			if (ismultiport(n->drvinfo.driver)) {
+				b->port = malloc(sizeof(struct pci_port));
+				if (b->port != NULL) {
+					b->port->port = n->devid+1;
+					b->port->pfi = p->is_sriov_virtual_function ?
+						p->vf_index : -1;
+				}
+			}
+			claim_netdev(b->netdev);
+			list_add(&b->node, &state->bios_devices);
+		}
 	}
 }
 
@@ -258,6 +278,7 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 		memset(b, 0, sizeof(*b));
 		INIT_LIST_HEAD(&b->node);
 		b->netdev = n;
+		b->port = NULL;
 		list_add(&b->node, &state->bios_devices);
 	}
 }
