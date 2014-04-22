@@ -1,7 +1,8 @@
 SUBSYSTEM!="net", GOTO="netdevicename_end"
-KERNEL!="eth*",   GOTO="netdevicename_end"
 ACTION!="add",    GOTO="netdevicename_end"
 NAME=="?*",       GOTO="netdevicename_end"
+ATTR{type}!="1",  GOTO="netdevicename_end"
+ENV{DEVTYPE}=="?*", GOTO="netdevicename_end"
 
 # kernel command line "biosdevname={0|1}" can turn off/on biosdevname
 IMPORT{cmdline}="biosdevname"
@@ -18,6 +19,6 @@ LABEL="netdevicename_start"
 
 # using NAME= instead of setting INTERFACE_NAME, so that persistent
 # names aren't generated for these devices, they are "named" on each boot.
-PROGRAM="/sbin/biosdevname --policy physical -i %k", NAME="%c",  OPTIONS+="string_escape=replace"
+SUBSYSTEMS=="pci", PROGRAM="/sbin/biosdevname --policy physical -i %k", NAME="%c",  OPTIONS+="string_escape=replace"
 
 LABEL="netdevicename_end"
