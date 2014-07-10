@@ -19,3 +19,4 @@ src/dmidecode/.deps/
 src/dmidecode/.dirstamp
 stamp-h1
 version
+.pc
