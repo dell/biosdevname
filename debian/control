@@ -25,7 +25,7 @@ Description: apply BIOS-given names to network devices
  Home Page: http://linux.dell.com/biosdevname/
 
 Package: biosdevname-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Section: debian-installer
 Architecture: i386 amd64 ia64
 Depends: ${shlibs:Depends}, ${misc:Depends}, udev-udeb
