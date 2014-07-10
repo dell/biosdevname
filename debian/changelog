@@ -1,8 +1,9 @@
-biosdevname (0.5.1-1) unstable; urgency=medium
+biosdevname (0.5.1-1) unstable; urgency=high
 
-  * Package for Debian (Closes: #617820)
-  * Modernize to use dh9 and DEP-5
-  * Start keeping Debian packaging in git
+  * Package for Debian (Closes: #617820).
+  * Modernize to use dh9 and DEP-5.
+  * Start keeping Debian packaging in git.
+  * Fix typo in debian/initramfs.hook (LP: #1338628).
 
  -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Wed, 09 Jul 2014 22:27:36 -0500
 
