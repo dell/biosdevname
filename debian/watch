@@ -1,0 +1,2 @@
+version=3
+http://linux.dell.com/cgi-bin/cgit.cgi/biosdevname.git .*[^n]/(?:|biosdevname(?:_|-))(\d[^\s/]*)\.(?:tar\.xz|txz|tar\.bz2|tbz2|tar\.gz|tgz)

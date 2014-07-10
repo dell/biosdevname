@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE=1
+
+## This has to be exported to make some magic below work.
+#export DH_OPTIONS
+export DH_OPTIONS=-v
+
+
+%:
+	dh $@ --with autoreconf
+
+override_dh_auto_install:
+	dh_auto_install
+	install -D --mode=755 debian/initramfs.hook \
+		debian/biosdevname/usr/share/initramfs-tools/hooks/biosdevname

@@ -1,0 +1,3 @@
+lib/udev/rules.d/71-biosdevname.rules
+usr/share/man/man1/biosdevname.1
+usr/sbin/biosdevname sbin/

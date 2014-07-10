@@ -1,0 +1,3 @@
+lib/udev/rules.d/71-biosdevname.rules
+usr/sbin/biosdevname sbin/
+debian/base-installer.d usr/lib

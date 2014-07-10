@@ -1,0 +1,10 @@
+biosdevname for Debian
+----------------------
+
+To build source package from the git repository, clone the git repository and
+from therein run 'git-buildpackage -us -uc -S' on the debian branch. The
+git-buildpackage package is required.
+
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Wed, 09 Jul 2014 21:32:52 -0500
+

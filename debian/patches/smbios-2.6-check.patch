@@ -1,0 +1,25 @@
+Description: Do not fall back on PIRQ tables on systems without SMBIOS 2.6
+ With the default PROGRAM= line in biosdevname.rules.in, for systems with no
+ SMBIOS 2.6 implemented, biosdevname might not find the type 41 tables and
+ might fall back on PIRQ tables. PIRQ tables might be buggy and cause
+ incorrect names.
+ .
+ The PROGRAM= line is modified in RHEL's and SLES' rules file to have the
+ --smbios 2.6 and –nopirq checks.
+Author: Daniel Jared Dominguez
+Reviewed-by: Colin Watson <cjwatson@ubuntu.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1046480
+Last-Update: 2012-09-06
+
+Index: b/biosdevname.rules.in
+===================================================================
+--- a/biosdevname.rules.in
++++ b/biosdevname.rules.in
+@@ -19,6 +19,6 @@
+ 
+ # using NAME= instead of setting INTERFACE_NAME, so that persistent
+ # names aren't generated for these devices, they are "named" on each boot.
+-SUBSYSTEMS=="pci", PROGRAM="/sbin/biosdevname --policy physical -i %k", NAME="%c",  OPTIONS+="string_escape=replace"
++SUBSYSTEMS=="pci", PROGRAM="/sbin/biosdevname --smbios 2.6 --nopirq --policy physical -i %k", NAME="%c",  OPTIONS+="string_escape=replace"
+ 
+ LABEL="netdevicename_end"

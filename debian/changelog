@@ -1,0 +1,181 @@
+biosdevname (0.5.1-1) unstable; urgency=medium
+
+  * Package for Debian (Closes: #617820)
+  * Modernize to use dh9 and DEP-5
+  * Start keeping Debian packaging in git
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Wed, 09 Jul 2014 22:27:36 -0500
+
+biosdevname (0.4.1-0ubuntu6.1) trusty; urgency=high
+
+  * Backport upstream patch to fix regression introduced by the addslot
+    function, which caused biosdevname to return identical names for two
+    different devices (LP: #1324558).
+
+ -- Jorge Niedbalski <jorge.niedbalski@canonical.com>  Wed, 04 Jun 2014 14:58:23 +0100
+
+biosdevname (0.4.1-0ubuntu6) trusty; urgency=medium
+
+  * Create initramfs hook that copies the rule and the binary to the initramfs
+    image. (LP: #1277436)
+
+ -- Margarita Manterola <marga@google.com>  Fri, 07 Feb 2014 12:40:26 +0100
+
+biosdevname (0.4.1-0ubuntu5) raring; urgency=low
+
+  * Fix logic for disabling biosdevname installation when using
+    biosdevname=0 (LP: #1134227).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 27 Feb 2013 11:18:42 +0000
+
+biosdevname (0.4.1-0ubuntu4) raring; urgency=low
+
+  * Use dh-autoreconf.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Sun, 16 Dec 2012 17:46:24 +0000
+
+biosdevname (0.4.1-0ubuntu3) quantal; urgency=low
+
+  [ Daniel Jared Dominguez ]
+  * Do not fall back on PIRQ tables on systems where SMBIOS 2.6 is not
+    implemented (LP: #1046480).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 06 Sep 2012 09:41:51 +0100
+
+biosdevname (0.4.1-0ubuntu2) quantal; urgency=low
+
+  * Move post-base-installer.d hook to a base-installer.d hook so that
+    apt-install may safely be used (LP: #1043936).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 31 Aug 2012 01:20:38 +0100
+
+biosdevname (0.4.1-0ubuntu1) quantal; urgency=low
+
+  * New upstream release (LP: #1040805)
+
+ -- Mario Limonciello <Mario_Limonciello@Dell.com>  Thu, 23 Aug 2012 14:07:37 -0500
+
+biosdevname (0.4.0-0ubuntu2) quantal; urgency=low
+
+  * Enable biosdevname by default in the installer (LP: #891258).  Use the
+    biosdevname=0 boot parameter if you need to disable it.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 20 Aug 2012 15:11:20 +0100
+
+biosdevname (0.4.0-0ubuntu1) quantal; urgency=low
+
+  * New upstream release (LP: #1006565).
+
+ -- Paolo Rotolo <paolorotolo@ubuntu-it.org>  Thu, 5 Jun 2012 21:07:02 +0100
+
+biosdevname (0.3.11-0ubuntu1) precise; urgency=low
+
+  * New upstream release (LP: #926926).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 06 Feb 2012 09:44:04 +0000
+
+biosdevname (0.3.8-0ubuntu2) oneiric; urgency=low
+
+  * Move biosdevname to /sbin, in support of separate /usr partitions.
+
+ -- Evan Dandrea <ev@ubuntu.com>  Tue, 20 Sep 2011 16:04:10 +0100
+
+biosdevname (0.3.8-0ubuntu1) oneiric; urgency=low
+
+  * New upstream version.
+
+ -- Mario Limonciello <Mario_Limonciello@Dell.com>  Thu, 07 Jul 2011 15:02:48 -0500
+
+biosdevname (0.3.7-0ubuntu1) natty; urgency=low
+
+  * Repackage with debhelper 7 and the 3.0 (quilt) source format.
+  * Cut down build-dependencies to what we actually need.
+  * Add biosdevname-udeb package for use in the installer.
+  * Disable biosdevname by default in the installer, for now.  Use the
+    biosdevname=1 boot parameter to enable it, which will also cause it to
+    be installed in the target system.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 23 Feb 2011 17:58:36 +0000
+
+biosdevname (0.3.7) unstable; urgency=low
+  * drop dump_pirq, suggest use biosdecode instead
+  * don't use '#' in names, use 'p' instead, by popular demand
+  * properly look for SMBIOS, then $PIR, then recurse
+  * Add kernel command line parameter "biosdevname={0|1}" to turn off/on biosdevname
+  * Fix segfault when BIOS advertises zero sized PIRQ Routing Table
+  * Add 'bonding' and 'openvswitch' to the virtual devices list
+  * Typo fixes
+  * fail PIRQ lookups if device domain is not 0
+  * Don't suggest names if running in a virtual machine (Xen, KVM,
+    VMware tested, but should work on others)
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 17 Feb 2011 09:48:00 -0600
+
+biosdevname (0.3.6) unstable; urgency=low
+  * drop biosdevnameS, it's unused and fails to build on F15
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Tue, 25 Jan 2011 14:48:00 -0600
+
+biosdevname (0.3.5) unstable; urgency=low
+  * install dump_pirq into /usr/sbin
+  * fix udev rule, skip running if NAME is already set
+  * move udev rule to /lib/udev/rules.d
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Tue, 25 Jan 2011 12:17:00 -0600
+
+biosdevname (0.3.4) unstable; urgency=low
+  * drop unnecessary explicit version requirement on udev
+  * bugfix: start indices at 1 not 0, to match Dell and HP server port designations
+  * bugfix: don't assign names to unknown devices
+  * bugfix: don't assign duplicate names
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 16 Dec 2010 10:45:00 -0600
+
+biosdevname (0.3.3) unstable; urgency=low
+
+  * add back in use of PCI IRQ Routing Table, if info is not provided by
+    sysfs or SMBIOS
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 09 Nov 2010 15:31:00 -0600
+
+  * fix for multi-port cards with bridges
+  * removal of code for seriously obsolete systems
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 02 Dec 2010 22:03:00 -0600
+
+biosdevname (0.3.1) unstable; urgency=low
+
+  * remove all policies except 'physical' and 'all_ethN'
+  * handle SR-IOV devices properly
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Mon, 28 Nov 2010 22:05:00 -0600
+
+biosdevname (0.3.0) unstable; urgency=low
+
+  * add --policy=loms, use it by default.
+  * read index and labels from sysfs if available
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Wed, 10 Nov 2010 22:44:23 -0600
+
+biosdevname (0.2.4-1) unstable; urgency=low
+
+  * eliminate libsysfs usage, libbiosdevname
+  * coordinate udev rules usage with udev maintainer
+  * fix crashes in pcmcia search, in_ethernet(), and incorrect command
+    line parsing.
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Sat, 21 Sep 2007 10:30:13 -0500
+
+biosdevname (0.2.3-1) unstable; urgency=low
+
+  * Initial working release
+
+ -- Matt Domsch <Matt_Domsch@dell.com>  Sat, 08 Sep 2007 14:30:13 -0500
+
+biosdevname (0.1-1) unstable; urgency=low
+
+  * Initial release.
+  * bios_dev_name-0.1-usage-and-virtual-device-fix.patch is applied
+
+ -- Rudy Gevaert <Rudy.Gevaert@UGent.be>  Wed, 16 May 2007 09:25:13 +0200
+

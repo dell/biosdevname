@@ -1,0 +1,18 @@
+#! /bin/sh
+set -e
+
+want_biosdevname=:
+
+for i in $(cat /proc/cmdline); do
+	case $i in
+	    biosdevname=0)
+		want_biosdevname=false
+		;;
+	esac
+done
+
+if $want_biosdevname; then
+	apt-install biosdevname || true
+fi
+
+exit 0
