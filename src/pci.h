@@ -102,5 +102,7 @@ static inline int pci_domain_nr(const struct pci_dev *dev)
 }
 #endif
 
+int is_root_port(const struct libbiosdevname_state *state,
+		 int domain, int bus, int device, int func);
 
 #endif /* PCI_H_INCLUDED */

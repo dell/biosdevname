@@ -876,3 +876,31 @@ struct pci_device * find_dev_by_pci_name(const struct libbiosdevname_state *stat
 
 	return find_pci_dev_by_pci_addr(state, domain, bus, device, func);
 }
+
+int is_root_port(const struct libbiosdevname_state *state,
+                int domain, int bus, int device, int func)
+{
+       struct pci_device *pdev;
+       int pos;
+       u16 flag;
+
+       pdev = find_pci_dev_by_pci_addr(state, domain, bus, device, func);
+
+       if (!pdev || !pdev->pci_dev)
+               return 0;
+
+       pos = pci_find_capability(pdev->pci_dev, PCI_CAP_ID_EXP);
+       if (pos != 0) {
+               u8 type;
+
+               flag = pci_read_word(pdev->pci_dev, pos + PCI_EXP_FLAGS);
+
+               type = (flag & PCI_EXP_FLAGS_TYPE) >> 4;
+
+               if (type == PCI_EXP_TYPE_ROOT_PORT)
+                       return 1;
+       }
+
+       return 0;
+}
+
