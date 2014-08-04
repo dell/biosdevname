@@ -139,6 +139,8 @@ biosdevname (0.3.3) unstable; urgency=low
 
  -- Matt Domsch <Matt_Domsch@dell.com>  Thu, 09 Nov 2010 15:31:00 -0600
 
+biosdevname (0.3.2) unstable; urgency=low
+
   * fix for multi-port cards with bridges
   * removal of code for seriously obsolete systems
 

@@ -1,5 +1,7 @@
 biosdevname for Debian
 ----------------------
 
-When necessary remove /etc/udev/rules.d/z25_persistent-net.rules after
-installing the package.
+When necessary remove /etc/udev/rules.d/z25_persistent-net.rules or
+/etc/udev/rules.d/70_persistent-net.rules after installing the package. This
+may be necessary if you have installed biosdevname after system installation so
+that biosdevname interfaces are used.
