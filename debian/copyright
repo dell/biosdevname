@@ -5,14 +5,26 @@ Source: http://linux.dell.com/git/biosdevname.git
 Files: *
 Copyright: 2006-2011 Dell, Inc <Matt_Domsch@Dell.com>
            2011-2014 Dell, Inc <Jordan_Hargrave@Dell.com>
-License: GPL-2.0
+License: GPL-2.0+
+
+Files: src/dmidecode/*
+Copyright: 2000-2002 Alan Cox <alan@redhat.com>
+           2002-2007 Jean Delvare <khali@linux-fr.org>
+License: GPL-2.0+
+
+Files: src/ethtool-copy.h
+Copyright: 1998 David S. Miller <davem@redhat.com>
+           2001 Jeff Garzik <jgarzik@mandrakesoft.com>
+           2001 Sun Microsystems <thockin@sun.com>
+           2002 Intel <eli.kupermann@intel.com>
+License: GPL-2.0+
 
 Files: debian/*
 Copyright: 2007 Rudy Gevaert <Rudy.Gevaert@UGent.be>
            2014 Daniel Jared Dominguez <Jared_Dominguez@Dell.com>
 License: GPL-2.0
 
-License: GPL-2.0
+License: GPL-2.0+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
