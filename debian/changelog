@@ -1,4 +1,4 @@
-biosdevname (0.5.1-1) unstable; urgency=high
+biosdevname (0.5.1-1) unstable; urgency=medium
 
   * Package for Debian (Closes: #617820).
   * Modernize to use dh9 and DEP-5.
