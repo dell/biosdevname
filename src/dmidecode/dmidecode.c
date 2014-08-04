@@ -48,6 +48,27 @@ extern int smver_mjr, smver_mnr, is_valid_smbios;
 #define dprintf(a...)
 #endif
 
+struct dmi_type9
+{
+	u8  hdrtype;
+	u8  hdrlength;
+	u16 hdrhandle;
+	
+	u8  ref;
+	u8  type;
+	u8  buswidth;
+	u8  usage;
+	u8  length;
+	u16 id;
+	u8  flags1; 
+	/* 2.1+ */
+	u8  flags2;
+	/* 2.6+ */
+	u16 segment;
+	u8  bus;
+	u8  devfn;
+} __attribute__((packed));
+
 static const char *bad_index = "<BAD INDEX>";
 
 /*
@@ -116,8 +137,7 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 		   int domain, int bus, int device, int func,
 		   int type, int slot, int index, const char *label)
 {
-	struct pci_device *pdev, *n;
-	int i;
+	struct pci_device *pdev;
 
 	dprintf("setslot: %.4x:%.2x:%.2x.%x = type:%x slot(%2d %2d) %s\n",
 		domain, bus, device, func, type, slot, index, label);
@@ -128,7 +148,7 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 	    (bus == 0xFF && device == 0x1F && func == 0x7)) 
 	{
 		dprintf("  disabled\n");
-		return;
+		return -1;
 	}
 
 	list_for_each_entry(pdev, &state->pci_devices, node) {
@@ -164,7 +184,8 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevname_state *state)
 {
 	u8 *data=h->data;
-	int domain, bus, device, function, i;
+
+	int domain, bus, device, function;
 	switch(h->type)
 	{
 	case 9: /* 3.3.10 System Slots */
@@ -173,7 +194,11 @@ static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevnam
 			bus = data[0x0F];
 			device = (data[0x10]>>3)&0x1F;
 			function = data[0x10] & 7;
-			smbios_setslot(state, domain, bus, device, -1, 
+
+			/* Root ports can be on multiport device.. scan single */
+			if (!is_root_port(state, domain, bus, device, function))
+				function = -1;
+			smbios_setslot(state, domain, bus, device, function, 
 				       0x00, WORD(data+0x09), 0x00,
 				       dmi_string(h, data[0x04]));
 		}
