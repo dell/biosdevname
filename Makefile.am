@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = 
+EXTRA_DIST = 
 
 dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec.suse biosdevname.1
 
