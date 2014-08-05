@@ -1,0 +1,9 @@
+biosdevname (0.5.1-1) unstable; urgency=medium
+
+    Move aside /etc/udev/rules.d/z25_persistent-net.rules or
+    /etc/udev/rules.d/70-persistent-net.rules after installing the package. This
+    is necessary if you have installed biosdevname after system installation so
+    that biosdevname interfaces are used. Otherwise, the old NIC names will
+    continue to be used.
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Tue, 05 Aug 2014 12:14:46 -0500
