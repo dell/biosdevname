@@ -140,10 +140,36 @@ static void add_port(struct pci_device *pdev, int port, int pfi)
 	list_add_tail(&p->node, &pdev->ports);
 }
 
+static void parse_dcm(struct libbiosdevname_state *state, int seg, int bus, 
+		     const char *dcm, int len)
+{
+	int i;
+	int port, devfn, pfi;
+	struct pci_device *vf;
+
+	for (i=3; i<len; ) {
+		if (!strncmp(dcm, "DCM", 3)) {
+			sscanf(dcm+i, "%1x%1x%2x", &port, &devfn, &pfi);
+			i += 10;
+		} else if (!strncmp(dcm, "DC2", 3)) {
+			sscanf(dcm+i, "%1x%2x%2x", &port, &devfn, &pfi);
+			i += 11;
+		} else {
+			return;
+		}
+		if ((vf = find_pci_dev_by_pci_addr(state, seg, bus, devfn>>3, devfn & 7)) != NULL) {
+			add_port(vf, port, pfi);
+			if (vf->vpd_port == INT_MAX) {
+				vf->vpd_port = port;
+				vf->vpd_pfi = pfi;
+			}
+		}
+	}
+}
+
 static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev, int len, unsigned char *vpd)
 {
-	int i, j, k, isz, jsz, port, func, pfi;
-	struct pci_device *vf;
+	int i, j, isz, jsz;
 
 	i = pci_vpd_find_tag(vpd, 0, len, PCI_VPDR_TAG);
 	if (i < 0)
@@ -161,26 +187,17 @@ static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev
 		return 1;
 	
 	/* Lookup Port Mappings */
-	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DCM");
-	if (j < 0)
-		return 1;
+	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DC2");
+	if (j < 0) {
+		j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DCM");
+		if (j < 0)
+			return 1;
+	}
 	jsz = pci_vpd_info_field_size(&vpd[j]);
 	j += PCI_VPD_INFO_FLD_HDR_SIZE;
 
-	for (k=3; k<jsz; k+=10) {
-		/* Parse Port Info */
-		sscanf((char *)vpd+j+k, "%1x%1x%2x", &port, &func, &pfi);
-		if ((vf = find_pci_dev_by_pci_addr(state, pdev->pci_dev->domain,
-						   pdev->pci_dev->bus,
-						   pdev->pci_dev->dev,
-						   func)) != NULL) {
-			add_port(vf, port, pfi);
-			if (vf->vpd_port == INT_MAX) {
-				vf->vpd_port = port;
-				vf->vpd_pfi = pfi;
-			}
-		}
-	}
+	parse_dcm(state, pdev->pci_dev->domain, pdev->pci_dev->bus, 
+		  (char *)vpd+j, jsz);
 	return 0;
 }
 
@@ -242,7 +259,6 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 		list_for_each_entry(dev2, &state->pci_devices, node) {
 			if (dev2->pci_dev->domain == dev->pci_dev->domain &&
 			    dev2->pci_dev->bus == dev->pci_dev->bus &&
-			    dev2->pci_dev->dev == dev->pci_dev->dev &&
 			    dev2->vpd_port == dev->vpd_port) {
 			  	dev2->vpd_count++;
 				dev->vpd_pf = dev2;
@@ -332,19 +348,6 @@ static int read_pci_sysfs_path(char *buf, size_t bufsize, const struct pci_dev *
 	return 0;
 }
 
-static int read_pci_sysfs_physfn(char *buf, size_t bufsize, const struct pci_dev *pdev)
-{
-	char path[PATH_MAX];
-	char pci_name[16];
-	ssize_t size;
-	unparse_pci_name(pci_name, sizeof(pci_name), pdev);
-	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn", pci_name);
-	size = readlink(path, buf, bufsize);
-	if (size == -1)
-		return 1;
-	return 0;
-}
-
 static int parse_pci_name(const char *s, int *domain, int *bus, int *dev, int *func)
 {
 	int err;
@@ -389,7 +392,6 @@ find_parent(struct libbiosdevname_state *state, struct pci_device *dev)
 	int rc;
 	char path[PATH_MAX];
 	char *c;
-	struct pci_device *physfn;
 	struct pci_dev *pdev;
 	memset(path, 0, sizeof(path));
 
