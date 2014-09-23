@@ -28,7 +28,7 @@ make -e srpm
 . version
 
 popd
-git tag -u $SIGNING_KEY -m "tag for official release: $PACKAGE_STRING" v${PACKAGE_VERSION}
+#git tag -u $SIGNING_KEY -m "tag for official release: $PACKAGE_STRING" v${PACKAGE_VERSION}
 pushd _builddir
 
 DEST=$RELEASE_TOPDIR/$PACKAGE_NAME-$PACKAGE_VERSION/

@@ -34,18 +34,23 @@ char *pr_ether(char *buf, const int size, const unsigned char *s)
 	return (buf);
 }
 
-static int eths_get_devid(const char *devname, int *devid)
+static void eths_get_devid(const char *devname, int *devid)
 {
 	char path[PATH_MAX];
 	char *devidstr = NULL;
 
 	*devid = -1;
-	snprintf(path, sizeof(path), "/sys/class/net/%s/dev_id", devname);
+	snprintf(path, sizeof(path), "/sys/class/net/%s/dev_port", devname);
 	if (sysfs_read_file(path, &devidstr) == 0) {
 		sscanf(devidstr, "%i", devid);
 		free(devidstr);
+	} else {
+		snprintf(path, sizeof(path), "/sys/class/net/%s/dev_id", devname);
+		if (sysfs_read_file(path, &devidstr) == 0) {
+			sscanf(devidstr, "%i", devid);
+			free(devidstr);
+		}
 	}
-	return NULL;
 }
 
 static int eths_get_ifindex(const char *devname, int *ifindex)
