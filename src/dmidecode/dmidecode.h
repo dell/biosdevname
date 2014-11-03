@@ -66,6 +66,6 @@ enum dmi_onboard_device_type {
 struct libbiosdevname_state;
 int dmidecode_main(const struct libbiosdevname_state *state);
 
-int smbios_setslot(const struct libbiosdevname_state *state,
-		   int domain, int bus, int device, int func,
-		   int type, int slot, int index, const char *label);
+void smbios_setslot(const struct libbiosdevname_state *state,
+		    int domain, int bus, int device, int func,
+		    int type, int slot, int index, const char *label);

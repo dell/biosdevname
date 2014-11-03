@@ -48,27 +48,6 @@ extern int smver_mjr, smver_mnr, is_valid_smbios;
 #define dprintf(a...)
 #endif
 
-struct dmi_type9
-{
-	u8  hdrtype;
-	u8  hdrlength;
-	u16 hdrhandle;
-	
-	u8  ref;
-	u8  type;
-	u8  buswidth;
-	u8  usage;
-	u8  length;
-	u16 id;
-	u8  flags1; 
-	/* 2.1+ */
-	u8  flags2;
-	/* 2.6+ */
-	u16 segment;
-	u8  bus;
-	u8  devfn;
-} __attribute__((packed));
-
 static const char *bad_index = "<BAD INDEX>";
 
 /*
@@ -133,9 +112,9 @@ static int matchpci(struct pci_device *pdev, int domain, int bus, int device, in
 	return 1;
 }
 
-int smbios_setslot(const struct libbiosdevname_state *state, 
-		   int domain, int bus, int device, int func,
-		   int type, int slot, int index, const char *label)
+void smbios_setslot(const struct libbiosdevname_state *state, 
+		    int domain, int bus, int device, int func,
+		    int type, int slot, int index, const char *label)
 {
 	struct pci_device *pdev;
 
@@ -148,7 +127,7 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 	    (bus == 0xFF && device == 0x1F && func == 0x7)) 
 	{
 		dprintf("  disabled\n");
-		return -1;
+		return;
 	}
 
 	list_for_each_entry(pdev, &state->pci_devices, node) {
@@ -178,7 +157,6 @@ int smbios_setslot(const struct libbiosdevname_state *state,
 			smbios_setslot(state, domain, pdev->sbus, -1, -1, type, slot, index, label);
 		}
 	}
-	return 0;
 }
 
 static void dmi_decode(struct dmi_header *h, u16 ver, const struct libbiosdevname_state *state)

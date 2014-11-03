@@ -23,6 +23,7 @@
 #include "pci.h"
 #include "eths.h"
 #include "state.h"
+#include "sysfs.h"
 
 /* Display an Ethernet address in readable format. */
 char *pr_ether(char *buf, const int size, const unsigned char *s)
@@ -59,7 +60,7 @@ static int eths_get_ifindex(const char *devname, int *ifindex)
 	struct ifreq ifr;
 
 	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name));
+	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name)-1);
 
 	/* Open control socket. */
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -82,7 +83,7 @@ static int eths_get_hwaddr(const char *devname, unsigned char *buf, int size, in
 	struct ifreq ifr;
 
 	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name));
+	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name)-1);
 
 	/* Open control socket. */
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -107,7 +108,7 @@ static int eths_get_info(const char *devname, struct ethtool_drvinfo *drvinfo)
 
 	/* Setup our control structures. */
 	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name));
+	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name)-1);
 
 	/* Open control socket. */
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -137,7 +138,7 @@ static int eths_get_permaddr(const char *devname, unsigned char *buf, int size)
 
 	/* Setup our control structures. */
 	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name));
+	strncpy(ifr.ifr_name, devname, sizeof(ifr.ifr_name)-1);
 
 
 
