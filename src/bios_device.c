@@ -238,6 +238,9 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 		list_for_each_entry(n, &state->network_devices, node) {
 			if (strncmp(n->drvinfo.bus_info, pci_name, sizeof(n->drvinfo.bus_info)))
 				continue;
+			/* Ignore if devtype is fcoe */
+			if (netdev_devtype_is_fcoe(n))
+				continue;
 			b = malloc(sizeof(*b));
 			if (!b)
 				continue;
@@ -271,6 +274,9 @@ static void match_unknown_eths(struct libbiosdevname_state *state)
 		if (!drvinfo_valid(n))
 			continue;
 		if (!is_ethernet(n)) /* for virtual interfaces */
+			continue;
+		/* Ignore if devtype is fcoe */
+		if (netdev_devtype_is_fcoe(n))
 			continue;
 		b = malloc(sizeof(*b));
 		if (!b)

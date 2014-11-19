@@ -28,6 +28,8 @@ struct network_device {
 	int hardware_claimed; /* true when recognized as PCI or PCMCIA and added to list of bios_devices */
   	int ifindex;
 	int devid;
+	int devtype_is_fcoe;
+	char *devtype;
 };
 
 extern void get_eths(struct libbiosdevname_state *state);
@@ -54,6 +56,11 @@ static inline int netdev_is_claimed(const struct network_device *dev)
 static inline int drvinfo_valid(const struct network_device *dev)
 {
 	return dev->drvinfo_valid != 0;
+}
+
+static inline int netdev_devtype_is_fcoe(const struct network_device *dev)
+{
+	return (dev->devtype_is_fcoe == 1);
 }
 
 #endif /* __ETHS_H_INCLUDED */
