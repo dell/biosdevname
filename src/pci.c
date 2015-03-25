@@ -183,7 +183,8 @@ static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev
 		return 1;
 	jsz = pci_vpd_info_field_size(&vpd[j]);
 	j += PCI_VPD_INFO_FLD_HDR_SIZE;
-	if (memcmp(vpd+j+3, "1028VPDR.VER1.0", 15))
+	if ((memcmp(vpd+j+3, "1028VPDR.VER1.0", 15)) &&
+	    (memcmp(vpd+j+3, "1028VPDR.VER2.0", 15)))
 		return 1;
 	
 	/* Lookup Port Mappings */
