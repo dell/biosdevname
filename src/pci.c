@@ -643,6 +643,10 @@ static void set_sriov(struct libbiosdevname_state *state, struct pci_device *pf,
 		vf->vf_index = vf_index;
 		vf->pf = pf;
 		pf->is_sriov_physical_function = 1;
+		if (pf->smbios_enabled) {
+			vf->smbios_instance = pf->smbios_instance;
+			vf->physical_slot = pf->physical_slot;
+		}
 		list_add_tail(&vf->vfnode, &pf->vfs);
 	}
 }
