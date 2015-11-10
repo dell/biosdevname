@@ -66,6 +66,10 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	    continue
 	fi
 	BUS=${P:5:2}
+	BUSDEV=${P:5:5}
+	if [ -e /usr/sbin/biosdecode ] ; then
+	    biosdecode | grep "$BUSDEV.*slot" | sed -n "s/^\s*/  /p"
+	fi
 	CLS=$(cat $RY/class)
 	if [ $((CLS & 0xF0000)) == $((0x10000)) ] ; then
 	    # Storage device, get bay mapping
