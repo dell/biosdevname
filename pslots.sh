@@ -5,12 +5,16 @@
 #
 # Display PCI slots for block and network devices
 # Display bay/ID for SSD devices
+declare -A dcmap
+
 function dcm()
 {
     p=$1
     dcm=$2
+    odcm=$2
     dev=0x${p:8:2}
     fun=0x${p:11:2}
+    sbd=${p:0:11}
     pfunc=$((dev * 8 + fun))
     
     while [ ! -z $dcm ] ;do
@@ -18,6 +22,7 @@ function dcm()
 	func=0x${dcm:1:1}
 	pfi=0x${dcm:2:2}
 	flag=0x${dcm:4:6}
+	dcmap[$sbd${dcm:1:1}]=$odcm
 	if [ $((func)) = $((pfunc)) ] ; then
 	    echo "    p${port}_$((pfi))"
 	fi
@@ -49,11 +54,6 @@ for Y in /sys/block/* /sys/class/net/* ; do
     fi
     while [ "x$RY" != "x/" ]; do
 	P=$(basename $RY)
-	if [ -e $RY/vpd ] ; then
-	    DCM=$(lspci -vvvv -s $P | sed -n "s/.*DCM//p")
-	    echo "  DCM: $DCM"
-	    dcm $P $DCM
-	fi
 	if [ -e $RY/driver/module -a $((FLAG & 0x100)) == $((0x00)) ] ; then
 	    RM=$(readlink -f $RY/driver/module)
 	    MOD=$(basename $RM)
@@ -71,6 +71,15 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	    biosdecode | grep "$BUSDEV.*slot" | sed -n "s/^\s*/  /p"
 	fi
 	CLS=$(cat $RY/class)
+	if [ $((CLS & 0xF0000)) == $((0x20000)) -a -e $RY/vpd ] ; then
+	    DCM=${dcmap[$P]}
+	    if [ -z $DCM ] ; then
+		DCM=$(lspci -vvvv -s $P | sed -n "s/.*DCM//p")
+		dcmap[$P]=$DCM;
+	    fi
+	    echo "  DCM: $DCM"
+	    dcm $P $DCM
+	fi
 	if [ $((CLS & 0xF0000)) == $((0x10000)) ] ; then
 	    # Storage device, get bay mapping
 	    if [ -e /dev/ipmi -o -e /dev/ipmi0 ] ; then
