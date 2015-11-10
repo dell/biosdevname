@@ -5,6 +5,25 @@
 #
 # Display PCI slots for block and network devices
 # Display bay/ID for SSD devices
+function dcm()
+{
+    p=$1
+    dcm=$2
+    dev=0x${p:8:2}
+    fun=0x${p:11:2}
+    pfunc=$((dev * 8 + fun))
+    
+    while [ ! -z $dcm ] ;do
+	port=${dcm:0:1}
+	func=0x${dcm:1:1}
+	pfi=0x${dcm:2:2}
+	flag=0x${dcm:4:6}
+	if [ $((func)) = $((pfunc)) ] ; then
+	    echo "    p${port}_$((pfi))"
+	fi
+	dcm=${dcm:10}
+    done
+}
 for Y in /sys/block/* /sys/class/net/* ; do
     RN=$(basename $Y)
     if [ ! -e $Y/device ] ; then
@@ -30,6 +49,11 @@ for Y in /sys/block/* /sys/class/net/* ; do
     fi
     while [ "x$RY" != "x/" ]; do
 	P=$(basename $RY)
+	if [ -e $RY/vpd ] ; then
+	    DCM=$(lspci -vvvv -s $P | sed -n "s/.*DCM//p")
+	    echo "  DCM: $DCM"
+	    dcm $P $DCM
+	fi
 	if [ -e $RY/driver/module -a $((FLAG & 0x100)) == $((0x00)) ] ; then
 	    RM=$(readlink -f $RY/driver/module)
 	    MOD=$(basename $RM)
