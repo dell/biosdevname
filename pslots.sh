@@ -52,6 +52,7 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	echo -n "  Model: "
 	cat $RY/model
     fi
+    BP=""
     while [ "x$RY" != "x/" ]; do
 	P=$(basename $RY)
 	if [ -e $RY/driver/module -a $((FLAG & 0x100)) == $((0x00)) ] ; then
@@ -65,10 +66,35 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	    RY=$(dirname $RY)
 	    continue
 	fi
-	BUS=${P:5:2}
+	SEG=${P:0:4}
+	BUS=0x${P:5:2}
+	DEV=0x${P:8:2}
+	FUN=0x${P:11:1}
+	if [ -z "$BP" ] ; then
+	    BP="$((SEG)):$((BUS)):$((DEV)).$((FUN))"
+	fi
 	BUSDEV=${P:5:5}
 	if [ -e /usr/sbin/biosdecode ] ; then
-	    biosdecode | grep "$BUSDEV.*slot" | sed -n "s/^\s*/  /p"
+	    BDSLOT=$(biosdecode | grep "$BUSDEV.*slot" | sed -n "s/^\s*/  /p")
+	    if [ ! -z "$BDSLOT"  ] ; then
+		echo "$BDSLOT"
+		PORT=""
+		case "$BP" in
+		    "$((SEG)):$((BUS+2)):0.0"|"$((SEG)):$((BUS)):0.0")
+			PORT=$((1+DEVPORT))
+			;;
+		    "$((SEG)):$((BUS+2)):0.1"|"$((SEG)):$((BUS)):0.1")
+			PORT=$((2+DEVPORT))
+			;;
+		    "$((SEG)):$((BUS+3)):0.0"|"$((SEG)):$((BUS)):0.2")
+			PORT=3
+			;;
+		    "$((SEG)):$((BUS+3)):0.1"|"$((SEG)):$((BUS)):0.3")
+			PORT=4
+			;;
+		esac
+		echo "  PORT: $PORT"
+	    fi
 	fi
 	CLS=$(cat $RY/class)
 	if [ $((CLS & 0xF0000)) == $((0x20000)) -a -e $RY/vpd ] ; then
@@ -83,7 +109,7 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	if [ $((CLS & 0xF0000)) == $((0x10000)) ] ; then
 	    # Storage device, get bay mapping
 	    if [ -e /dev/ipmi -o -e /dev/ipmi0 ] ; then
-                MAP=$(ipmitool raw 0x30 0xd5 0x01 0x07 0x06 0x00 0x00 0x00 0x$BUS 0x00 2> /dev/null)
+                MAP=$(ipmitool raw 0x30 0xd5 0x01 0x07 0x06 0x00 0x00 0x00 $BUS 0x00 2> /dev/null)
                 if [ "$MAP" != "" ] ; then
                     BAY=$(echo $MAP | cut -f8 -d' ')
                     SLOT=$(echo $MAP | cut -f9 -d' ')
