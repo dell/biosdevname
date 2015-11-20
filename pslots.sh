@@ -45,12 +45,23 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	DEVPORT=$(cat $Y/dev_port)
 	echo "  DevPort: $DEVPORT"
     fi
+    if [ -z "$DEVPORT" ] ; then
+	DEVPORT=0
+    fi
     FLAG=""
+    KSLOT=""
+    LABEL=""
+    AINDEX=""
+    SINDEX=""
     if [ -e $RY/vendor -a -e $RY/model ]; then
 	echo -n "  Vendor: "
 	cat $RY/vendor
 	echo -n "  Model: "
 	cat $RY/model
+	TGT=$(basename $RY | cut -f3 -d':')
+	if [ -e /usr/sbin/megacli ] ; then
+	    megacli -LDInfo -L$TGT -a0 | egrep "^Size|^RAID"
+	fi
     fi
     BP=""
     while [ "x$RY" != "x/" ]; do
@@ -66,30 +77,48 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	    RY=$(dirname $RY)
 	    continue
 	fi
-	SEG=${P:0:4}
+	SEG=0x${P:0:4}
 	BUS=0x${P:5:2}
 	DEV=0x${P:8:2}
 	FUN=0x${P:11:1}
 	if [ -z "$BP" ] ; then
-	    BP="$((SEG)):$((BUS)):$((DEV)).$((FUN))"
+	    BP="$((SEG)):$((BUS)):$((DEV)).$((FUN))@$((DEVPORT))"
 	fi
 	BUSDEV=${P:5:5}
+	for Z in /sys/bus/pci/slots/*/address ; do
+	    if [ -e $Z ] ; then 
+		KZ=$(grep $BUSDEV $Z)
+		if [ ! -z "$KZ" ] ; then
+		    echo "  SLOTTER: $Z"
+		fi
+	    fi
+	done
+	if [ -e $RY/slot -a -z "$KSLOT" ] ; then
+	    KSLOT=$(cat $RY/slot)
+	    echo "  KSLOT: $KSLOT"
+	fi
 	if [ -e /usr/sbin/biosdecode ] ; then
 	    BDSLOT=$(biosdecode | grep "$BUSDEV.*slot" | sed -n "s/^\s*/  /p")
 	    if [ ! -z "$BDSLOT"  ] ; then
+	    	SBUS=$(lspci -v -s $P | sed -n "s/.*secondary=//p" | cut -f1 -d,)
 		echo "$BDSLOT"
 		PORT=""
 		case "$BP" in
-		    "$((SEG)):$((BUS+2)):0.0"|"$((SEG)):$((BUS)):0.0")
-			PORT=$((1+DEVPORT))
+		    "$((SEG)):$((BUS+2)):0.0@0"| \
+		    "$((SEG)):$((BUS)):0.0@0")
+			PORT=1
 			;;
-		    "$((SEG)):$((BUS+2)):0.1"|"$((SEG)):$((BUS)):0.1")
-			PORT=$((2+DEVPORT))
+		    "$((SEG)):$((BUS+2)):0.1@0"| \
+		    "$((SEG)):$((BUS)):0.1@0"| \
+		    "$((SEG)):$((BUS)):0.0@1")
+			PORT=2
 			;;
-		    "$((SEG)):$((BUS+3)):0.0"|"$((SEG)):$((BUS)):0.2")
+		    "$((SEG)):$((BUS+3)):0.0@0"| \
+		    "$((SEG)):$((BUS)):0.2@0")
 			PORT=3
 			;;
-		    "$((SEG)):$((BUS+3)):0.1"|"$((SEG)):$((BUS)):0.3")
+		    "$((SEG)):$((BUS+3)):0.1@0"| \
+		    "$((SEG)):$((BUS)):0.3@0")
 			PORT=4
 			;;
 		esac
@@ -97,15 +126,6 @@ for Y in /sys/block/* /sys/class/net/* ; do
 	    fi
 	fi
 	CLS=$(cat $RY/class)
-	if [ $((CLS & 0xF0000)) == $((0x20000)) -a -e $RY/vpd ] ; then
-	    DCM=${dcmap[$P]}
-	    if [ -z $DCM ] ; then
-		DCM=$(lspci -vvvv -s $P | sed -n "s/.*DCM//p")
-		dcmap[$P]=$DCM;
-	    fi
-	    echo "  DCM: $DCM"
-	    dcm $P $DCM
-	fi
 	if [ $((CLS & 0xF0000)) == $((0x10000)) ] ; then
 	    # Storage device, get bay mapping
 	    if [ -e /dev/ipmi -o -e /dev/ipmi0 ] ; then
@@ -119,20 +139,27 @@ for Y in /sys/block/* /sys/class/net/* ; do
                 fi
 	    fi
 	fi
-	if [ -e $RY/label -a $((FLAG & 0x1)) == $((0x00)) ] ; then
-	    echo -n "  $P Label: "
-	    cat $RY/label
-	    FLAG=$((FLAG | 0x1))
+	if [ $((CLS & 0xF0000)) == $((0x20000)) -a -e $RY/vpd ] ; then
+	    # Network device, get DCM
+	    DCM=${dcmap[$P]}
+	    if [ -z $DCM ] ; then
+		DCM=$(lspci -vvvv -s $P | sed -n "s/.*DCM//p")
+		dcmap[$P]=$DCM;
+	    fi
+	    echo "  DCM: $DCM"
+	    dcm $P $DCM
 	fi
-	if [ -e $RY/acpi_index -a $((FLAG & 0x2)) == $((0x00)) ] ; then
-	    echo -n "  $P ACPI Index: "
-	    cat $RY/acpi_index
-	    FLAG=$((FLAG | 0x2))
+	if [ -e $RY/label -a -z "$LABEL" ] ; then
+	    LABEL=$(cat $RY/label)
+	    echo "  $P Label: $LABEL"
 	fi
-	if [ -e $RY/index -a $((FLAG & 0x4)) == $((0x00)) ] ; then
-	    echo -n "  $P SMBIOS Index: "
-	    cat $RY/index
-	    FLAG=$((FLAG | 0x4))
+	if [ -e $RY/acpi_index -a -z "$AINDEX" ] ; then
+	    AINDEX=$(cat $RY/acpi_index)
+	    echo "  $P ACPI Index: $AINDEX"
+	fi
+	if [ -e $RY/index -a -z "$SINDEX" ] ; then
+	    SINDEX=$(cat $RY/index)
+	    echo "  $P SMBIOS Index: $SINDEX"
 	fi
 	RY=$(dirname $RY)
     done
