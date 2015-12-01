@@ -129,8 +129,6 @@ static void parse_dcm(struct libbiosdevname_state *state, struct pci_device *pde
 	for (i = 3; i < len; i += step) {
 		if (sscanf(dcm->data+i, fmt, &port, &devfn, &pfi) != 3)
 			break;
-		printf("%.4x:%.2x %.2x.%x = %d_%d\n",
-		       pdev->pci_dev->domain, pdev->pci_dev->bus, devfn >> 3, devfn & 7, port, pfi);
 		vf = find_pci_dev_by_pci_addr(state, pdev->pci_dev->domain,
 					      pdev->pci_dev->bus,
 					      devfn >> 3, devfn & 7);
@@ -152,6 +150,8 @@ static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *p
 	int fd, len;
 	unsigned char *vpd;
 
+	if (!is_pci_network(pdev))
+		return 1;
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn/vpd", pci_name);
 	fd = open(path, O_RDONLY|O_SYNC);
@@ -167,10 +167,8 @@ static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *p
 	if (pci_vpd_readtag(fd, &len) != PCI_VPDR_TAG)
 		goto done;
 	vpd = alloca(len);
-	if (read(fd, vpd, len) != len) {
-		printf("read %d fails\n", len);
+	if (read(fd, vpd, len) != len)
 		goto done;
-	}
 	/* Check for DELL VPD tag */
 	if (!pci_vpd_findtag(vpd, len, "DSV1028VPDR.VER"))
 		goto done;
