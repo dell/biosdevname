@@ -30,6 +30,7 @@ extern int is_valid_smbios;
 /* Borrowed from kernel vpd code */
 #define PCI_VPD_LRDT			0x80
 #define PCI_VPD_SRDT_END		0x78
+#define PCI_VPDI_TAG			0x82
 #define PCI_VPDR_TAG			0x90
 
 #define PCI_VPD_SRDT_LEN_MASK		0x7
@@ -37,9 +38,16 @@ extern int is_valid_smbios;
 #define PCI_VPD_SRDT_TAG_SIZE		1
 #define PCI_VPD_INFO_FLD_HDR_SIZE	3
 
+struct vpd_tag
+{
+	char	cc[2];
+	u8	len;
+	char	data[1];
+};
+
 static inline u16 pci_vpd_lrdt_size(const u8 *lrdt)
 {
-	return (u16)lrdt[1] + ((u16)lrdt[2] << 8L);
+	return (u16)lrdt[0] + ((u16)lrdt[1] << 8L);
 }
 
 static inline u8 pci_vpd_srdt_size(const u8* srdt)
@@ -47,78 +55,38 @@ static inline u8 pci_vpd_srdt_size(const u8* srdt)
 	return (*srdt) & PCI_VPD_SRDT_LEN_MASK;
 }
 
-static inline u8 pci_vpd_info_field_size(const u8 *info_field)
+static int pci_vpd_readtag(int fd, int *len)
 {
-	return info_field[2];
+	u8 tag, tlen[2];
+
+	if (read(fd, &tag, 1) != 1)
+		return -1;
+	if (tag == 0x00 || tag == 0xFF || tag == 0x7F)
+		return -1;
+	if (tag & PCI_VPD_LRDT) {
+		if (read(fd, tlen, 2) != 2)
+			return -1;
+		*len = pci_vpd_lrdt_size(tlen);
+		return tag;
+	}
+	*len = pci_vpd_srdt_size(&tag);
+	return (tag & ~0x7);
 }
 
-static int pci_vpd_size(struct pci_device *pdev, int fd)
+static void *pci_vpd_findtag(void *buf, int len, const char *sig)
 {
-	uint8_t buf[3], tag;
-	int off;
+        int off, siglen;
+        struct vpd_tag *t;
 
-	if (!is_pci_network(pdev))
-		return 0;
-	off = 0;
-	for(;;) {
-		if (pread(fd, buf, 1, off) != 1)
-			break;
-		if (buf[0] & PCI_VPD_LRDT) {
-			tag = buf[0];
-			if (pread(fd, buf, 3, off) != 3)
-				break;
-			off += PCI_VPD_LRDT_TAG_SIZE + pci_vpd_lrdt_size(buf);
-		} else {
-			tag = buf[0] & ~PCI_VPD_SRDT_LEN_MASK;
-			off += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(buf);
-		}
-		if (tag == 0 || tag == 0xFF || tag == PCI_VPD_SRDT_END || tag == PCI_VPDR_TAG)
-			break;
-	}
-	return off;
-}
-
-static int pci_vpd_find_tag(const u8 *buf, unsigned int off, unsigned int len, u8 rdt)
-{
-	int i;
-
-	for (i = off; i < len;) {
-		u8 val = buf[i];
-
-		if (val & PCI_VPD_LRDT) {
-			if (i + PCI_VPD_LRDT_TAG_SIZE > len)
-				break;
-			if (val == rdt)
-				return i;
-			i += PCI_VPD_LRDT_TAG_SIZE + pci_vpd_lrdt_size(&buf[i]);
-		} else {
-			u8 tag = val & ~PCI_VPD_SRDT_LEN_MASK;
-			
-			if (tag == rdt)
-				return i;
-			if (tag == PCI_VPD_SRDT_END)
-				break;
-			i += PCI_VPD_SRDT_TAG_SIZE + pci_vpd_srdt_size(&buf[i]);
-		}
-	}
-	return -1;
-}
-
-/* Search for matching key/subkey in the VPD data */
-static int pci_vpd_find_info_subkey(const u8 *buf, unsigned int off, unsigned int len, 
-	const char *kw, const char *skw)
-{
-	int i;
-
-	for (i = off; i + PCI_VPD_INFO_FLD_HDR_SIZE <= off+len;) {
-		/* Match key and subkey names, can use * for regex */
-		if ((kw[0] == '*' || buf[i+0] == kw[0]) &&
-		    (kw[1] == '*' || buf[i+1] == kw[1]) &&
-		    (skw[0] == '*' || !memcmp(&buf[i+3], skw, 3)))
-			return i;
-		i += PCI_VPD_INFO_FLD_HDR_SIZE + pci_vpd_info_field_size(&buf[i]);
-	}
-	return -1;
+        off = 0;
+        siglen = strlen(sig);
+        while (off < len) {
+                t = (struct vpd_tag *)((u8 *)buf + off);
+                if (!memcmp(t->data, sig, siglen))
+                        return t;
+                off += (t->len + 3);
+        }
+        return NULL;
 }
 
 /* Add port identifier(s) to PCI device */
@@ -140,24 +108,33 @@ static void add_port(struct pci_device *pdev, int port, int pfi)
 	list_add_tail(&p->node, &pdev->ports);
 }
 
-static void parse_dcm(struct libbiosdevname_state *state, int seg, int bus, 
-		     const char *dcm, int len)
+static void parse_dcm(struct libbiosdevname_state *state, struct pci_device *pdev,
+		      void *vpd, int len)
 {
-	int i;
-	int port, devfn, pfi;
+	int i, port, devfn, pfi, step;
 	struct pci_device *vf;
+	struct vpd_tag *dcm;
+	const char *fmt;
 
-	for (i=3; i<len; ) {
-		if (!strncmp(dcm, "DCM", 3)) {
-			sscanf(dcm+i, "%1x%1x%2x", &port, &devfn, &pfi);
-			i += 10;
-		} else if (!strncmp(dcm, "DC2", 3)) {
-			sscanf(dcm+i, "%1x%2x%2x", &port, &devfn, &pfi);
-			i += 11;
-		} else {
+	fmt = "%1x%1x%2x";
+	step = 10;
+	dcm = pci_vpd_findtag(vpd, len, "DCM");
+	if (dcm == NULL) {
+		dcm = pci_vpd_findtag(vpd, len, "DC2");
+		if (dcm == NULL)
 			return;
-		}
-		if ((vf = find_pci_dev_by_pci_addr(state, seg, bus, devfn>>3, devfn & 7)) != NULL) {
+		fmt = "%1x%2x%2x";
+		step = 11;
+	}
+	for (i = 3; i < len; i += step) {
+		if (sscanf(dcm->data+i, fmt, &port, &devfn, &pfi) != 3)
+			break;
+		printf("%.4x:%.2x %.2x.%x = %d_%d\n",
+		       pdev->pci_dev->domain, pdev->pci_dev->bus, devfn >> 3, devfn & 7, port, pfi);
+		vf = find_pci_dev_by_pci_addr(state, pdev->pci_dev->domain,
+					      pdev->pci_dev->bus,
+					      devfn >> 3, devfn & 7);
+		if (vf != NULL) {
 			add_port(vf, port, pfi);
 			if (vf->vpd_port == INT_MAX) {
 				vf->vpd_port = port;
@@ -167,66 +144,40 @@ static void parse_dcm(struct libbiosdevname_state *state, int seg, int bus,
 	}
 }
 
-static int parse_vpd(struct libbiosdevname_state *state, struct pci_device *pdev, int len, unsigned char *vpd)
-{
-	int i, j, isz, jsz;
-
-	i = pci_vpd_find_tag(vpd, 0, len, PCI_VPDR_TAG);
-	if (i < 0)
-		return 1;
-	isz = pci_vpd_lrdt_size(&vpd[i]);
-	i += PCI_VPD_LRDT_TAG_SIZE;
-
-	/* Lookup Version */
-	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DSV");
-	if (j < 0)
-		return 1;
-	jsz = pci_vpd_info_field_size(&vpd[j]);
-	j += PCI_VPD_INFO_FLD_HDR_SIZE;
-	if ((memcmp(vpd+j+3, "1028VPDR.VER1.0", 15)) &&
-	    (memcmp(vpd+j+3, "1028VPDR.VER2.0", 15)))
-		return 1;
-	
-	/* Lookup Port Mappings */
-	j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DC2");
-	if (j < 0) {
-		j = pci_vpd_find_info_subkey(vpd, i, isz, "**", "DCM");
-		if (j < 0)
-			return 1;
-	}
-	jsz = pci_vpd_info_field_size(&vpd[j]);
-	j += PCI_VPD_INFO_FLD_HDR_SIZE;
-
-	parse_dcm(state, pdev->pci_dev->domain, pdev->pci_dev->bus, 
-		  (char *)vpd+j, jsz);
-	return 0;
-}
-
 /* Read and parse PCI VPD section if it exists */
 static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *pdev)
 {
 	char path[PATH_MAX];
 	char pci_name[16];
-	int fd, rc=1;
+	int fd, len;
 	unsigned char *vpd;
-	off_t size;
-	ssize_t nrd;
 
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
-	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/vpd", pci_name);
-	if ((fd = open(path, O_RDONLY|O_SYNC)) >= 0) {
-		size = pci_vpd_size(pdev, fd);
-		if (size > 0) {
-			vpd = malloc(size);
-			if (vpd != NULL) {
-				if ((nrd = pread(fd, vpd, size, 0)) > 0)
-					rc = parse_vpd(state, pdev, nrd, vpd);
-				free(vpd);
-			}
-		}
-		close(fd);
+	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn/vpd", pci_name);
+	fd = open(path, O_RDONLY|O_SYNC);
+	if (fd < 0) {
+		snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/vpd", pci_name);
+		fd = open(path, O_RDONLY|O_SYNC);
+		if (fd < 0)
+			return 1;
 	}
-	return rc;
+	if (pci_vpd_readtag(fd, &len) != PCI_VPDI_TAG)
+		goto done;
+	lseek(fd, len, SEEK_CUR);
+	if (pci_vpd_readtag(fd, &len) != PCI_VPDR_TAG)
+		goto done;
+	vpd = alloca(len);
+	if (read(fd, vpd, len) != len) {
+		printf("read %d fails\n", len);
+		goto done;
+	}
+	/* Check for DELL VPD tag */
+	if (!pci_vpd_findtag(vpd, len, "DSV1028VPDR.VER"))
+		goto done;
+	parse_dcm(state, pdev, vpd, len);
+ done:
+	close(fd);
+	return 0;
 }
 
 static void set_pci_vpd_instance(struct libbiosdevname_state *state)
@@ -254,6 +205,10 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 		if (dev->pci_dev->vendor_id == 0x1969 ||
 		    dev->pci_dev->vendor_id == 0x168c)
 			continue;
+		if (dev->vpd_port != INT_MAX) {
+			/* Ignore already parsed devices */
+			continue;
+		}
 		read_pci_vpd(state, dev);
 	}
 
