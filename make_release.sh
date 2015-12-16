@@ -25,7 +25,8 @@ pushd _builddir
 make -e distcheck
 make -e srpm
 
-. version
+chmod +x version
+. ./version
 
 popd
 git tag -u $SIGNING_KEY -m "tag for official release: $PACKAGE_STRING" v${PACKAGE_VERSION}
