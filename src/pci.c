@@ -67,6 +67,9 @@ static int pci_vpd_readtag(int fd, int *len)
 		if (read(fd, tlen, 2) != 2)
 			return -1;
 		*len = pci_vpd_lrdt_size(tlen);
+		/* Check length of VPD-R */
+		if (*len  >= 1024)
+			return -1;
 		return tag;
 	}
 	*len = pci_vpd_srdt_size(&tag);
@@ -126,7 +129,11 @@ static void parse_dcm(struct libbiosdevname_state *state, struct pci_device *pde
 		fmt = "%1x%2x%2x";
 		step = 11;
 	}
-	for (i = 3; i < len; i += step) {
+	for (i = 3; i < dcm->len; i += step) {
+		if (i+step > dcm->len) {
+			/* DCM is truncated */
+			return;
+		}
 		if (sscanf(dcm->data+i, fmt, &port, &devfn, &pfi) != 3)
 			break;
 		vf = find_pci_dev_by_pci_addr(state, pdev->pci_dev->domain,
