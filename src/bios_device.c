@@ -21,6 +21,7 @@ void free_bios_devices(void *cookie)
 		return;
 	list_for_each_entry_safe(dev, n, &state->bios_devices, node) {
 		list_del(&(dev->node));
+		free(dev->bios_name);
 		free(dev);
 	}
 }
