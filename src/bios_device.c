@@ -138,6 +138,7 @@ static int sort_smbios(const struct bios_device *x, const struct bios_device *y)
 
 	if      (x->pcidev && !y->pcidev) return -1;
 	else if (!x->pcidev && y->pcidev) return 1;
+	else if (!x->pcidev && !y->pcidev) return 0;
 
 	a = x->pcidev;
 	b = y->pcidev;
