@@ -596,7 +596,7 @@ static void set_sriov(struct libbiosdevname_state *state, struct pci_device *pf,
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/%s", pci_name, virtpath);
 
 	memset(cpath, 0, sizeof(cpath));
-	if (readlink(path, cpath, sizeof(cpath)) < 0)
+	if (readlink(path, cpath, sizeof(cpath) - 1) < 0)
 		return;
 	if ((vf = find_dev_by_pci_name(state, cpath)) != NULL) {
 		vf->is_sriov_virtual_function = 1;
