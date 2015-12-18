@@ -749,7 +749,7 @@ static int unparse_smbios_type41_type(char *buf, const int size, const int type)
 			     "SATA Controller",
 			     "SAS Controller",
 	};
-	if (type > 0 && type <= sizeof(msg))
+	if (type > 0 && type <= (sizeof(msg)/sizeof(msg[0])))
 		s += snprintf(s, size-(s-buf), "%s\n", msg[type-1]);
 	else
 		s += snprintf(s, size-(s-buf), "<OUT OF SPEC>\n");
