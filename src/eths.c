@@ -198,6 +198,7 @@ static int eths_get_permaddr(const char *devname, unsigned char *buf, int size)
 	/* Open control socket. */
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (fd < 0) {
+		free(permaddr);
 		perror("Cannot get control socket");
 		return 1;
 	}
@@ -208,6 +209,7 @@ static int eths_get_permaddr(const char *devname, unsigned char *buf, int size)
 	err = ioctl(fd, SIOCETHTOOL, &ifr);
 	if (err < 0) {
 		close(fd);
+		free(permaddr);
 		return err;
 	}
 	memcpy(buf, permaddr->data, min(permaddr->size, size));
