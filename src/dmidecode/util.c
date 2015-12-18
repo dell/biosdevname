@@ -111,6 +111,7 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 	if((p=malloc(len))==NULL)
 	{
 		perror("malloc");
+		close(fd);
 		return NULL;
 	}
 	
@@ -129,6 +130,7 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 	if(mmp==MAP_FAILED)
 	{
 		free(p);
+		close(fd);
 		return NULL;
 	}
 	
@@ -145,18 +147,21 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 		fprintf(stderr, "%s: ", devmem);
 		perror("lseek");
 		free(p);
+		close(fd);
 		return NULL;
 	}
 	
 	if(myread(fd, p, len, devmem)==-1)
 	{
 		free(p);
+		close(fd);
 		return NULL;
 	}
 #endif /* USE_MMAP */
 	
 	if(close(fd)==-1)
 		perror(devmem);
-	
+
+	close(fd);
 	return p;
 }
