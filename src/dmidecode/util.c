@@ -162,6 +162,5 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 	if(close(fd)==-1)
 		perror(devmem);
 
-	close(fd);
 	return p;
 }
