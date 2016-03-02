@@ -227,6 +227,8 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 			    dev2->vpd_port == dev->vpd_port) {
 				dev2->vpd_count++;
 				dev->vpd_pf = dev2;
+				if (dev2->physical_slot == 0)
+					dev->physical_slot = 0;
 				break;
 			}
 		}
