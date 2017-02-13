@@ -1,7 +1,10 @@
 SUBSYSTEM!="net", GOTO="netdevicename_end"
 ACTION!="add",    GOTO="netdevicename_end"
 NAME=="?*",       GOTO="netdevicename_end"
-ATTR{type}!="1",  GOTO="netdevicename_end"
+ENV{SUPPORT}="0"
+ATTR{type}=="1", ENV{SUPPORT}="1"
+ATTR{type}=="32", ENV{SUPPORT}="1"
+ENV{SUPPORT}=="0" GOTO="netdevicename_end"
 ENV{DEVTYPE}=="?*", GOTO="netdevicename_end"
 
 # kernel command line "biosdevname={0|1}" can turn off/on biosdevname
