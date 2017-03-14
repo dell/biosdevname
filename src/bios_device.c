@@ -238,6 +238,9 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 		/* Loop through all ether devices to find match */
 		unparse_pci_name(pci_name, sizeof(pci_name), p->pci_dev);
 		list_for_each_entry(n, &state->network_devices, node) {
+			//Accept only Ethernet devices, otherwise ignore.
+			if(!netdev_arphrd_type_is_eth(n))
+				continue;
 			if (strncmp(n->drvinfo.bus_info, pci_name, sizeof(n->drvinfo.bus_info)))
 				continue;
 			/* Ignore if devtype is fcoe */

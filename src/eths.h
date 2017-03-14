@@ -63,4 +63,9 @@ static inline int netdev_devtype_is_fcoe(const struct network_device *dev)
 	return (dev->devtype_is_fcoe == 1);
 }
 
+static inline int netdev_arphrd_type_is_eth(const struct network_device *dev)
+{
+        return (dev->arphrd_type == ARPHRD_ETHER);
+}
+
 #endif /* __ETHS_H_INCLUDED */
