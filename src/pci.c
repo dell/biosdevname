@@ -119,6 +119,10 @@ static void parse_dcm(struct libbiosdevname_state *state, struct pci_device *pde
 	struct vpd_tag *dcm;
 	const char *fmt;
 
+        if (pdev->is_sriov_virtual_function) {
+                return ;
+        }
+	
 	fmt = "%1x%1x%2x";
 	step = 10;
 	dcm = pci_vpd_findtag(vpd, len, "DCM");
@@ -139,7 +143,7 @@ static void parse_dcm(struct libbiosdevname_state *state, struct pci_device *pde
 		vf = find_pci_dev_by_pci_addr(state, pdev->pci_dev->domain,
 					      pdev->pci_dev->bus,
 					      devfn >> 3, devfn & 7);
-		if (vf != NULL) {
+		if (vf != NULL && !vf->is_sriov_virtual_function) {
 			add_port(vf, port, pfi);
 			if (vf->vpd_port == INT_MAX) {
 				vf->vpd_port = port;
@@ -157,7 +161,7 @@ static int read_pci_vpd(struct libbiosdevname_state *state, struct pci_device *p
 	int fd, len;
 	unsigned char *vpd;
 
-	if (!is_pci_network(pdev))
+	if (!is_pci_network(pdev) || pdev->is_sriov_virtual_function)
 		return 1;
 	unparse_pci_name(pci_name, sizeof(pci_name), pdev->pci_dev);
 	snprintf(path, sizeof(path), "/sys/bus/pci/devices/%s/physfn/vpd", pci_name);
@@ -214,12 +218,15 @@ static void set_pci_vpd_instance(struct libbiosdevname_state *state)
 			/* Ignore already parsed devices */
 			continue;
 		}
+                if (dev->is_sriov_virtual_function) {
+                        continue;
+                }
 		read_pci_vpd(state, dev);
 	}
 
 	/* Now match VPD master device */
 	list_for_each_entry(dev, &state->pci_devices, node) {
-		if (dev->vpd_port == INT_MAX)
+		if (dev->vpd_port == INT_MAX || dev->is_sriov_virtual_function)
 			continue;
 		list_for_each_entry(dev2, &state->pci_devices, node) {
 			if (dev2->pci_dev->domain == dev->pci_dev->domain &&
