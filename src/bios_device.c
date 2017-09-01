@@ -221,6 +221,8 @@ int ismultiport(const char *driver)
 		return 1;
 	if (!strncmp(driver, "cxgb", 4))
 		return 1;
+	if (!strncmp(driver, "exanic", 6))
+		return 1;
 	return 0;
 }
 
