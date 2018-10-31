@@ -214,7 +214,7 @@ static void sort_device_list(struct libbiosdevname_state *state)
 	list_splice(&sorted_devices, &state->bios_devices);
 }
 
-/* Check for Mellanox/Chelsio drivers */
+/* Check for multiport drivers */
 int ismultiport(const char *driver)
 {
 	if (!strncmp(driver, "mlx4", 4))
@@ -222,6 +222,8 @@ int ismultiport(const char *driver)
 	if (!strncmp(driver, "cxgb", 4))
 		return 1;
 	if (!strncmp(driver, "exanic", 6))
+		return 1;
+	if (!strncmp(driver, "nfp", 3))
 		return 1;
 	return 0;
 }
