@@ -35,21 +35,55 @@ char *pr_ether(char *buf, const int size, const unsigned char *s)
 	return (buf);
 }
 
-static void eths_get_devid(const char *devname, int *devid)
+static int eths_get_phys_port_name_id(const char *devname)
+{
+	char *portstr = NULL;
+	char path[PATH_MAX];
+	int index = -1;
+
+	/* Only devices that have a phys_port_name of 'pX' are considered here,
+	 * with the index 'X' extracted.
+	 */
+	snprintf(path, sizeof(path), "/sys/class/net/%s/phys_port_name", devname);
+	if (sysfs_read_file(path, &portstr) == 0) {
+		char *res = NULL;
+
+		if (portstr[0] == 'p') {
+			index = strtol(&portstr[1], &res, 10);
+			/* Reset to invalid if the format is unexpected. */
+			if (*res)
+				index = -1;
+		}
+
+		free(portstr);
+	}
+
+	return index;
+}
+
+static void eths_get_devid(struct network_device *dev)
 {
 	char path[PATH_MAX];
 	char *devidstr = NULL;
 
-	*devid = -1;
-	snprintf(path, sizeof(path), "/sys/class/net/%s/dev_port", devname);
-	if (sysfs_read_file(path, &devidstr) == 0) {
-		sscanf(devidstr, "%i", devid);
-		free(devidstr);
+	dev->devid = -1;
+
+	/* For some drivers, the phys_port_name index, e.g. pX, is the correct
+	 * dev ID to use instead of the dev_port attribute.
+	 */
+	if (dev->drvinfo_valid && strcmp(dev->drvinfo.driver, "nfp") == 0) {
+		dev->devid = eths_get_phys_port_name_id(dev->kernel_name);
 	} else {
-		snprintf(path, sizeof(path), "/sys/class/net/%s/dev_id", devname);
+		snprintf(path, sizeof(path), "/sys/class/net/%s/dev_port", dev->kernel_name);
 		if (sysfs_read_file(path, &devidstr) == 0) {
-			sscanf(devidstr, "%i", devid);
+			sscanf(devidstr, "%i", &dev->devid);
 			free(devidstr);
+		} else {
+			snprintf(path, sizeof(path), "/sys/class/net/%s/dev_id", dev->kernel_name);
+			if (sysfs_read_file(path, &devidstr) == 0) {
+				sscanf(devidstr, "%i", &dev->devid);
+				free(devidstr);
+			}
 		}
 	}
 }
@@ -224,13 +258,13 @@ static void fill_eth_dev(struct network_device *dev)
 	eths_get_ifindex(dev->kernel_name, &dev->ifindex);
 	eths_get_hwaddr(dev->kernel_name, dev->dev_addr, sizeof(dev->dev_addr), &dev->arphrd_type);
 	eths_get_permaddr(dev->kernel_name, dev->perm_addr, sizeof(dev->perm_addr));
-	eths_get_devid(dev->kernel_name, &dev->devid);
 	devtype = eths_get_devtype(dev);
 	if (devtype > 0)
 		dev->devtype_is_fcoe = 1;
 	rc = eths_get_info(dev->kernel_name, &dev->drvinfo);
 	if (rc == 0)
 		dev->drvinfo_valid = 1;
+	eths_get_devid(dev);
 }
 
 void free_eths(struct libbiosdevname_state *state)
