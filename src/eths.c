@@ -61,6 +61,18 @@ static int eths_get_phys_port_name_id(const char *devname)
 	return index;
 }
 
+static void eths_get_dev_eligible(struct network_device *dev)
+{
+	/* By default, all network devices are eligible for naming. Some may
+	 * opt-out explicitly below.
+	 */
+	dev->is_eligible = 1;
+
+	if (dev->drvinfo_valid && strcmp(dev->drvinfo.driver, "nfp") == 0) {
+		dev->is_eligible = (eths_get_phys_port_name_id(dev->kernel_name) >= 0 ? 1 : 0);
+	}
+}
+
 static void eths_get_devid(struct network_device *dev)
 {
 	char path[PATH_MAX];
@@ -265,6 +277,7 @@ static void fill_eth_dev(struct network_device *dev)
 	if (rc == 0)
 		dev->drvinfo_valid = 1;
 	eths_get_devid(dev);
+	eths_get_dev_eligible(dev);
 }
 
 void free_eths(struct libbiosdevname_state *state)

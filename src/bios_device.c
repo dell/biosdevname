@@ -250,6 +250,8 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 			/* Ignore if devtype is fcoe */
 			if (netdev_devtype_is_fcoe(n))
 				continue;
+			if (!netdev_is_eligible(n))
+				continue;
 			b = malloc(sizeof(*b));
 			if (!b)
 				continue;
