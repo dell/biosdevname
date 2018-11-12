@@ -30,6 +30,7 @@ struct network_device {
 	int devid;
 	int devtype_is_fcoe;
 	char *devtype;
+	int is_eligible:1; /* not eligible for naming when 0 */
 };
 
 extern void get_eths(struct libbiosdevname_state *state);
@@ -66,6 +67,11 @@ static inline int netdev_devtype_is_fcoe(const struct network_device *dev)
 static inline int netdev_arphrd_type_is_eth(const struct network_device *dev)
 {
         return (dev->arphrd_type == ARPHRD_ETHER);
+}
+
+static inline int netdev_is_eligible(const struct network_device *dev)
+{
+	return (!!dev->is_eligible);
 }
 
 #endif /* __ETHS_H_INCLUDED */

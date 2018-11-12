@@ -214,7 +214,7 @@ static void sort_device_list(struct libbiosdevname_state *state)
 	list_splice(&sorted_devices, &state->bios_devices);
 }
 
-/* Check for Mellanox/Chelsio drivers */
+/* Check for multiport drivers */
 int ismultiport(const char *driver)
 {
 	if (!strncmp(driver, "mlx4", 4))
@@ -222,6 +222,8 @@ int ismultiport(const char *driver)
 	if (!strncmp(driver, "cxgb", 4))
 		return 1;
 	if (!strncmp(driver, "exanic", 6))
+		return 1;
+	if (!strncmp(driver, "nfp", 3))
 		return 1;
 	return 0;
 }
@@ -247,6 +249,8 @@ static void match_pci_and_eth_devs(struct libbiosdevname_state *state)
 				continue;
 			/* Ignore if devtype is fcoe */
 			if (netdev_devtype_is_fcoe(n))
+				continue;
+			if (!netdev_is_eligible(n))
 				continue;
 			b = malloc(sizeof(*b));
 			if (!b)
