@@ -47,7 +47,6 @@
 #include "types.h"
 #include "util.h"
 
-#ifndef USE_MMAP
 static int myread(int fd, u8 *buf, size_t count, const char *prefix)
 {
 	ssize_t r=1;
@@ -78,7 +77,6 @@ static int myread(int fd, u8 *buf, size_t count, const char *prefix)
 	
 	return 0;
 }
-#endif
 
 int checksum(const u8 *buf, size_t len)
 {
@@ -94,28 +92,13 @@ int checksum(const u8 *buf, size_t len)
  * Copy a physical memory chunk into a memory buffer.
  * This function allocates memory.
  */
-void *mem_chunk(size_t base, size_t len, const char *devmem)
-{
-	void *p;
-	int fd;
 #ifdef USE_MMAP
+static void *mem_chunk_mmap(size_t base, size_t len, const char *devmem,
+			    int fd, void *p)
+{
 	size_t mmoffset;
 	void *mmp;
-#endif
-	
-	if((fd=open(devmem, O_RDONLY))==-1)
-	{
-		return NULL;
-	}
-	
-	if((p=malloc(len))==NULL)
-	{
-		perror("malloc");
-		close(fd);
-		return NULL;
-	}
-	
-#ifdef USE_MMAP
+
 #ifdef _SC_PAGESIZE
 	mmoffset=base%sysconf(_SC_PAGESIZE);
 #else
@@ -129,8 +112,6 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 	mmp=mmap(0, mmoffset+len, PROT_READ, MAP_SHARED, fd, base-mmoffset);
 	if(mmp==MAP_FAILED)
 	{
-		free(p);
-		close(fd);
 		return NULL;
 	}
 	
@@ -141,26 +122,67 @@ void *mem_chunk(size_t base, size_t len, const char *devmem)
 		fprintf(stderr, "%s: ", devmem);
 		perror("munmap");
 	}
-#else /* USE_MMAP */
+
+	return p;
+}
+#endif /* USE_MMAP */
+
+static void *mem_chunk_read(size_t base, size_t len, const char *devmem,
+			    int fd, void *p)
+{
 	if(lseek(fd, base, SEEK_SET)==-1)
 	{
 		fprintf(stderr, "%s: ", devmem);
 		perror("lseek");
-		free(p);
-		close(fd);
 		return NULL;
 	}
 	
 	if(myread(fd, p, len, devmem)==-1)
 	{
-		free(p);
+		return NULL;
+	}
+
+	return p;
+}
+
+void *__mem_chunk(size_t base, size_t len, const char *devmem, int use_mmap)
+{
+	void *ret;
+	void *p;
+	int fd;
+
+#ifndef USE_MMAP
+	use_mmap = 0;
+#endif
+
+	if((fd=open(devmem, O_RDONLY))==-1)
+	{
+		return NULL;
+	}
+	
+	if((p=malloc(len))==NULL)
+	{
+		perror("malloc");
 		close(fd);
 		return NULL;
 	}
-#endif /* USE_MMAP */
-	
+
+#ifdef USE_MMAP
+	if (use_mmap)
+		ret = mem_chunk_mmap(base, len, devmem, fd, p);
+	else
+#endif
+		ret = mem_chunk_read(base, len, devmem, fd, p);
+
 	if(close(fd)==-1)
 		perror(devmem);
+	if (!ret)
+		free(p);
 
-	return p;
+	return ret;
+}
+
+void *mem_chunk(size_t base, size_t len, const char *devmem)
+{
+	return __mem_chunk(base, len, devmem, 1);
 }
