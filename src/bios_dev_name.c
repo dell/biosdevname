@@ -119,28 +119,33 @@ parse_opts(int argc, char **argv)
 static u_int32_t
 cpuid (u_int32_t eax, u_int32_t ecx)
 {
-    asm volatile (
-        "xor %%ebx, %%ebx; cpuid"
-        : "=a" (eax),  "=c" (ecx)
-        : "a" (eax)
-	: "%ebx", "%edx");
-    return ecx;
+#if defined(__x86_64__) || defined(__i386__)
+	asm volatile (
+		"xor %%ebx, %%ebx; cpuid"
+		: "=a" (eax),  "=c" (ecx)
+		: "a" (eax)
+		: "%ebx", "%edx");
+	return ecx;
+#else
+	return 0;
+#endif
 }
-
-/*
-  Algorithm suggested by:
-  http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1009458
-*/
 
 static int
 running_in_virtual_machine (void)
 {
-    u_int32_t eax=1U, ecx=0U;
+#if defined(__x86_64__) || defined(__i386__)
+	/* Algorithm suggested by https://kb.vmware.com/s/article/1009458 */
+	u_int32_t eax=1U, ecx=0U;
 
-    ecx = cpuid (eax, ecx);
-    if (ecx & 0x80000000U)
-       return 1;
+	ecx = cpuid (eax, ecx);
+	if (ecx & 0x80000000U)
+		return 1;
+	else
+		return 0;
+#else
     return 0;
+#endif
 }
 
 static int
