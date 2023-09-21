@@ -15,6 +15,7 @@
 
 static struct bios_dev_name_opts opts;
 int nopirq;
+int allow_vm;
 int smver_mjr;
 int smver_mnr;
 int is_valid_smbios = 0;
@@ -29,6 +30,7 @@ static void usage(void)
 	fprintf(stderr, "   -P        or --prefix [string]     string use for embedded NICs (default='em')\n");
 	fprintf(stderr, "   -s        or --smbios [x.y]	       Require SMBIOS x.y or greater\n");
 	fprintf(stderr, "   -x        or --nopirq	       Don't use $PIR table for slot numbers\n");
+	fprintf(stderr, "   -V        or --allow-vm            Allow running in virtual machines\n");
 	fprintf(stderr, "   -v        or --version             Show biosdevname version\n");
 	fprintf(stderr, " Example:  biosdevname -i eth0\n");
 	fprintf(stderr, "  returns: em1\n");
@@ -64,11 +66,12 @@ parse_opts(int argc, char **argv)
 			{"prefix",      required_argument, 0, 'P'},
 			{"nopirq",	      no_argument, 0, 'x'},
 			{"smbios",	required_argument, 0, 's'},
+			{"allow-vm",          no_argument, 0, 'V'},
 			{"version",           no_argument, 0, 'v'},
 			{0, 0, 0, 0}
 		};
 		c = getopt_long(argc, argv,
-				"dip:P:xs:v",
+				"dip:P:xs:Vv",
 				long_options, &option_index);
 		if (c == -1)
 			break;
@@ -90,6 +93,9 @@ parse_opts(int argc, char **argv)
 			break;
 		case 'x':
 			nopirq = 1;
+			break;
+		case 'V':
+			allow_vm = 1;
 			break;
 		case 'v':
 			fprintf(stderr, "biosdevname version %s\n",  BIOSDEVNAME_VERSION);
@@ -158,8 +164,10 @@ int main(int argc, char *argv[])
 
 	if (!running_as_root())
 		exit(3);
-	if (running_in_virtual_machine())
+	if (!allow_vm && running_in_virtual_machine()) {
+		fprintf(stderr, "Refusing to run in a virtual machine without --allow-vm option\n");
 		exit(4);
+	}
 	cookie = setup_bios_devices(opts.namingpolicy, opts.prefix);
 	if (!cookie) {
 		rc = 1;
